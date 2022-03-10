@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySDK.Mobile.ViewModels", "EasySDK.Mobile.ViewModels\EasySDK.Mobile.ViewModels.csproj", "{9BEA9D2F-3BFB-4279-B4F8-A87ED649323A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BEA9D2F-3BFB-4279-B4F8-A87ED649323A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BEA9D2F-3BFB-4279-B4F8-A87ED649323A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BEA9D2F-3BFB-4279-B4F8-A87ED649323A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BEA9D2F-3BFB-4279-B4F8-A87ED649323A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {69650A86-9E38-479A-8C05-9D67AF44D01B}
+	EndGlobalSection
+EndGlobal
