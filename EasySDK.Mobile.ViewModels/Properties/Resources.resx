@@ -129,4 +129,13 @@
   <data name="MBormat" xml:space="preserve">
     <value>{0:F2} Mb</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

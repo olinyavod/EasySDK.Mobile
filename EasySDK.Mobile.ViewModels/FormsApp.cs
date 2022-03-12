@@ -23,6 +23,8 @@ public abstract class FormsApp : Application
 		onPlatform?.Invoke(services);
 		
 		ServiceProvider = RegisterModules(services);
+
+		DependencyService.RegisterSingleton(ServiceProvider);
 	}
 
 	#endregion

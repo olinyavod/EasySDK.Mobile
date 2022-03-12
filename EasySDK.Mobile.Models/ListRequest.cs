@@ -1,6 +1,4 @@
-﻿using EasySDK.Mobile.Models;
-
-namespace EasySDK.Mobile.RestClient.Models;
+﻿namespace EasySDK.Mobile.Models;
 
 public class ListRequest : IListRequest
 {
