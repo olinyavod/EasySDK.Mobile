@@ -2,6 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", "EasySDK.Mobile.ViewModels")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", "EasySDK.Mobile.ViewModels.Pages")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", "EasySDK.Mobile.ViewModels.Extensions")]
+
 namespace EasySDK.Mobile.ViewModels;
 
 public abstract class FormsApp : Application
