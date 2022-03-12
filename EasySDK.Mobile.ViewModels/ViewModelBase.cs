@@ -7,30 +7,6 @@ namespace EasySDK.Mobile.ViewModels;
 
 public class ViewModelBase : INotifyPropertyChanged
 {
-	#region Private fields
-
-	bool _isBusy;
-	string _title = string.Empty;
-
-
-	#endregion
-		
-	#region Properties
-
-	public bool IsBusy
-	{
-		get => _isBusy;
-		set => SetProperty(ref _isBusy, value);
-	}
-
-	public string Title
-	{
-		get => _title;
-		set => SetProperty(ref _title, value);
-	}
-
-	#endregion
-
 	#region Protected methods
 
 	protected bool SetProperty<T>(ref T backingStore, T value, Action onChanged = null, [CallerMemberName] string propertyName = "")
