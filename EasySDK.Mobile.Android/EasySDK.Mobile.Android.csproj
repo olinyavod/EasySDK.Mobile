@@ -53,6 +53,7 @@
     <Compile Include="Effects\AndroidDataErrorEffect.cs" />
     <Compile Include="Effects\AndroidEntryIconEffect.cs" />
     <Compile Include="Effects\AndroidShadowEffect.cs" />
+    <Compile Include="Extensions\ThemeExtensions.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Renderers\ItemFrameRenderer.cs" />
     <Compile Include="Renderers\JavascriptWebViewClient.cs" />
