@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<resources>
+	<style name="AlertLightDialog" parent="Theme.AppCompat.Light.Dialog.Alert"/>
+
+	<style name="AlertDarkDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert"/>
+</resources>
