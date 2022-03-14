@@ -20,12 +20,37 @@ class FakeResponse : IResponse
 
 	#endregion
 
+	#region ctor
+
+	public FakeResponse()
+	{
+		
+	}
+
+	public FakeResponse(IResponse response)
+	{
+		ErrorCode = response.ErrorCode;
+		ErrorMessage = response.ErrorMessage;
+		ErrorMessages = response.ErrorMessages;
+	}
+
+	#endregion
+
+	#region Public methods
+
 	public static IResponse<TResult> FromResult<TResult>(TResult result) => new FakeResponse<TResult>(result);
 
 	public static IResponse<TResult> FromErrorCode<TResult>(int errorCode) => new FakeResponse<TResult>
 	{
 		ErrorCode = errorCode
 	};
+
+	public static IResponseList<TModel> FromResultList<TModel>(IEnumerable<TModel> items, int total) => new FakeResponseList<TModel>(items)
+	{
+		TotalCount = total
+	};
+
+	#endregion
 }
 
 class FakeResponse<TResult> : FakeResponse, IResponse<TResult>
@@ -38,6 +63,12 @@ class FakeResponse<TResult> : FakeResponse, IResponse<TResult>
 
 	#region ctor
 
+	public FakeResponse(IResponse response)
+		: base(response)
+	{
+
+	}
+
 	public FakeResponse()
 	{
 		
@@ -48,7 +79,43 @@ class FakeResponse<TResult> : FakeResponse, IResponse<TResult>
 		Result = result;
 	}
 
-	public IResponse<TNewResult> Convert<TNewResult>(Func<TResult, TNewResult> convert) => new FakeResponse<TNewResult>(convert(Result));
+	public IResponse<TNewResult> Convert<TNewResult>(Func<TResult, TNewResult> convert) => !HasError
+		? new FakeResponse<TNewResult>(convert(Result))
+		: new FakeResponse<TNewResult>(this);
+
+	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert) => HasError
+			? new FakeResponseList<TNewResult>(this)
+			: new FakeResponseList<TNewResult>(convert(Result));
+	
+	#endregion
+}
+
+class FakeResponseList<TResult> : FakeResponse<IEnumerable<TResult>>, IResponseList<TResult>
+{
+	#region Properties
+
+	public int TotalCount { get; set; }
+
+	#endregion
+
+	#region ctor
+
+	public FakeResponseList()
+	{
+		
+	}
+
+	public FakeResponseList(IResponse response)
+		: base(response)
+	{
+
+	}
+
+	public FakeResponseList(IEnumerable<TResult> result)
+		: base(result)
+	{
+
+	}
 
 	#endregion
 }

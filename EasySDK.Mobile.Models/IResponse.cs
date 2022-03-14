@@ -32,5 +32,16 @@ public interface IResponse<out TResult> : IResponse
 
 	IResponse<TNewResult> Convert<TNewResult>(Func<TResult, TNewResult> convert);
 
+	IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert);
+
+	#endregion
+}
+
+public interface IResponseList<out TResult> : IResponse<IEnumerable<TResult>>
+{
+	#region Properties
+
+	int TotalCount { get; }
+
 	#endregion
 }

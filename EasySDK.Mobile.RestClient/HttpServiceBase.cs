@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -91,7 +90,6 @@ public abstract class HttpServiceBase
 	(
 		string requestUrl, 
 		object postModel,
-		TResult defaultResult,
 		bool useToken = true)
 	{
 		using var requestContent = postModel != null ? CreateJsonContent(postModel) : new StringContent(string.Empty);
@@ -101,15 +99,14 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse(response, content, defaultResult);
+			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
 		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
 	}
 
-	protected async Task<IResponse<TResult>> GetJsonAsync<TResult>
+	protected async Task<IResponseList<TResult>> GetJsonListAsync<TResult>
 	(
 		string requestUrl,
-		TResult defaultValue,
 		bool useToken = true
 	)
 	{
@@ -119,7 +116,29 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse(response, content, defaultValue);
+			return CreateErrorResponse<HttpResponseList<TResult>>(response, content);
+
+		var result = JsonConvert.DeserializeObject<HttpResponseList<TResult>>(content, CreateJsonSettings());
+
+		if (result?.Metadata is { } metadata && metadata.Value<int>("total") is { } total)
+			result.TotalCount = total;
+
+		return result;
+	}
+
+	protected async Task<IResponse<TResult>> GetJsonAsync<TResult>
+	(
+		string requestUrl,
+		bool useToken = true
+	)
+	{
+		using var client = CreateClient(useToken);
+		using var response = await client.GetAsync(requestUrl);
+
+		var content = await response.Content.ReadAsStringAsync();
+
+		if (!response.IsSuccessStatusCode)
+			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
 		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
 	}
@@ -128,7 +147,6 @@ public abstract class HttpServiceBase
 	(
 		string requestUrl, 
 		object model,
-		TResult defaultValue,
 		bool useToken = true
 	)
 	{
@@ -143,7 +161,7 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse(response, content, defaultValue);
+			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 		
 		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
 	}
@@ -151,7 +169,6 @@ public abstract class HttpServiceBase
 	protected async Task<IResponse<TResult>> DeleteJsonAsync<TResult>
 	(
 		string requestUrl,
-		TResult defaultValue,
 		bool useToken = true
 	)
 	{
@@ -161,7 +178,7 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse(response, content, defaultValue);
+			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
 		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
 	}
@@ -169,7 +186,6 @@ public abstract class HttpServiceBase
 	protected async Task<IResponse<TResult>> PostFormAsync<TResult>
 	(
 		string requestUrl,
-		TResult defaultValue,
 		HttpContent form,
 		bool useToken = true
 	)
@@ -180,22 +196,26 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse(response, content, defaultValue);
+			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
 		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
 	}
 
-	protected IResponse<TResult> CreateErrorResponse<TResult>(HttpResponseMessage response, string content,
-		TResult defaultValue)
+	protected TResponse CreateErrorResponse<TResponse>
+	(
+		HttpResponseMessage response,
+		string content
+	) where TResponse : HttpResponse, new()
 	{
 		LogErrorResponse(response, content);
 
 		var errorCode = (int) response.StatusCode;
 
-		return HttpResponse.Fail(defaultValue, errorCode, content, r =>
+		return new TResponse()
 		{
-			r.NeedAuthorization = response.StatusCode == HttpStatusCode.Unauthorized;
-		});
+			ErrorMessage = content,
+			ErrorCode = errorCode
+		};
 	}
 
 	#endregion

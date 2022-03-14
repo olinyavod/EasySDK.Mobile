@@ -39,14 +39,14 @@ public abstract class FakeCrudServiceBase<TModel, TKey>
 
 	#region Public methods
 
-	public Task<IResponse<IEnumerable<TModel>>> GetList(IListRequest request) => Task.Run(async () =>
+	public Task<IResponseList<TModel>> GetList(IListRequest request) => Task.Run(async () =>
 	{
 		await Delay();
-		return FakeResponse.FromResult(Items
+		return FakeResponse.FromResultList(Items
 			.Values
 			.Where(i => Search(i, request.Search))
 			.Skip(request.Offset)
-			.Take(request.Count));
+			.Take(request.Count), Items.Count);
 	});
 
 	public Task<IResponse<TModel>> GetByKey(TKey key) => Task.Run(async () =>

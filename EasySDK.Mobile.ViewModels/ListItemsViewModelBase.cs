@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -92,11 +91,18 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	protected virtual Task OnPostLoadItems() => Task.FromResult(true);
 
-	protected abstract Task<IResponse<IEnumerable<TModel>>> LoadItemsAsync(IListRequest request);
+	protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IListRequest request);
 
 	protected abstract TItem CreateItem(TModel model);
 
 	protected abstract string GetLoadItemsFailedMessage();
+
+	protected int CalculateThreshold(IResponseList<TModel> response)
+	{
+		var threshold =  response.TotalCount - ItemsSource.Count;
+
+		return threshold > 0 ? threshold : -1;
+	}
 
 	#endregion
 
@@ -122,25 +128,24 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			if (!await OnPreLoadItems())
 				return;
 
-			var getResponse = await LoadItemsAsync(new ListRequest
+			var response = await LoadItemsAsync(new ListRequest
 			{
 				Count = DefaultPageSize, 
 				Search = SearchQuery
 			});
 
-			IsBusy = !getResponse.HasError;
-			if (!await _responseChecker.CheckCanContinue(getResponse, GetLoadItemsFailedMessage()))
+			IsBusy = !response.HasError;
+			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
 				return;
 
-			var items = getResponse.Result.Select(CreateItem);
+			var items = response.Result.Select(CreateItem);
 
 			foreach (var item in items)
 				ItemsSource.Add(item);
-
-			RemainingItemsThreshold = 0;
+			
+			RemainingItemsThreshold = CalculateThreshold(response);
 
 			await OnPostLoadItems();
-
 		}
 		catch (Exception ex)
 		{
@@ -178,6 +183,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 			foreach (var item in items)
 				ItemsSource.Add(item);
+
+			RemainingItemsThreshold = CalculateThreshold(response);
 		}
 		catch (Exception ex)
 		{

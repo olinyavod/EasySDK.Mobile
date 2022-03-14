@@ -13,7 +13,7 @@ public class HttpPostFileRequest : IProgressRequest
 
 	#region Properties
 
-	public string FIleName { get; }
+	public string FileName { get; }
 
 	public Stream FileStream { get; }
 
@@ -23,9 +23,9 @@ public class HttpPostFileRequest : IProgressRequest
 
 	#region ctor
 
-	public HttpPostFileRequest(string fIleName, string fileType, Stream fileStream)
+	public HttpPostFileRequest(string fileName, string fileType, Stream fileStream)
 	{
-		FIleName = fIleName;
+		FileName = fileName;
 		FileStream = fileStream;
 		FileType = fileType;
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
 
@@ -13,6 +14,13 @@ public static class ModelExtensions
 		var response = await responseTask;
 
 		return response.Convert(convert);
+	}
+
+	public static async Task<IResponseList<TNewResult>> ConvertToList<TResult, TNewResult>(this Task<IResponse<TResult>> responseTask, Func<TResult, IEnumerable<TNewResult>> convert)
+	{
+		var response = await responseTask;
+
+		return response.ConvertToList(convert);
 	}
 
 	#endregion

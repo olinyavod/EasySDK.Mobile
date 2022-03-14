@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using EasySDK.Mobile.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace EasySDK.Mobile.RestClient.Models;
 
-class HttpResponse : IResponse
+public class HttpResponse : IResponse
 {
 	#region Properties
 
@@ -20,15 +21,34 @@ class HttpResponse : IResponse
 	[JsonProperty("errorMessages")]
 	public Dictionary<string, IEnumerable<string>> ErrorMessages { get; set; }
 
-	public bool NeedAuthorization { get; set; }
+	public bool NeedAuthorization => ErrorCode == ResponseErrorCodes.Unauthorized;
+
+	[JsonProperty("_meta")]
+	public JToken Metadata { get; set; }
+
+	#endregion
+
+	#region ctor
+
+	public HttpResponse()
+	{
+		
+	}
+
+	public HttpResponse(IResponse response)
+	{
+		ErrorCode = response.ErrorCode;
+		ErrorMessages = response.ErrorMessages;
+		ErrorMessage = response.ErrorMessage;
+	}
 
 	#endregion
 
 	#region Public methods
 
-	public static HttpResponse<TResult> Success<TResult>(TResult result) => new(result);
+	public static IResponse<TResult> Success<TResult>(TResult result) => new HttpResponse<TResult>(result);
 
-	public static HttpResponse<TResult> Fail<TResult>
+	public static IResponse<TResult> Fail<TResult>
 	(
 		TResult defaultResult,
 		int errorCode,
@@ -50,7 +70,7 @@ class HttpResponse : IResponse
 	#endregion
 }
 
-class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
+public class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 {
 	#region Properties
 
@@ -65,6 +85,12 @@ class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 	{
 	}
 
+	public HttpResponse(IResponse response)
+		: base(response)
+	{
+		
+	}
+
 	public HttpResponse(TResult result)
 	{
 		Result = result;
@@ -74,7 +100,6 @@ class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 	{
 		ErrorCode = response.ErrorCode;
 		ErrorMessage = response.ErrorMessage;
-		NeedAuthorization = response.NeedAuthorization;
 	}
 
 	#endregion
@@ -84,6 +109,43 @@ class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 	public IResponse<TNewResult> Convert<TNewResult>(Func<TResult, TNewResult> convert) => HasError
 		? new HttpResponse<TNewResult>(this)
 		: HttpResponse.Success(convert(Result));
+
+	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert)
+	{
+		return HasError
+			? new HttpResponseList<TNewResult>(this)
+			: new HttpResponseList<TNewResult>(convert(Result));
+	}
+
+	#endregion
+}
+
+public class HttpResponseList<TResult> : HttpResponse<IEnumerable<TResult>>, IResponseList<TResult>
+{
+	#region Properties
+	
+	[JsonIgnore]
+	public int TotalCount { get; set; }
+
+	#endregion
+
+	#region ctor
+
+	public HttpResponseList()
+	{
+		
+	}
+
+	public HttpResponseList(IResponse response)
+		: base(response)
+	{
+
+	}
+
+	public HttpResponseList(IEnumerable<TResult> result)
+	{
+		Result = result;
+	}
 
 	#endregion
 }
