@@ -36,3 +36,31 @@ public class ActivityResultHandler : Java.Lang.Object, IActivityResultCallback
 
 	#endregion
 }
+
+public class ActivityResultHandler<TResult> : Java.Lang.Object, IActivityResultCallback
+where TResult : Java.Lang.Object
+{
+	#region Private fields
+
+	private readonly Action<TResult> _onResult;
+
+	#endregion
+
+	#region ctor
+
+	public ActivityResultHandler(Action<TResult> onResult)
+	{
+		_onResult = onResult;
+	}
+
+	#endregion
+
+	#region Public methods
+
+	public void OnActivityResult(Object result)
+	{
+		_onResult(result as TResult);
+	}
+
+	#endregion
+}

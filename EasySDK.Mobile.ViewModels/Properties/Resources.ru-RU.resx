@@ -135,6 +135,9 @@
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="RequestPermissions" xml:space="preserve">
+    <value>Запрос разрешений</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
   </data>

@@ -20,6 +20,12 @@ public class ViewModelBase : INotifyPropertyChanged
 		return true;
 	}
 
+	protected void OnPropertiesChanged(params string[] properties)
+	{
+		foreach (var p in properties ?? Array.Empty<string>())
+			OnPropertyChanged(p);
+	}
+
 	#endregion
 
 	#region INotifyPropertyChanged

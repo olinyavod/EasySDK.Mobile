@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<controls:ItemFrame xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:controls="clr-namespace:EasySDK.Mobile.ViewModels.Controls;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:converters="clr-namespace:EasySDK.Mobile.ViewModels.Converters;assembly=EasySDK.Mobile.ViewModels"
+                    Click="ButtonSettingsCellOnClick"
+                    HasShadow="False"
+                    Padding="25, 5"
+                    x:Class="EasySDK.Mobile.ViewModels.Controls.ButtonSettingsCell">
+	<controls:ItemFrame.Resources>
+		<converters:EmptyStringToObjectConverter x:Key="EmptyStringToObjectConverter"
+		                                         NotEmptyValue="{x:Static x:Environment.NewLine}"
+		                                         EmptyValue="{x:Static x:String.Empty}">
+
+		</converters:EmptyStringToObjectConverter>
+	</controls:ItemFrame.Resources>
+
+	<Label x:Name="TextLabel"
+	       VerticalOptions="CenterAndExpand"
+	       LineBreakMode="WordWrap">
+		<Label.FormattedText>
+			<FormattedString>
+				<Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls:ButtonSettingsCell}}, Path=Text}"
+				      FontAttributes="Bold"
+				      LineHeight="2"
+				      FontSize="Body"/>
+
+				<Span>
+					<Span.Text>
+						<Binding Source="{RelativeSource AncestorType={x:Type controls:ButtonSettingsCell}}"
+						         Path="Description"
+						         Converter="{StaticResource EmptyStringToObjectConverter}"/>
+					</Span.Text>
+				</Span>
+
+				<Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls:ButtonSettingsCell}}, Path=Description}"
+				      FontSize="Micro"/>
+			</FormattedString>
+		</Label.FormattedText>
+	</Label>
+</controls:ItemFrame>

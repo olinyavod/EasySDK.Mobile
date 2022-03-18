@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using EasySDK.Mobile.ViewModels.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels.Extensions;
@@ -102,6 +103,39 @@ public static class FormsViewExtensions
 				? androidDialogStyles?.AlertDarkStyleId ?? 0
 				: androidDialogStyles?.AlertLightStyleId ?? 0
 		});
+	}
+
+	public static async Task<bool> RequestPermissionIfDeny<TPermission>
+	(
+		this IUserDialogs dialogs,
+		string rationaleMessage,
+		string promptGoToSettings = null,
+		string title = null
+	)
+		where TPermission : Xamarin.Essentials.Permissions.BasePermission, new()
+	{
+		var status = await Xamarin.Essentials.Permissions.CheckStatusAsync<TPermission>();
+
+		switch (status)
+		{
+			case PermissionStatus.Granted:
+				return true;
+
+			case PermissionStatus.Disabled:
+				return false;
+
+			case PermissionStatus.Denied when Device.RuntimePlatform == Device.iOS:
+				await dialogs.ShowAlertAsync(promptGoToSettings, title ?? Properties.Resources.RequestPermissions);
+				return false;
+		}
+
+		if (Xamarin.Essentials.Permissions.ShouldShowRationale<TPermission>())
+			await dialogs.ShowAlertAsync(rationaleMessage, title ?? Properties.Resources.RequestPermissions);
+
+		status = await Xamarin.Essentials.Permissions.RequestAsync<TPermission>();
+
+		return status == PermissionStatus.Granted;
+
 	}
 
 	#endregion

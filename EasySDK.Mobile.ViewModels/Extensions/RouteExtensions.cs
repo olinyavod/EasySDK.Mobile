@@ -15,20 +15,27 @@ public static class RouteExtensions
 
 		public override Element GetOrCreate()
 		{
-			if (Application.Current is FormsApp app
-			    && app.ServiceProvider.GetService<TPage>() is { } page)
+			try
+			{
+				if (Application.Current is FormsApp app
+				    && app.ServiceProvider.GetService<TPage>() is { } page)
+					return page;
+
+				page = Activator.CreateInstance<TPage>();
+
+				if (page.BindingContext != null)
+					return page;
+
+				if (Application.Current is FormsApp appForms
+				    && appForms.ServiceProvider.GetService<TViewModel>() is { } viewModel)
+					page.BindingContext = viewModel;
+
 				return page;
-
-			page = Activator.CreateInstance<TPage>();
-
-			if (page.BindingContext != null)
-				return page;
-
-			if (Application.Current is FormsApp appForms
-			    && appForms.ServiceProvider.GetService<TViewModel>() is { } viewModel)
-				page.BindingContext = viewModel;
-
-			return page;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
 		}
 
 		#endregion

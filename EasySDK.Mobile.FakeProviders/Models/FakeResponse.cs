@@ -4,7 +4,7 @@ using EasySDK.Mobile.Models;
 
 namespace EasySDK.Mobile.FakeProviders.Models;
 
-class FakeResponse : IResponse
+public class FakeResponse : IResponse
 {
 	#region Properties
 

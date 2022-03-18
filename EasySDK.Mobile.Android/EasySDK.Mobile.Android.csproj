@@ -55,6 +55,7 @@
     <Compile Include="Effects\AndroidShadowEffect.cs" />
     <Compile Include="Extensions\ThemeExtensions.cs" />
     <Compile Include="LoggerExtensions.cs" />
+    <Compile Include="Permissions\AnswerRejectCallsPlatformPermission.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Renderers\ItemFrameRenderer.cs" />
     <Compile Include="Renderers\JavascriptWebViewClient.cs" />

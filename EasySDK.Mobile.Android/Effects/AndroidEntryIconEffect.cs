@@ -198,6 +198,8 @@ class AndroidEntryIconEffect : PlatformEffect
 			Entry entry => entry.TextColor,
 			DatePicker datePicker => datePicker.TextColor,
 			TimePicker timePicker => timePicker.TextColor,
+			Editor editor => editor.TextColor,
+			Picker picker => picker.TextColor,
 
 			_ => Color.Default
 		};

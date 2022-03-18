@@ -76,7 +76,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	#region Public methods
 
-	public void OnAppearing()
+	public virtual void OnAppearing()
 	{
 		_searchQuery = string.Empty;
 		OnPropertyChanged(nameof(SearchQuery));
@@ -138,7 +138,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
 				return;
 
-			var items = response.Result.Select(CreateItem);
+			var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
 
 			foreach (var item in items)
 				ItemsSource.Add(item);
@@ -179,7 +179,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
 				return;
 
-			var items = response.Result.Select(CreateItem);
+			var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
 
 			foreach (var item in items)
 				ItemsSource.Add(item);

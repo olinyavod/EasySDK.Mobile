@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<controls:ItemFrame xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:controls="clr-namespace:EasySDK.Mobile.ViewModels.Controls;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:converters="clr-namespace:EasySDK.Mobile.ViewModels.Converters;assembly=EasySDK.Mobile.ViewModels"
+                    Click="SwitchSettingsCellOnClick"
+                    HasShadow="False"
+                    Padding="25, 5"
+                    x:Class="EasySDK.Mobile.ViewModels.Controls.SwitchSettingsCell">
+	<controls:ItemFrame.Resources>
+		<converters:EmptyStringToObjectConverter x:Key="EmptyStringToObjectConverter"
+		                                         NotEmptyValue="{x:Static x:Environment.NewLine}"
+		                                         EmptyValue="{x:Static x:String.Empty}">
+
+		</converters:EmptyStringToObjectConverter>
+	</controls:ItemFrame.Resources>
+	<Grid>
+	    <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+	    </Grid.ColumnDefinitions>
+
+	    <Label Grid.Column="0"
+	           x:Name="TextLabel"
+			   VerticalOptions="CenterAndExpand"
+	           LineBreakMode="WordWrap">
+		    <Label.FormattedText>
+				<FormattedString>
+					<Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls:SwitchSettingsCell}}, Path=Text}"
+					      FontAttributes="Bold"
+						  LineHeight="2"
+					      FontSize="Body"/>
+
+					<Span>
+						<Span.Text>
+							<Binding Source="{RelativeSource AncestorType={x:Type controls:SwitchSettingsCell}}"
+							         Path="Description"
+							         Converter="{StaticResource EmptyStringToObjectConverter}"/>
+						</Span.Text>
+					</Span>
+
+					<Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls:SwitchSettingsCell}}, Path=Description}"
+					      FontSize="Micro"/>
+				</FormattedString>
+		    </Label.FormattedText>
+	    </Label>
+
+	    <Switch Grid.Column="1"
+	            x:Name="ValueSwitch" 
+	            VerticalOptions="CenterAndExpand"
+	            IsToggled="{Binding Source={RelativeSource AncestorType={x:Type controls:SwitchSettingsCell}}, Path=IsToggled, Mode=TwoWay}"/>
+    </Grid>
+</controls:ItemFrame>

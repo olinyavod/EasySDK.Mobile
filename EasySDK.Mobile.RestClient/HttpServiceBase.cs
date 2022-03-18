@@ -23,7 +23,7 @@ public abstract class HttpServiceBase
 
 	private readonly IHttpClientFactory _httpClientFactory;
 	private readonly ILogger _logger;
-	private readonly ITokenProvider _settings;
+	private readonly ITokenProvider _tokenProvider;
 	private readonly Uri _baseUri;
 	protected static readonly HttpMethod HttpMethodPatch = new("PATCH");
 
@@ -35,13 +35,13 @@ public abstract class HttpServiceBase
 	(
 		IHttpClientFactory httpClientFactory,
 		ILogger logger,
-		ITokenProvider tokenProvder,
+		ITokenProvider tokenProvider,
 		Uri baseUri
 	)
 	{
 		_httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
 		_logger = logger;
-		_settings = tokenProvder ?? throw new ArgumentNullException(nameof(tokenProvder));
+		_tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
 		_baseUri = baseUri;
 	}
 
@@ -81,7 +81,7 @@ public abstract class HttpServiceBase
 		client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentUICulture.Name);
 
 		if (useToken)
-			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _settings.Token);
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.Token);
 
 		return client;
 	}
@@ -107,11 +107,14 @@ public abstract class HttpServiceBase
 	protected async Task<IResponseList<TResult>> GetJsonListAsync<TResult>
 	(
 		string requestUrl,
+		object filter = null,
 		bool useToken = true
 	)
 	{
 		using var client = CreateClient(useToken);
-		using var response = await client.GetAsync(requestUrl);
+		using var requestContent = filter != null ? CreateJsonContent(filter) : new StringContent(string.Empty);
+		using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl) {Content = requestContent};
+		using var response = await client.SendAsync(request);
 
 		var content = await response.Content.ReadAsStringAsync();
 

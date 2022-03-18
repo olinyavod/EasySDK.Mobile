@@ -115,6 +115,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Permission request.
+        /// </summary>
+        public static string RequestPermissions {
+            get {
+                return ResourceManager.GetString("RequestPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Yes.
         /// </summary>
         public static string Yes {
