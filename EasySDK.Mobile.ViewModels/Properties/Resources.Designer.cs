@@ -70,11 +70,56 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Clear the entire log?.
+        /// </summary>
+        public static string ClearAllLogsMessage {
+            get {
+                return ResourceManager.GetString("ClearAllLogsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на The entire log is copied to the clipboard..
+        /// </summary>
+        public static string CopyAllLogsMessage {
+            get {
+                return ResourceManager.GetString("CopyAllLogsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Failed to clear log..
+        /// </summary>
+        public static string FailedClearLogsMessage {
+            get {
+                return ResourceManager.GetString("FailedClearLogsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Failed to copy log..
+        /// </summary>
+        public static string FailedCopyLogsMessage {
+            get {
+                return ResourceManager.GetString("FailedCopyLogsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на {0:F1} Gb.
         /// </summary>
         public static string GBFormat {
             get {
                 return ResourceManager.GetString("GBFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Journal.
+        /// </summary>
+        public static string Journal {
+            get {
+                return ResourceManager.GetString("Journal", resourceCulture);
             }
         }
         

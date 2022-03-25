@@ -120,8 +120,23 @@
   <data name="BFormat" xml:space="preserve">
     <value>{0} Б</value>
   </data>
+  <data name="ClearAllLogsMessage" xml:space="preserve">
+    <value>Очистить весь журнал?</value>
+  </data>
+  <data name="CopyAllLogsMessage" xml:space="preserve">
+    <value>Весь журнал скопирован в буфер обмена.</value>
+  </data>
+  <data name="FailedClearLogsMessage" xml:space="preserve">
+    <value>Не удалось очистить журнал.</value>
+  </data>
+  <data name="FailedCopyLogsMessage" xml:space="preserve">
+    <value>Не удалось скопировать журнал.</value>
+  </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Гб</value>
+  </data>
+  <data name="Journal" xml:space="preserve">
+    <value>Журнал</value>
   </data>
   <data name="KBFormat" xml:space="preserve">
     <value>{0:F1} Кб</value>

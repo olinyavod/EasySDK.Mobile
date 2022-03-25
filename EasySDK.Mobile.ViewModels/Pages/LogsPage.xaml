@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:ModelContentPage x:TypeArguments="viewModels:LogsViewModel" 
+                        xmlns="http://xamarin.com/schemas/2014/forms"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:viewModels="clr-namespace:EasySDK.Mobile.ViewModels;assembly=EasySDK.Mobile.ViewModels"
+                        xmlns:pages="clr-namespace:EasySDK.Mobile.ViewModels.Pages;assembly=EasySDK.Mobile.ViewModels"
+                        xmlns:effects="clr-namespace:EasySDK.Mobile.ViewModels.Effects;assembly=EasySDK.Mobile.ViewModels"
+                        Title="{Binding Title}"
+                        x:DataType="viewModels:LogsViewModel"
+                        x:Class="EasySDK.Mobile.ViewModels.Pages.LogsPage">
+	<pages:ModelContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding CopyAllCommand}"
+                     IconImageSource="ic_copy_all_white_24px.png"/>
+
+        <ToolbarItem Command="{Binding ClearCommand}"
+                     IconImageSource="ic_clear_all_white_24px.png"/>
+	</pages:ModelContentPage.ToolbarItems>
+    <Grid>
+		<Editor Text="{Binding Text}"
+		        VerticalOptions="FillAndExpand"
+		        effects:ShowLinesEffect.FillVertical="True"
+		        IsReadOnly="True">
+			<Editor.Effects>
+	            <effects:ShowLinesEffect/>
+			</Editor.Effects>
+		</Editor>
+    </Grid>
+</pages:ModelContentPage>

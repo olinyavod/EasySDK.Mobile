@@ -120,8 +120,23 @@
   <data name="BFormat" xml:space="preserve">
     <value>{0} B</value>
   </data>
+  <data name="ClearAllLogsMessage" xml:space="preserve">
+    <value>Clear the entire log?</value>
+  </data>
+  <data name="CopyAllLogsMessage" xml:space="preserve">
+    <value>The entire log is copied to the clipboard.</value>
+  </data>
+  <data name="FailedClearLogsMessage" xml:space="preserve">
+    <value>Failed to clear log.</value>
+  </data>
+  <data name="FailedCopyLogsMessage" xml:space="preserve">
+    <value>Failed to copy log.</value>
+  </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Gb</value>
+  </data>
+  <data name="Journal" xml:space="preserve">
+    <value>Journal</value>
   </data>
   <data name="KBFormat" xml:space="preserve">
     <value>{0:F1} Kb</value>

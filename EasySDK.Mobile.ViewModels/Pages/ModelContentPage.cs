@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Microsoft.Extensions.Logging;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace EasySDK.Mobile.ViewModels.Pages;
@@ -15,10 +17,22 @@ public abstract class ModelContentPage<TViewModel> : ContentPage
 
 	protected ModelContentPage()
 	{
-		if (Application.Current is FormsApp app)
-			ViewModel = app.ServiceProvider.GetService<TViewModel>();
+		if (Application.Current is not FormsApp {ServiceProvider: { } serviceProvider})
+			return;
 
-		BindingContext = ViewModel;
+		try
+		{
+			ViewModel = serviceProvider.GetService<TViewModel>();
+			BindingContext = ViewModel;
+		}
+		catch (Exception ex)
+		{
+			var log = serviceProvider
+				.GetService<ILoggerFactory>()
+				.CreateLogger<ModelContentPage<TViewModel>>();
+
+			log.LogError(ex, "Initialize page error.");
+		}
 	}
 
 	#endregion

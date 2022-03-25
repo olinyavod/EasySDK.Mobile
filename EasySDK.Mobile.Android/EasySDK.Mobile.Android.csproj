@@ -53,6 +53,7 @@
     <Compile Include="Effects\AndroidDataErrorEffect.cs" />
     <Compile Include="Effects\AndroidEntryIconEffect.cs" />
     <Compile Include="Effects\AndroidShadowEffect.cs" />
+    <Compile Include="Effects\AndroidShowLinesEffect.cs" />
     <Compile Include="Extensions\ThemeExtensions.cs" />
     <Compile Include="LoggerExtensions.cs" />
     <Compile Include="Permissions\AnswerRejectCallsPlatformPermission.cs" />
@@ -168,6 +169,30 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\ic_clear_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\ic_copy_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\ic_clear_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\ic_copy_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_clear_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_copy_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_clear_all_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_copy_all_white_24px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

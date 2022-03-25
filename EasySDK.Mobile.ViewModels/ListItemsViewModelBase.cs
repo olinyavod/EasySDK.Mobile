@@ -23,8 +23,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	private readonly IUserDialogs _dialogs;
 	private readonly IResponseChecker _responseChecker;
-	private readonly ILogger _logger;
-
+	
 	private bool _isBusy;
 	private string _searchQuery;
 	private int _remainingItemsThreshold = -1;
@@ -32,6 +31,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	#endregion
 
 	#region Properties
+
+	protected ILogger Log { get; }
 
 	public bool IsBusy
 	{
@@ -66,7 +67,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	{
 		_dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 		_responseChecker = responseChecker ?? throw new ArgumentNullException(nameof(responseChecker));
-		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		Log = logger ?? throw new ArgumentNullException(nameof(logger));
 
 		LoadItemsCommand = new Command(OnLoadItems);
 		LoadNextItemsCommand = new AsyncCommand(OnLoadNextItems);
@@ -104,6 +105,11 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		return threshold > 0 ? threshold : -1;
 	}
 
+	protected virtual string GetSearchQueryText()
+	{
+		return string.IsNullOrWhiteSpace(SearchQuery) ? null : SearchQuery;
+	}
+
 	#endregion
 
 	#region Private methods
@@ -131,7 +137,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			var response = await LoadItemsAsync(new ListRequest
 			{
 				Count = DefaultPageSize, 
-				Search = SearchQuery
+				Search = GetSearchQueryText()
 			});
 
 			IsBusy = !response.HasError;
@@ -149,7 +155,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError(ex, $"Load items error.");
+			Log.LogError(ex, $"Load items error.");
 			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
 		}
 		finally
@@ -173,7 +179,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			{
 				Count = DefaultPageSize,
 				Offset = offset, 
-				Search = SearchQuery
+				Search = GetSearchQueryText()
 			});
 
 			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
@@ -188,7 +194,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError(ex, $"Load next items for error.");
+			Log.LogError(ex, $"Load next items for error.");
 			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
 		}
 	}

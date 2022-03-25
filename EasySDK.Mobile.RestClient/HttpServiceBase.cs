@@ -8,6 +8,7 @@ using EasySDK.Mobile.Models;
 using EasySDK.Mobile.RestClient.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace EasySDK.Mobile.RestClient;
 
@@ -113,7 +114,12 @@ public abstract class HttpServiceBase
 	{
 		using var client = CreateClient(useToken);
 		using var requestContent = filter != null ? CreateJsonContent(filter) : new StringContent(string.Empty);
-		using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl) {Content = requestContent};
+		using var request = new HttpRequestMessage
+		{
+			Content = requestContent, 
+			Method = HttpMethod.Get,
+			RequestUri = new Uri(requestUrl, UriKind.Relative)
+		};
 		using var response = await client.SendAsync(request);
 
 		var content = await response.Content.ReadAsStringAsync();
@@ -212,11 +218,14 @@ public abstract class HttpServiceBase
 	{
 		LogErrorResponse(response, content);
 
+		var json = JToken.Parse(content);
+		var message = json.Value<string>("message") ?? content;
+
 		var errorCode = (int) response.StatusCode;
 
 		return new TResponse()
 		{
-			ErrorMessage = content,
+			ErrorMessage = message,
 			ErrorCode = errorCode
 		};
 	}

@@ -178,7 +178,7 @@ class AndroidEntryIconEffect : PlatformEffect
 		    && !string.IsNullOrWhiteSpace(iconName))
 		{
 			var resId = GetResourceId("drawable", iconName);
-
+			
 			text.EndIconVisible = true;
 			text.SetEndIconDrawable(resId);
 		}
