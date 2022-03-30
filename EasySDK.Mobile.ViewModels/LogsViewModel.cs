@@ -60,6 +60,7 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 
 		ClearCommand = new AsyncCommand(OnClear);
 		CopyAllCommand = new Command(OnCopyAll);
+		ShareCommand = new AsyncCommand(OnShare);
 	}
 
 	#endregion
@@ -134,6 +135,27 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 		{
 			_log.LogError(ex, "Copy logs error.");
 			_dialogs.ShowErrorMessage(Properties.Resources.FailedCopyLogsMessage);
+		}
+	}
+
+	#endregion
+
+	#region ShareCommand
+
+	public ICommand ShareCommand { get; }
+
+	private async Task OnShare()
+	{
+		try
+		{
+			var file = _pathsService.GetLogsFilePath();
+
+			await Share.RequestAsync(new ShareFileRequest(Path.GetFileName(file), new ShareFile(file, "text/plain")));
+		}
+		catch (Exception ex)
+		{
+			_log.LogError(ex, "Share logs error.");
+			_dialogs.ShowErrorMessage(Properties.Resources.FailedShareLogsMessage);
 		}
 	}
 

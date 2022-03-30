@@ -132,6 +132,9 @@
   <data name="FailedCopyLogsMessage" xml:space="preserve">
     <value>Не удалось скопировать журнал.</value>
   </data>
+  <data name="FailedShareLogsMessage" xml:space="preserve">
+    <value>Не удалось отправить файл журнала.</value>
+  </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Гб</value>
   </data>

@@ -132,6 +132,9 @@
   <data name="FailedCopyLogsMessage" xml:space="preserve">
     <value>Failed to copy log.</value>
   </data>
+  <data name="FailedShareLogsMessage" xml:space="preserve">
+    <value>Failed share logs.</value>
+  </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Gb</value>
   </data>

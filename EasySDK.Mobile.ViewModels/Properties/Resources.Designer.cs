@@ -106,6 +106,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Failed share logs..
+        /// </summary>
+        public static string FailedShareLogsMessage {
+            get {
+                return ResourceManager.GetString("FailedShareLogsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на {0:F1} Gb.
         /// </summary>
         public static string GBFormat {
