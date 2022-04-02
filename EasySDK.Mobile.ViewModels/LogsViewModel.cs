@@ -150,6 +150,9 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 		{
 			var file = _pathsService.GetLogsFilePath();
 
+			if(!File.Exists(file))
+				return;
+
 			await Share.RequestAsync(new ShareFileRequest(Path.GetFileName(file), new ShareFile(file, "text/plain")));
 		}
 		catch (Exception ex)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -93,11 +94,15 @@ public abstract class HttpServiceBase
 		object postModel,
 		bool useToken = true)
 	{
+		var stopwatch = Stopwatch.StartNew();
 		using var requestContent = postModel != null ? CreateJsonContent(postModel) : new StringContent(string.Empty);
 		using var client = CreateClient(useToken);
 		using var response = await client.PostAsync(requestUrl, requestContent);
 
 		var content = await response.Content.ReadAsStringAsync();
+
+		stopwatch.Stop();
+		_logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
@@ -112,6 +117,7 @@ public abstract class HttpServiceBase
 		bool useToken = true
 	)
 	{
+		var stopwatch = Stopwatch.StartNew();
 		using var client = CreateClient(useToken);
 		using var requestContent = filter != null ? CreateJsonContent(filter) : new StringContent(string.Empty);
 		using var request = new HttpRequestMessage
@@ -123,6 +129,9 @@ public abstract class HttpServiceBase
 		using var response = await client.SendAsync(request);
 
 		var content = await response.Content.ReadAsStringAsync();
+
+		stopwatch.Stop();
+		_logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponseList<TResult>>(response, content);
@@ -141,10 +150,14 @@ public abstract class HttpServiceBase
 		bool useToken = true
 	)
 	{
+		var stopwatch = Stopwatch.StartNew();
 		using var client = CreateClient(useToken);
 		using var response = await client.GetAsync(requestUrl);
 
 		var content = await response.Content.ReadAsStringAsync();
+
+		stopwatch.Stop();
+		_logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
@@ -159,6 +172,7 @@ public abstract class HttpServiceBase
 		bool useToken = true
 	)
 	{
+		var stopwatch = Stopwatch.StartNew();
 		using var client = CreateClient(useToken);
 		using var requestContent = model != null ? CreateJsonContent(model) : new StringContent(string.Empty);
 		using var request = new HttpRequestMessage(HttpMethodPatch, requestUrl)
@@ -168,6 +182,9 @@ public abstract class HttpServiceBase
 		using var response = await client.SendAsync(request);
 
 		var content = await response.Content.ReadAsStringAsync();
+
+		stopwatch.Stop();
+		_logger.LogInformation("Execute PATCH '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
@@ -181,10 +198,14 @@ public abstract class HttpServiceBase
 		bool useToken = true
 	)
 	{
+		var stopwatch = Stopwatch.StartNew();
 		using var client = CreateClient(useToken);
 		using var response = await client.DeleteAsync(requestUrl);
 
 		var content = await response.Content.ReadAsStringAsync();
+
+		stopwatch.Stop();
+		_logger.LogInformation("Execute DELETE '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
@@ -199,10 +220,14 @@ public abstract class HttpServiceBase
 		bool useToken = true
 	)
 	{
+		var stopwatch = Stopwatch.StartNew();
 		using var client = CreateClient(useToken);
 		using var response = await client.PostAsync(requestUrl, form);
 
 		var content = await response.Content.ReadAsStringAsync();
+
+		stopwatch.Stop();
+		_logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
