@@ -100,6 +100,7 @@ public class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 	{
 		ErrorCode = response.ErrorCode;
 		ErrorMessage = response.ErrorMessage;
+		ErrorMessages = response.ErrorMessages;
 	}
 
 	#endregion
@@ -108,7 +109,7 @@ public class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 
 	public IResponse<TNewResult> Convert<TNewResult>(Func<TResult, TNewResult> convert) => HasError
 		? new HttpResponse<TNewResult>(this)
-		: HttpResponse.Success(convert(Result));
+		: Success(convert(Result));
 
 	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert)
 	{

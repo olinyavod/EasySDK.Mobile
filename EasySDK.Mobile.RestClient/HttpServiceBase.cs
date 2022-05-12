@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,10 +25,15 @@ public abstract class HttpServiceBase
 	#region Private fields
 
 	private readonly IHttpClientFactory _httpClientFactory;
-	private readonly ILogger _logger;
 	private readonly ITokenProvider _tokenProvider;
 	private readonly Uri _baseUri;
 	protected static readonly HttpMethod HttpMethodPatch = new("PATCH");
+
+	#endregion
+
+	#region Properties
+
+	protected ILogger Logger { get; }
 
 	#endregion
 
@@ -42,7 +48,7 @@ public abstract class HttpServiceBase
 	)
 	{
 		_httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-		_logger = logger;
+		Logger = logger;
 		_tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
 		_baseUri = baseUri;
 	}
@@ -51,7 +57,7 @@ public abstract class HttpServiceBase
 
 	#region Protected methods
 
-	protected JsonSerializerSettings CreateJsonSettings() => new()
+	protected virtual JsonSerializerSettings CreateJsonSettings() => new()
 	{
 		Culture = CultureInfo.CurrentUICulture,
 		DateFormatString = "dd.MM.yyyy",
@@ -68,7 +74,7 @@ public abstract class HttpServiceBase
 
 	protected void LogErrorResponse(HttpResponseMessage response, string content)
 	{
-		_logger.LogWarning("Response from {0}  error: {1}", response.RequestMessage.RequestUri, content);
+		Logger.LogWarning("Response from {0}  error: {1}", response.RequestMessage.RequestUri, content);
 	}
 
 	protected HttpClient CreateClient(bool useToken = true)
@@ -102,12 +108,17 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		stopwatch.Stop();
-		_logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
+		Logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
-		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+
+		if(result?.HasError == true)
+			LogErrorResponse(response, content);
+
+		return result;
 	}
 
 	protected async Task<IResponseList<TResult>> GetJsonListAsync<TResult>
@@ -131,12 +142,15 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		stopwatch.Stop();
-		_logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
+		Logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponseList<TResult>>(response, content);
 
 		var result = JsonConvert.DeserializeObject<HttpResponseList<TResult>>(content, CreateJsonSettings());
+
+		if(result?.HasError == true)
+			LogErrorResponse(response, content);
 
 		if (result?.Metadata is { } metadata && metadata.Value<int>("total") is { } total)
 			result.TotalCount = total;
@@ -157,12 +171,17 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		stopwatch.Stop();
-		_logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
+		Logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
-		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+
+		if(result?.HasError == true)
+			LogErrorResponse(response, content);
+
+		return result;
 	}
 
 	protected async Task<IResponse<TResult>> PatchJsonAsync<TResult>
@@ -184,12 +203,17 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		stopwatch.Stop();
-		_logger.LogInformation("Execute PATCH '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
+		Logger.LogInformation("Execute PATCH '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 		
-		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		
+		if(result?.HasError == true)
+			LogErrorResponse(response, content);
+
+		return result;
 	}
 
 	protected async Task<IResponse<TResult>> DeleteJsonAsync<TResult>
@@ -205,12 +229,17 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		stopwatch.Stop();
-		_logger.LogInformation("Execute DELETE '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
+		Logger.LogInformation("Execute DELETE '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
-		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+
+		if(result?.HasError == true)
+			LogErrorResponse(response, content);
+
+		return result;
 	}
 
 	protected async Task<IResponse<TResult>> PostFormAsync<TResult>
@@ -227,12 +256,17 @@ public abstract class HttpServiceBase
 		var content = await response.Content.ReadAsStringAsync();
 
 		stopwatch.Stop();
-		_logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
+		Logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
 
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
-		return JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+
+		if(result?.HasError == true)
+			LogErrorResponse(response, content);
+
+		return result;
 	}
 
 	protected TResponse CreateErrorResponse<TResponse>
@@ -253,6 +287,20 @@ public abstract class HttpServiceBase
 			ErrorMessage = message,
 			ErrorCode = errorCode
 		};
+	}
+
+	protected async Task CopyStreamAsync(IProgressRequest progress, long length, Stream source, Stream destination, int bufferSize = 1024)
+	{
+		progress.RaiseProgressChanged(0, length);
+		var buffer = new byte[bufferSize];
+		var total = 0;
+
+		while ((await source.ReadAsync(buffer, 0, buffer.Length)) is { } readCount and > 0)
+		{
+			await destination.WriteAsync(buffer, 0, readCount);
+			total += readCount;
+			progress.RaiseProgressChanged(total, length);
+		}
 	}
 
 	#endregion

@@ -7,4 +7,5 @@ public static class ResponseErrorCodes
 	public const int NotAccepted = 403;
 	public const int NotFound = 404;
 	public const int DataError = 422;
+	public const int BusinessLogicError = 460;
 }

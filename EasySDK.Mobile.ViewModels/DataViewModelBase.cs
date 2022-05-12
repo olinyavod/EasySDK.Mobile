@@ -100,7 +100,7 @@ public abstract class DataViewModelBase : ViewModelBase, INotifyDataErrorInfo
 			RaiseErrorsChanged(propertyName);
 	}
 
-	protected async Task<bool> ValidateAsync()
+	public async Task<bool> ValidateAsync()
 	{
 		ClearErrors();
 

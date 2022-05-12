@@ -27,6 +27,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	private bool _isBusy;
 	private string _searchQuery;
 	private int _remainingItemsThreshold = -1;
+	private int _itemsCount;
 
 	#endregion
 
@@ -53,6 +54,12 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	}
 
 	public ObservableCollection<TItem> ItemsSource { get; } = new();
+
+	public int ItemsCount
+	{
+		get => _itemsCount;
+		set => SetProperty(ref _itemsCount, value);
+	}
 
 	#endregion
 
@@ -110,6 +117,42 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		return string.IsNullOrWhiteSpace(SearchQuery) ? null : SearchQuery;
 	}
 
+	protected async Task DoLoadItemsAsync(IListRequest request)
+	{
+		try
+		{
+			ItemsSource.Clear();
+
+			if (!await OnPreLoadItems())
+				return;
+
+			var response = await LoadItemsAsync(request);
+
+			IsBusy = !response.HasError;
+			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
+				return;
+
+			var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
+
+			foreach (var item in items)
+				ItemsSource.Add(item);
+
+			ItemsCount = response.TotalCount;
+			RemainingItemsThreshold = CalculateThreshold(response);
+
+			await OnPostLoadItems();
+		}
+		catch (Exception ex)
+		{
+			Log.LogError(ex, $"Load items error.");
+			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
+		}
+		finally
+		{
+			IsBusy = false;
+		}
+	}
+
 	#endregion
 
 	#region Private methods
@@ -127,41 +170,11 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	private async void OnLoadItems()
 	{
-		try
+		await DoLoadItemsAsync(new ListRequest
 		{
-			ItemsSource.Clear();
-
-			if (!await OnPreLoadItems())
-				return;
-
-			var response = await LoadItemsAsync(new ListRequest
-			{
-				Count = DefaultPageSize, 
-				Search = GetSearchQueryText()
-			});
-
-			IsBusy = !response.HasError;
-			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
-				return;
-
-			var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
-
-			foreach (var item in items)
-				ItemsSource.Add(item);
-			
-			RemainingItemsThreshold = CalculateThreshold(response);
-
-			await OnPostLoadItems();
-		}
-		catch (Exception ex)
-		{
-			Log.LogError(ex, $"Load items error.");
-			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
-		}
-		finally
-		{
-			IsBusy = false;
-		}
+			Count = DefaultPageSize,
+			Search = GetSearchQueryText()
+		});
 	}
 
 	#endregion
@@ -190,6 +203,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			foreach (var item in items)
 				ItemsSource.Add(item);
 
+			ItemsCount = response.TotalCount;
 			RemainingItemsThreshold = CalculateThreshold(response);
 		}
 		catch (Exception ex)
