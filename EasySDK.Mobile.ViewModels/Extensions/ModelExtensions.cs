@@ -40,4 +40,6 @@ public static class ModelExtensions
 			_ => string.Format(Properties.Resources.BFormat, fileSize)
 		};
 	}
+
+	public static string ToUrlArgs(this string args) => Uri.EscapeDataString(args ?? string.Empty);
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using Android.Views;
 using Android.Widget;
 using EasySDK.Mobile.Android.Effects;

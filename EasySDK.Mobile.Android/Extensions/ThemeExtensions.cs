@@ -73,6 +73,8 @@ public static class ThemeExtensions
 		SetLightStatusBar(app, lightStatusBarColor);
 		SetActivity(app, activity);
 
+		FormsAppOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.RequestedTheme));
+
 		app.RequestedThemeChanged += FormsAppOnRequestedThemeChanged;
 	}
 

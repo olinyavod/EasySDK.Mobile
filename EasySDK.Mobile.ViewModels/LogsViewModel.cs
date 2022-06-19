@@ -73,7 +73,7 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 		
 		if(!File.Exists(logsFilePath))
 			return;
-
+		
 		using var reader = new StreamReader(logsFilePath);
 		Text = await reader.ReadToEndAsync();
 	}
