@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
@@ -75,7 +76,12 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 			return;
 		
 		using var reader = new StreamReader(logsFilePath);
-		Text = await reader.ReadToEndAsync();
+		var builder = new StringBuilder();
+
+		for (int i = 0; i < 100 && !reader.EndOfStream; i++)
+			builder.AppendLine(await reader.ReadLineAsync());
+
+		Text = builder.ToString();
 	}
 
 	#endregion

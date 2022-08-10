@@ -27,6 +27,7 @@ public abstract class HttpServiceBase
 	private readonly IHttpClientFactory _httpClientFactory;
 	private readonly ITokenProvider _tokenProvider;
 	private readonly Uri _baseUri;
+	private readonly bool _useGZip;
 	protected static readonly HttpMethod HttpMethodPatch = new("PATCH");
 
 	#endregion
@@ -44,13 +45,15 @@ public abstract class HttpServiceBase
 		IHttpClientFactory httpClientFactory,
 		ILogger logger,
 		ITokenProvider tokenProvider,
-		Uri baseUri
+		Uri baseUri,
+		bool useGZip = false
 	)
 	{
 		_httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
 		Logger = logger;
 		_tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
 		_baseUri = baseUri;
+		_useGZip = useGZip;
 	}
 
 	#endregion
@@ -88,6 +91,9 @@ public abstract class HttpServiceBase
 		client.DefaultRequestHeaders.AcceptCharset.TryParseAdd("utf-8");
 		client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentUICulture.Name);
 
+		if (_useGZip)
+			client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip");
+		
 		if (useToken)
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.Token);
 

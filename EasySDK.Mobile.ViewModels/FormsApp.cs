@@ -27,6 +27,13 @@ public abstract class FormsApp : Application
 		DependencyService.RegisterSingleton(ServiceProvider);
 	}
 
+	protected FormsApp(IServiceProvider serviceProvider)
+	{
+		ServiceProvider = serviceProvider;
+
+		DependencyService.RegisterSingleton(ServiceProvider);
+	}
+
 	#endregion
 
 	#region Protected methods
