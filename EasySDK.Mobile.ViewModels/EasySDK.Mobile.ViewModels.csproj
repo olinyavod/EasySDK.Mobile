@@ -33,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CloudStorageApp\mobile\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj" />
     <ProjectReference Include="..\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj" />
   </ItemGroup>
 
