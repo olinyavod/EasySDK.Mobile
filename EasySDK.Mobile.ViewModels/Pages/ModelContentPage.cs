@@ -44,4 +44,13 @@ public abstract class ModelContentPage<TViewModel> : ContentPage
 		if (ViewModel is ISupportAppearing appearing)
 			appearing.OnAppearing();
 	}
+
+	protected override void OnDisappearing()
+	{
+		base.OnDisappearing();
+
+		if(ViewModel is ISupportDisappearing disappearing)
+			disappearing.OnDisappearing();
+
+	}
 }
