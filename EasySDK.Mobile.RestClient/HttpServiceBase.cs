@@ -2,11 +2,13 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
+using EasySDK.Mobile.RestClient.Extensions;
 using EasySDK.Mobile.RestClient.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -188,6 +190,18 @@ public abstract class HttpServiceBase
 			LogErrorResponse(response, content);
 
 		return result;
+	}
+
+	protected Task<IResponse<TResult>> PatchJsonAsync<TForm, TResult>
+	(
+		string requestUri,
+		Expression<Func<TForm>> patch,
+		bool useToken = true
+	)
+	{
+		var model = patch.ToJObject();
+
+		return PatchJsonAsync<TResult>(requestUri, model, useToken);
 	}
 
 	protected async Task<IResponse<TResult>> PatchJsonAsync<TResult>
