@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+                    x:Class="EasySDK.Mobile.DXPages.EditorStylesResources">
+	<Thickness x:Key="EditorPadding">10</Thickness>
+
+	<Color x:Key="LightStartIconColor">#FF505050</Color>
+	<Color x:Key="DarkStartIconColor">#FFF0F0F0</Color>
+
+	<Style TargetType="editors:EditBase"
+	       x:Key="EditorStyle">
+		<Setter Property="StartIconColor">
+			<Setter.Value>
+				<x:AppThemeBinding
+					Light="{StaticResource LightStartIconColor}"
+					Dark="{StaticResource DarkStartIconColor}"/>
+			</Setter.Value>
+		</Setter>
+
+		<Setter Property="BoxPadding" Value="{StaticResource EditorPadding}"/>
+		<Setter Property="IsLabelFloating" Value="True"/>
+	</Style>
+
+	<Style TargetType="editors:DateEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:TextEdit"
+	       BaseResourceKey="EditorStyle">
+		
+	</Style>
+
+	<Style TargetType="editors:NumericEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:ComboBoxEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:PasswordEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:MultilineEdit">
+		<Setter Property="StartIconColor">
+			<Setter.Value>
+				<x:AppThemeBinding
+					Light="{StaticResource LightStartIconColor}"
+					Dark="{StaticResource DarkStartIconColor}"/>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="IsLabelFloating" Value="True"/>
+	</Style>
+</ResourceDictionary>

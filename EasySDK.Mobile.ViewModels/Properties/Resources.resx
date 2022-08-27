@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Authorization" xml:space="preserve">
+    <value>Authorization...</value>
+  </data>
   <data name="BFormat" xml:space="preserve">
     <value>{0} B</value>
   </data>
@@ -135,14 +138,23 @@
   <data name="FailedShareLogsMessage" xml:space="preserve">
     <value>Failed share logs.</value>
   </data>
+  <data name="FailedSignInMessage" xml:space="preserve">
+    <value>Failed to login.</value>
+  </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Gb</value>
+  </data>
+  <data name="InvalidUserOrPassword" xml:space="preserve">
+    <value>Wrong login or password</value>
   </data>
   <data name="Journal" xml:space="preserve">
     <value>Journal</value>
   </data>
   <data name="KBFormat" xml:space="preserve">
     <value>{0:F1} Kb</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="MBormat" xml:space="preserve">
     <value>{0:F2} Mb</value>
@@ -153,8 +165,14 @@
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="RequestPermissions" xml:space="preserve">
     <value>Permission request</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign In</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

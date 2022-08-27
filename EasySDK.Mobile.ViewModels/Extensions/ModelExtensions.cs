@@ -1,12 +1,25 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
+using EasySDK.Mobile.ViewModels.Converters;
+using Newtonsoft.Json;
 
 namespace EasySDK.Mobile.ViewModels.Extensions;
 
 public static class ModelExtensions
 {
+	#region Constants
+
+	public const double Kb = 1024;
+	public const double Mb = Kb * Kb;
+	public const double Gb = Kb * Mb;
+
+	#endregion
+
 	#region Public methods
 
 	public static async Task<IResponse<TNewResult>> Convert<TResult, TNewResult>(this Task<IResponse<TResult>> responseTask, Func<TResult, TNewResult> convert)
@@ -23,12 +36,6 @@ public static class ModelExtensions
 		return response.ConvertToList(convert);
 	}
 
-	#endregion
-
-	public const double Kb = 1024;
-	public const double Mb = Kb * Kb;
-	public const double Gb = Kb * Mb;
-
 	public static string FileSizeToString(this long fileSize)
 	{
 		return fileSize switch
@@ -41,5 +48,39 @@ public static class ModelExtensions
 		};
 	}
 
-	public static string ToUrlArgs(this string args) => Uri.EscapeDataString(args ?? string.Empty);
+	public static string ToUrlArgs(this string? args) => Uri.EscapeDataString(args ?? string.Empty);
+	
+	public static Dictionary<string, string> GetPropertiesMap(this Type? type)
+	{
+		var map = new Dictionary<string, string>(new IgnoreCaseComparer());
+		if (type is null)
+			return map;
+
+		var properties = type.GetProperties();
+
+		foreach (var property in properties)
+		{
+			foreach (var attribute in property.GetCustomAttributes(true))
+			{
+				switch (attribute)
+				{
+					case JsonPropertyAttribute {PropertyName: { } jp}:
+						map[jp] = property.Name;
+						break;
+
+					case DataMemberAttribute {IsNameSetExplicitly:true, Name: { } dmn}:
+						map[dmn] = property.Name;
+						break;
+
+					default:
+						map[property.Name] = property.Name;
+						break;
+				}
+			}
+		}
+
+		return map;
+	}
+
+	#endregion
 }
