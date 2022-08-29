@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:dataForm="http://schemas.devexpress.com/xamarin/2014/forms/dataform"
+                    xmlns:dxPages="clr-namespace:EasySDK.Mobile.DXPages;assembly=EasySDK.Mobile.DXPages"
+                    xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+                    xmlns:behaviors="clr-namespace:EasySDK.Mobile.DXPages.Behaviors;assembly=EasySDK.Mobile.DXPages"
+                    xmlns:behaviors1="http://easyptog.ru/sdk/mobile"
+                    xmlns:themes="clr-namespace:EasySDK.Mobile.DXPages.Themes;assembly=EasySDK.Mobile.DXPages"
+                    xmlns:themes1="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+                    x:Class="EasySDK.Mobile.DXPages.Themes.DataFormResources">
+	
+	<Style TargetType="dataForm:DataFormView"
+	       x:Key="DefaultDataFormStyle">
+		<Setter Property="CommitMode" Value="PropertyChanged"/>
+		<Setter Property="ContentPadding" Value="10, 0"/>
+		<Setter Property="IsAutoGenerationEnabled" Value="False"/>
+		<Setter Property="ReserveBottomTextLine" Value="True" />
+		<Setter Property="IsEditorLabelVisible" Value="False"/>
+		<Setter Property="EditorHorizontalSpacing" Value="5"/>
+
+		<Setter Property="EditorLabelColor" Value="{x:DynamicResource {themes1:DefaultColorThemeKey Key=TextColor}}"/>
+
+			<Setter Property="GroupHeaderTextColor" Value="{x:DynamicResource {themes1:DefaultColorThemeKey Key=TextColor}}">
+			</Setter>
+			<Setter Property="behaviors1:ResourceDictionaryBehavior.Resources">
+				<Setter.Value>
+					<ResourceDictionary>
+						<ResourceDictionary.MergedDictionaries>
+							<themes:EditorStylesResources/>
+						</ResourceDictionary.MergedDictionaries>
+
+						<Style TargetType="editors:EditBase"
+						       BaseResourceKey="EditorStyle"
+						       x:Key="FormDataEditStyle">
+							<Style.Behaviors>
+								<behaviors:DataFormBehavior/>
+							</Style.Behaviors>
+						</Style>
+
+						<Style TargetType="editors:DateEdit"
+						       BaseResourceKey="FormDataEditStyle"/>
+
+						<Style TargetType="editors:TimeEdit"
+						       BaseResourceKey="FormDataEditStyle"/>
+
+						<Style TargetType="editors:TextEdit"
+						       BaseResourceKey="FormDataEditStyle"/>
+
+						<Style TargetType="editors:NumericEdit"
+						       BaseResourceKey="FormDataEditStyle"/>
+
+						<Style TargetType="editors:ComboBoxEdit"
+						       BaseResourceKey="FormDataEditStyle"/>
+
+						<Style TargetType="editors:PasswordEdit"
+						       BaseResourceKey="FormDataEditStyle"/>
+
+						<Style TargetType="editors:MultilineEdit">
+							<Style.Behaviors>
+								<behaviors:DataFormBehavior/>
+							</Style.Behaviors>
+							<Setter Property="StartIconColor" Value="{x:DynamicResource {themes1:DefaultColorThemeKey Key=StartIconColor}}"/>
+							<Setter Property="IsLabelFloating" Value="True"/>
+						</Style>
+
+						<Style TargetType="editors:CheckEdit">
+							<Setter Property="LabelFontSize" Value="Medium"/>
+						</Style>
+					</ResourceDictionary>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="BackgroundColor" Value="Transparent"/>
+			
+			<Style.Behaviors>
+				<behaviors1:ResourceDictionaryBehavior/>
+			</Style.Behaviors>
+		</Style>
+</ResourceDictionary>

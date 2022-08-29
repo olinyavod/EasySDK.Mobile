@@ -47,6 +47,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Themes\DefaultColorsResources.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

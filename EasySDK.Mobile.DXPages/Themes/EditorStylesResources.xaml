@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+                    xmlns:system="clr-namespace:System;assembly=netstandard"
+                    xmlns:controls="http://easyptog.ru/sdk/mobile"
+                    xmlns:props="clr-namespace:EasySDK.Mobile.DXPages.Properties;assembly=EasySDK.Mobile.DXPages"
+                    xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+                    x:Class="EasySDK.Mobile.DXPages.Themes.EditorStylesResources">
+
+	<controls:TextTransformConverter x:Key="TextTransformConverter"/>
+	<controls:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
+
+	<Thickness x:Key="EditorPadding">10</Thickness>
+	<system:Int32 x:Key="ElementCornerRadius">5</system:Int32>
+
+	<system:Double x:Key="FieldHeight">75</system:Double>
+
+	<Style TargetType="editors:EditBase"
+	       x:Key="EditorStyle">
+		<Setter Property="StartIconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=StartIconColor}}"/>
+		<Setter Property="BoxPadding" Value="{StaticResource EditorPadding}"/>
+		<Setter Property="IsLabelFloating" Value="True"/>
+	</Style>
+
+	<Style TargetType="editors:DateEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:TextEdit"
+	       BaseResourceKey="EditorStyle">
+		
+	</Style>
+
+	<Style TargetType="editors:NumericEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:ComboBoxEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:PasswordEdit"
+	       BaseResourceKey="EditorStyle"/>
+
+	<Style TargetType="editors:MultilineEdit">
+		<Setter Property="StartIconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=StartIconColor}}"/>
+		<Setter Property="IsLabelFloating" Value="True"/>
+	</Style>
+
+	<Style TargetType="Button">
+		<Setter Property="TextColor" Value="White"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
+		<Setter Property="VisualStateManager.VisualStateGroups">
+			<VisualStateGroupList>
+				<VisualStateGroup x:Name="CommonStates">
+					<VisualState x:Name="Normal">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+						</VisualState.Setters>
+					</VisualState>
+					<VisualState x:Name="Disabled">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="#332196F3" />
+						</VisualState.Setters>
+					</VisualState>
+				</VisualStateGroup>
+			</VisualStateGroupList>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Label">
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
+	</Style>
+
+	<Style TargetType="controls:DataEntry">
+		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
+		<Setter Property="PlaceholderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
+		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+	</Style>
+
+	<Style TargetType="editors:SimpleButton"
+	       x:Key="BackButtonStyle">
+		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
+		<Setter Property="UseRippleEffect" Value="True"/>
+		<Setter Property="Icon" Value="ic_back_white_24px.png"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Padding" Value="10, 9"/>
+		<Setter Property="Text" Value="{Binding Source={x:Static props:Resources.Back}, Converter={StaticResource TextTransformConverter}, ConverterParameter={x:Static TextTransform.Uppercase}}"/>
+
+		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
+		<Setter Property="PressedBackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
+		<Setter Property="DisabledBackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
+		<Setter Property="BorderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="PressedBorderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="PressedTextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+	</Style>
+
+	<Style TargetType="Button"
+	       x:Key="RedButtonStyle">
+		<Setter Property="TextColor" Value="White"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
+		<Setter Property="VisualStateManager.VisualStateGroups">
+			<VisualStateGroupList>
+				<VisualStateGroup x:Name="CommonStates">
+					<VisualState x:Name="Normal">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=ErrorColor}}"/>
+						</VisualState.Setters>
+					</VisualState>
+				            
+					<VisualState x:Name="Disabled">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="#332196F3" />
+						</VisualState.Setters>
+					</VisualState>
+				</VisualStateGroup>
+			</VisualStateGroupList>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Button"
+	       x:Key="GreenButtonStyle">
+		<Setter Property="TextColor" Value="White"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
+		<Setter Property="VisualStateManager.VisualStateGroups">
+			<VisualStateGroupList>
+				<VisualStateGroup x:Name="CommonStates">
+					<VisualState x:Name="Normal">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=DoneColor}}">
+							</Setter>
+						</VisualState.Setters>
+					</VisualState>
+				            
+					<VisualState x:Name="Disabled">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="#332196F3" />
+						</VisualState.Setters>
+					</VisualState>
+				</VisualStateGroup>
+			</VisualStateGroupList>
+		</Setter>
+	</Style>
+
+	<Style TargetType="Button"
+	       x:Key="SecondaryButtonStyle">
+		<!--<Setter Property="BackgroundColor" Value="White"/>-->
+		<Setter Property="BorderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+	            
+		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+	            
+		<Setter Property="BorderWidth" Value="1"/>
+
+		<Setter Property="VisualStateManager.VisualStateGroups">
+			<VisualStateGroupList>
+				<VisualStateGroup x:Name="CommonStates">
+					<VisualState x:Name="Normal">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=SecondaryColor}}"/>
+						</VisualState.Setters>
+					</VisualState>
+				            
+					<VisualState x:Name="Disabled">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="#332196F3" />
+						</VisualState.Setters>
+					</VisualState>
+				</VisualStateGroup>
+			</VisualStateGroupList>
+		</Setter>
+	</Style>
+
+	<Style TargetType="{x:Type controls:HyperlinkSpan}" >
+		<Setter Property="TextDecorations" Value="Underline"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=LinkColor}}"/>
+	</Style>
+
+	<Style TargetType="CheckBox">
+		<Setter Property="Color" Value="{x:DynamicResource TextColor}"/>
+	</Style>
+
+	<Style TargetType="controls:DataDatePicker">
+		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey TextColor}}"/>
+		<Setter Property="controls:EntryIconEffect.HintColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+	</Style>
+
+	<Style TargetType="controls:DataPicker">
+		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
+		<Setter Property="TitleColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
+		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+	</Style>
+
+	<Style TargetType="controls:DataTimePicker">
+		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
+		<Setter Property="controls:EntryIconEffect.HintColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}">
+		</Setter>
+	</Style>
+
+	<Style TargetType="controls:DataEditor">
+		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey TextColor}}"/>
+		<Setter Property="PlaceholderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey PlaceholderColor}}"/>
+		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+	</Style>
+
+	<Style TargetType="Editor">
+		<Setter Property="TextColor" Value="{x:DynamicResource TextColor}"/>
+		<Setter Property="PlaceholderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+	</Style>
+
+	<Style TargetType="controls:ErrorLabel">
+		<Setter Property="HorizontalOptions" Value="EndAndExpand"/>
+		<Setter Property="HorizontalTextAlignment" Value="End"/>
+		<Setter Property="FontSize" Value="Small"/>
+		<Setter Property="LineBreakMode" Value="MiddleTruncation"/>
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=ErrorText}}"/>
+	</Style>
+
+	<Style TargetType="Label"
+	       x:Key="MessageLabelStyle">
+		<Setter Property="LineBreakMode" Value="WordWrap"/>
+		<Setter Property="HorizontalTextAlignment" Value="Start"/>
+		<Setter Property="FontSize" Value="Body"/>
+	</Style>
+
+	<Style TargetType="RefreshView">
+		<Setter Property="RefreshColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=RefreshBackgroundColor}}"/>
+		<Setter Property="controls:ShadowEffect.Elevation" Value="20"/>
+	</Style>
+
+	<Style TargetType="CollectionView">
+		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=CollectionBackgroundColor}}"/>
+	</Style>
+
+	<Style TargetType="controls:ItemFrame">
+		<Setter Property="HasShadow" Value="True"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Padding" Value="15, 10"/>
+		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
+	</Style>
+
+	<Style TargetType="Label"
+	       x:Key="EmptyListLabelStyle">
+		<Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+		<Setter Property="VerticalOptions" Value="FillAndExpand"/>
+		<Setter Property="VerticalTextAlignment" Value="Center"/>
+		<Setter Property="HorizontalTextAlignment" Value="Center"/>
+		<Setter Property="IsVisible" Value="{Binding IsBusy, Converter={StaticResource InvertBooleanConverter}}"></Setter>
+	</Style>
+
+	<Style TargetType="Label"
+	       x:Key="ItemTitleStyle">
+		<Setter Property="LineBreakMode" Value="MiddleTruncation"/>
+		<Setter Property="FontAttributes" Value="Bold"/>
+		<Setter Property="FontSize" Value="Body"/>
+	</Style>
+
+	<Style TargetType="RadioButton">
+		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}">
+		</Setter>
+		<Setter Property="BackgroundColor" Value="Transparent"/>
+	</Style>
+
+	<Style TargetType="StackLayout" 
+	       x:Key="CustomCheckEditLayoutStyle">
+		<Setter Property="Orientation" Value="Vertical"/>
+		<Setter Property="Spacing" Value="-1"/>
+	</Style>
+</ResourceDictionary>

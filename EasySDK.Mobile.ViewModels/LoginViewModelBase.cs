@@ -23,6 +23,7 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 	private string _login;
 	private string _password;
+	private bool _invalidLogin;
 
 	#endregion
 
@@ -33,13 +34,13 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 	public string Login
 	{
 		get => _login;
-		set => SetProperty(ref _login, value);
+		set => SetProperty(ref _login, value, LoginOnChanged);
 	}
 
 	public string Password
 	{
 		get => _password;
-		set => SetProperty(ref _password, value);
+		set => SetProperty(ref _password, value, PasswordOnChanged);
 	}
 	
 	#endregion
@@ -75,6 +76,23 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 	};
 
 	protected abstract Task SignInOnSuccess(TLoginForm form, string token);
+
+	#endregion
+
+	#region Private methods
+	
+	private void LoginOnChanged()
+	{
+		_invalidLogin = false;
+	}
+
+	private void PasswordOnChanged()
+	{
+		if(_invalidLogin)
+			ClearErrors(nameof(Login));
+
+		_invalidLogin = false;
+	}
 
 	#endregion
 
@@ -116,13 +134,13 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 				case ResponseErrorCodes.NotFound:
 					SetError(Properties.Resources.InvalidUserOrPassword, nameof(Login));
+					_invalidLogin = true;
 					break;
 
 				default:
 					_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
 					break;
 			}
-
 		}
 		catch (Exception ex)
 		{

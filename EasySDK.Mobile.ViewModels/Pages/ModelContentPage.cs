@@ -1,4 +1,5 @@
 ﻿using System;
+using EasySDK.Mobile.ViewModels.Themes;
 using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,6 +18,8 @@ public abstract class ModelContentPage<TViewModel> : ContentPage
 
 	protected ModelContentPage()
 	{
+		SetDynamicResource(BackgroundColorProperty, nameof(DefaultColorThemeKeys.PageBackgroundColor));
+
 		if (Application.Current is not FormsApp {ServiceProvider: { } serviceProvider})
 			return;
 

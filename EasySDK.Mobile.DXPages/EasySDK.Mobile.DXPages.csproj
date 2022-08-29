@@ -16,16 +16,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="EditorStylesResources.xaml.cs">
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Themes\EditorStylesResources.xaml.cs">
       <DependentUpon>EditorStylesResources.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="DefaultColorsResources.xaml">
+    <EmbeddedResource Update="Properties\Resources.ru-RU.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\DataFormResources.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="EditorStylesResources.xaml">
+    <EmbeddedResource Update="Themes\EditorStylesResources.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
