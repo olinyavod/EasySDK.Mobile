@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.ComponentModel;
 using FluentValidation;
 using System.Windows.Input;
 using Acr.UserDialogs;
@@ -12,8 +14,7 @@ using EasySDK.Mobile.ViewModels.Input;
 
 namespace EasySDK.Mobile.ViewModels;
 
-public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILoginForm
-	where TLoginForm: class, ILoginForm, new()
+public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILoginViewModel where TLoginForm: class, ILoginForm, new()
 {
 	#region Private fields
 
@@ -24,12 +25,26 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 	private string _login;
 	private string _password;
 	private bool _invalidLogin;
+	private string _title = Properties.Resources.AuthorizationTitle;
+	private ImageSource _logoImageSource;
 
 	#endregion
 
 	#region Properties
 
 	protected ILogger Log { get; }
+
+	public string Title
+	{
+		get => _title;
+		set => SetProperty(ref _title, value);
+	}
+
+	public ImageSource LogoImageSource
+	{
+		get => _logoImageSource;
+		set => SetProperty(ref _logoImageSource, value);
+	}
 
 	public string Login
 	{
@@ -61,13 +76,21 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 		_authService = authService;
 		Log = logger;
 
+		var application = Application.Current;
+
+		application.RequestedThemeChanged += ApplicationOnRequestedThemeChanged;
+
+		LogoImageSource = GetLogoSource(application.RequestedTheme);
+
 		ChangeThemeCommand = new Command(OnChangeTheme);
 		SignInCommand = new AsyncCommand(OnSignIn);
 	}
-	
+
 	#endregion
 
 	#region Protected methods
+
+	protected abstract ImageSource GetLogoSource(OSAppTheme theme);
 
 	protected virtual TLoginForm CreateForm() => new()
 	{
@@ -80,6 +103,11 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 	#endregion
 
 	#region Private methods
+
+	private void ApplicationOnRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+	{
+		LogoImageSource = GetLogoSource(e.RequestedTheme);
+	}
 	
 	private void LoginOnChanged()
 	{

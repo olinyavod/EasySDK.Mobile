@@ -4,9 +4,9 @@ public interface ILoginForm
 {
 	#region Properties
 
-	string Login { get; set; }
+	public string Login { get; set; }
 
-	string Password { get; set; }
+	public string Password { get; set; }
 
 	#endregion
 }

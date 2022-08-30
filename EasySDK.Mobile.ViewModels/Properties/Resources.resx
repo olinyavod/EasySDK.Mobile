@@ -120,6 +120,9 @@
   <data name="Authorization" xml:space="preserve">
     <value>Authorization...</value>
   </data>
+  <data name="AuthorizationTitle" xml:space="preserve">
+    <value>Authorization</value>
+  </data>
   <data name="BFormat" xml:space="preserve">
     <value>{0} B</value>
   </data>

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<m:ModelContentPage x:TypeArguments="m:ILoginViewModel" 
+                    xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:m="http://easyptog.ru/sdk/mobile"
+                    xmlns:dataForm="http://schemas.devexpress.com/xamarin/2014/forms/dataform"
+                    xmlns:behaviors1="clr-namespace:EasySDK.Mobile.DXPages.Behaviors;assembly=EasySDK.Mobile.DXPages"
+                    xmlns:props="clr-namespace:EasySDK.Mobile.ViewModels.Properties;assembly=EasySDK.Mobile.ViewModels"
+                    x:DataType="m:ILoginViewModel"
+                    Shell.NavBarHasShadow="False"
+                    x:Class="EasySDK.Mobile.DXPages.LoginPage">
+	<m:ModelContentPage.Resources>
+		<ResourceDictionary>
+		</ResourceDictionary>
+	</m:ModelContentPage.Resources>
+
+	<m:ModelContentPage.ToolbarItems>
+		<ToolbarItem Command="{Binding ChangeThemeCommand}">
+			<ToolbarItem.IconImageSource>
+				<x:AppThemeBinding
+					Light="ic_dark_mode_24px.png"
+					Dark="ic_light_mode_24px.png"/>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+	</m:ModelContentPage.ToolbarItems>
+
+	<Shell.TitleView>
+		<Label Text="{Binding Title}"
+		       FontSize="Large"
+		       FontAttributes="Bold"
+		       VerticalTextAlignment="Center"
+		       HorizontalTextAlignment="Center"
+		       VerticalOptions="FillAndExpand"
+		       HorizontalOptions="FillAndExpand"/>
+	</Shell.TitleView>
+
+	<ScrollView>
+		<Grid Padding="{StaticResource PagePadding}" 
+		      VerticalOptions="FillAndExpand"
+		      RowDefinitions="*, Auto, Auto, Auto, *">
+
+			<Image Grid.Row="0"
+			       WidthRequest="250"
+			       HorizontalOptions="CenterAndExpand"
+			       VerticalOptions="CenterAndExpand"
+			       Source="{Binding LogoImageSource}"/>
+			
+			<dataForm:DataFormView DataObject="{Binding}"
+			                       Grid.Row="1">
+				<dataForm:DataFormTextItem FieldName="Login"
+				                           behaviors1:DataFormBehavior.StartIcon="ic_account_dark_24px"
+				                           InplaceLabelText="{x:Static props:Resources.Login}"
+				                           Keyboard="Email"
+				                           ReturnType="Next"/>
+
+				<dataForm:DataFormPasswordItem FieldName="Password"
+				                               ReturnType="Done"
+				                               InplaceLabelText="{x:Static props:Resources.Password}"
+				                               behaviors1:DataFormBehavior.StartIcon="ic_key_white_24px"
+				                               behaviors1:DataFormBehavior.RetrunCommand="{Binding SignInCommand}"/>
+			</dataForm:DataFormView>
+
+			<Button Grid.Row="3" 
+			        Text="{x:Static props:Resources.SignIn}"
+			        Margin="{StaticResource VerticalElementsMargin}"
+			        Command="{Binding SignInCommand}"/>
+		</Grid>
+	</ScrollView>
+</m:ModelContentPage>

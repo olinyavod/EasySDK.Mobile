@@ -70,6 +70,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authorization.
+        /// </summary>
+        public static string AuthorizationTitle {
+            get {
+                return ResourceManager.GetString("AuthorizationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} B.
         /// </summary>
         public static string BFormat {
