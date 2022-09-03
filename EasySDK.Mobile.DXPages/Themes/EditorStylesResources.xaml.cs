@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms.Xaml;
+﻿using DevExpress.XamarinForms.Core.Themes;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace EasySDK.Mobile.DXPages.Themes
 {
@@ -8,6 +10,13 @@ namespace EasySDK.Mobile.DXPages.Themes
 		public EditorStylesResources()
 		{
 			InitializeComponent();
+
+			Application.Current.RequestedThemeChanged += CurrentOnRequestedThemeChanged;
+		}
+
+		private void CurrentOnRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+		{
+			ThemeManager.ThemeName = e.RequestedTheme == OSAppTheme.Dark ? Theme.Dark : Theme.Light;
 		}
 
 		private void Init()

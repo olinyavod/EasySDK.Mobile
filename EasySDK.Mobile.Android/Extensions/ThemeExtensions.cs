@@ -62,15 +62,31 @@ public static class ThemeExtensions
 
 	#endregion //AttachedProperty DarkStatusBarColor
 
+	#region AttachedProperty StatusBarColorKey
+
+	public static readonly BindableProperty StatusBarColorKeyProperty = BindableProperty.CreateAttached(
+		"StatusBarColorKey", typeof(string), typeof(ThemeExtensions), default(string));
+
+	public static void SetStatusBarColorKey(BindableObject element, string value)
+	{
+		element.SetValue(StatusBarColorKeyProperty, value);
+	}
+
+	public static string GetStatusBarColorKey(BindableObject element)
+	{
+		return (string) element.GetValue(StatusBarColorKeyProperty);
+	}
+
+	#endregion //AttachedProperty StatusBarColorKey
+
 	#endregion
 
 
 	#region Public methods
 
-	public static void OnThemeChanged(this Application app, Activity activity, Color lightStatusBarColor, Color darkStatusBarColor)
+	public static void OnThemeChanged(this Application app, Activity activity, string statusColorKey)
 	{
-		SetDarkStatusBarColor(app, darkStatusBarColor);
-		SetLightStatusBar(app, lightStatusBarColor);
+		SetStatusBarColorKey(app, statusColorKey);
 		SetActivity(app, activity);
 
 		FormsAppOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.RequestedTheme));
@@ -89,17 +105,16 @@ public static class ThemeExtensions
 
 
 		if (e.RequestedTheme == OSAppTheme.Dark)
-		{
 			ClearLightStatusBar(activity);
-			var darkStatusBarColor = GetDarkStatusBarColor(app);
-			activity.Window?.SetStatusBarColor(darkStatusBarColor.ToAndroid());
-		}
 		else
-		{
 			SetLightStatusBar(activity);
-			var lightStatusBarColor = GetLightStatusBar(app);
-			activity.Window?.SetStatusBarColor(lightStatusBarColor.ToAndroid());
-		}
+		
+		var statusBarColorKey = GetStatusBarColorKey(app);
+		
+		var element = new BoxView();
+		element.SetDynamicResource(BoxView.ColorProperty, statusBarColorKey);
+
+		activity.Window?.SetStatusBarColor(element.Color.ToAndroid());
 	}
 
 	private static void SetLightStatusBar(Activity activity)

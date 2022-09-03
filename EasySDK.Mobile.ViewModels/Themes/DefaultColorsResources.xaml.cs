@@ -9,9 +9,37 @@ namespace EasySDK.Mobile.ViewModels.Themes
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DefaultColorsResources
 	{
-		public ColorPaletteBase LightPalette { get; set; } = new DefaultLightPalette();
+		private ResourceDictionary? _oldColors;
+		private ColorPaletteBase _lightPalette = new DefaultLightPalette();
+		private ColorPaletteBase _darkPalette = new DefaultDarkPalette();
 
-		public ColorPaletteBase DarkPalette { get; set; } = new DefaultDarkPalette();
+		public ColorPaletteBase LightPalette
+		{
+			get => _lightPalette;
+			set
+			{
+				if(_lightPalette == value)
+					return;
+
+				_lightPalette = value;
+				var app = Application.Current;
+				CurrentOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.UserAppTheme));
+			}
+		}
+
+		public ColorPaletteBase DarkPalette
+		{
+			get => _darkPalette;
+			set
+			{
+				if(_darkPalette == value)
+					return;
+
+				_darkPalette = value;
+				var app = Application.Current;
+				CurrentOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.UserAppTheme));
+			}
+		}
 
 
 		public DefaultColorsResources()
@@ -24,9 +52,7 @@ namespace EasySDK.Mobile.ViewModels.Themes
 
 			CurrentOnRequestedThemeChanged(application, new AppThemeChangedEventArgs(application.UserAppTheme));
 		}
-
-		private ResourceDictionary? _oldColors;
-
+		
 		private void CurrentOnRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
 		{
 			if (_oldColors != null)
