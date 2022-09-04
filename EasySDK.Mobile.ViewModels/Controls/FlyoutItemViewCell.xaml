@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+      xmlns:effects="clr-namespace:EasySDK.Mobile.ViewModels.Effects;assembly=EasySDK.Mobile.ViewModels"
+      x:DataType="FlyoutItem"
+      Padding="10"
+      x:Class="EasySDK.Mobile.ViewModels.Controls.FlyoutItemViewCell">
+	<VisualStateManager.VisualStateGroups>
+		<VisualStateGroupList>
+			<VisualStateGroup x:Name="CommonStates">
+				<VisualState x:Name="Normal">
+					<VisualState.Setters>
+						<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}">
+						</Setter>
+					</VisualState.Setters>
+				</VisualState>
+				<VisualState x:Name="Selected">
+					<VisualState.Setters>
+						<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=SelectedBackgroundColor}}"/>
+					</VisualState.Setters>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateGroupList>
+	</VisualStateManager.VisualStateGroups>
+
+	<Grid.ColumnDefinitions>
+		<ColumnDefinition Width="50"/>
+		<ColumnDefinition Width="*"/>
+	</Grid.ColumnDefinitions>
+
+	<Image Grid.Column="0"
+	       Source="{Binding FlyoutIcon}"
+	       effects:TintImageEffect.TintColor="{x:DynamicResource {themes:DefaultColorThemeKey Key=MenuIconColor}}">
+		<Image.Effects>
+			<effects:TintImageEffect/>
+		</Image.Effects>
+	</Image>
+
+	<Label Text="{Binding Title}" 
+	       FontSize="Body"
+	       Grid.Column="1"/>
+</Grid>

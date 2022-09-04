@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.OS;
 using Android.Views;
+using AndroidX.AppCompat.App;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Application = Xamarin.Forms.Application;
@@ -109,6 +110,7 @@ public static class ThemeExtensions
 		else
 			SetLightStatusBar(activity);
 		
+
 		var statusBarColorKey = GetStatusBarColorKey(app);
 		
 		var element = new BoxView();

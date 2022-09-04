@@ -46,14 +46,17 @@
 			       Source="{Binding LogoImageSource}"/>
 			
 			<dataForm:DataFormView DataObject="{Binding}"
+			                       ReserveBottomTextLine="True"
 			                       Grid.Row="1">
 				<dataForm:DataFormTextItem FieldName="Login"
+										   ReserveBottomTextLine="True"
 				                           behaviors1:DataFormBehavior.StartIcon="ic_account_dark_24px"
 				                           InplaceLabelText="{x:Static props:Resources.Login}"
 				                           Keyboard="Email"
 				                           ReturnType="Next"/>
 
 				<dataForm:DataFormPasswordItem FieldName="Password"
+											   ReserveBottomTextLine="True"
 				                               ReturnType="Done"
 				                               InplaceLabelText="{x:Static props:Resources.Password}"
 				                               behaviors1:DataFormBehavior.StartIcon="ic_key_white_24px"

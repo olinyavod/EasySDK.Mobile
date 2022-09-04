@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:effects="clr-namespace:EasySDK.Mobile.ViewModels.Effects;assembly=EasySDK.Mobile.ViewModels"
+      xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+      x:Class="EasySDK.Mobile.ViewModels.Controls.FlyoutMenuItemViewCell"
+      ColumnDefinitions="50,*" 
+      Padding="10">
+	<Image Source="{Binding Icon}"
+	       Margin="5" 
+	       effects:TintImageEffect.TintColor="{x:DynamicResource {themes:DefaultColorThemeKey Key=MenuIconColor}}">
+		<Image.Effects>
+			<effects:TintImageEffect/>
+		</Image.Effects>
+	</Image>
+
+	<Label Grid.Column="1"
+	       Text="{Binding Text}"
+	       FontAttributes="Italic"
+	       VerticalTextAlignment="Center" />
+</Grid>

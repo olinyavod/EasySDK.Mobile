@@ -43,6 +43,9 @@
     <Compile Update="Controls\CheckBoxView.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
+    <Compile Update="Controls\FlyoutMenuItemViewCell.xaml.cs">
+      <DependentUpon>FlyoutMenuItemViewCell.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -55,6 +58,12 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Controls\ButtonSettingsCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\FlyoutItemViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\FlyoutMenuItemViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\SwitchSettingsCell.xaml">
