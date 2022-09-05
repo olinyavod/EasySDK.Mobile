@@ -23,6 +23,7 @@
 		StartIconColor,
 		SeparatorColor,
 		FlyoutHeaderColor,
-		MenuIconColor
+		MenuIconColor,
+		UnselectedTextColor
 	}
 }

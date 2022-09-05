@@ -8,6 +8,7 @@ public class DefaultDarkPalette : ColorPaletteBase
 		SetColor(nameof(DefaultColorThemeKeys.SecondaryColor), "#1F1F1F");
 		SetColor(nameof(DefaultColorThemeKeys.LinkColor), "#2C88D9");
 		SetColor(nameof(DefaultColorThemeKeys.TextColor), "#FFFFFF");
+		SetColor(nameof(DefaultColorThemeKeys.UnselectedTextColor), "#90FFFFFF");
 		SetColor(nameof(DefaultColorThemeKeys.PlaceholderColor), "#FFFFFF");
 		SetColor(nameof(DefaultColorThemeKeys.NavigationColor), "#1E1E1E");
 		SetColor(nameof(DefaultColorThemeKeys.PageBackgroundColor), "#1E1E1E");
