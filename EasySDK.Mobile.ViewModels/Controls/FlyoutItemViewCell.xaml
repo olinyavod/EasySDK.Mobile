@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
       xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
       xmlns:effects="clr-namespace:EasySDK.Mobile.ViewModels.Effects;assembly=EasySDK.Mobile.ViewModels"
-      x:DataType="FlyoutItem"
+      xmlns:controls="clr-namespace:EasySDK.Mobile.ViewModels.Controls;assembly=EasySDK.Mobile.ViewModels"
       Padding="10"
       x:Class="EasySDK.Mobile.ViewModels.Controls.FlyoutItemViewCell">
 	<VisualStateManager.VisualStateGroups>
@@ -26,6 +26,7 @@
 
 	<Grid.ColumnDefinitions>
 		<ColumnDefinition Width="50"/>
+		<ColumnDefinition Width="Auto"/>
 		<ColumnDefinition Width="*"/>
 	</Grid.ColumnDefinitions>
 
@@ -40,4 +41,7 @@
 	<Label Text="{Binding Title}" 
 	       FontSize="Body"
 	       Grid.Column="1"/>
+
+	<ContentView Grid.Column="2"
+				 x:Name="PART_AdditionalContent"/>
 </Grid>

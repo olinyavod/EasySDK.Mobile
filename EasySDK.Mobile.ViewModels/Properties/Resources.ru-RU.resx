@@ -174,6 +174,9 @@
   <data name="RequestPermissions" xml:space="preserve">
     <value>Запрос разрешений</value>
   </data>
+  <data name="SearchDots" xml:space="preserve">
+    <value>Поиск...</value>
+  </data>
   <data name="SignIn" xml:space="preserve">
     <value>Войти</value>
   </data>

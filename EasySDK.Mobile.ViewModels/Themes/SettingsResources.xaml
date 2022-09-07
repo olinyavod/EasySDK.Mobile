@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:controls="clr-namespace:EasySDK.Mobile.ViewModels.Controls;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+                    x:Class="EasySDK.Mobile.ViewModels.Themes.SettingsResources">
+	<Style TargetType="Label"
+	       x:Key="HeaderLabelStyle">
+		<Setter Property="FontSize" Value="Medium"/>
+		<Setter Property="FontAttributes" Value="Bold"/>
+		<Setter Property="Padding" Value="15, 10, 15, 5"/>
+	</Style>
+
+	<Style TargetType="controls:ItemFrame"
+	       x:Key="ItemFrameStyle">
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}">
+		</Setter>
+	</Style>
+
+	<Style TargetType="controls:SwitchSettingsCell"
+	       BaseResourceKey="ItemFrameStyle"/>
+
+	<Style TargetType="controls:ButtonSettingsCell"
+	       BaseResourceKey="ItemFrameStyle"/>
+</ResourceDictionary>

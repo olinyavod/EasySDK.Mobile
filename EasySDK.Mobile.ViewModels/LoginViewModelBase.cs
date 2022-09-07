@@ -100,6 +100,22 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 	protected abstract Task SignInOnSuccess(TLoginForm form, string token);
 
+	protected void SetErrors(IResponse response)
+	{
+		if (response.ErrorMessages is not { } errors)
+			return;
+
+		var map = typeof(TLoginForm).GetPropertiesMap();
+
+		foreach (var error in errors)
+		{
+			if (!map.TryGetValue(error.Key, out var propertyName))
+				propertyName = error.Key;
+
+			SetErrors(error.Value, propertyName);
+		}
+	}
+
 	#endregion
 
 	#region Private methods
@@ -178,20 +194,4 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 	}
 
 	#endregion
-
-	protected void SetErrors(IResponse response)
-	{
-		if (response.ErrorMessages is not { } errors)
-			return;
-
-		var map = typeof(TLoginForm).GetPropertiesMap();
-
-		foreach (var error in errors)
-		{
-			if (!map.TryGetValue(error.Key, out var propertyName))
-				propertyName = error.Key;
-
-			SetErrors(error.Value, propertyName);
-		}
-	}
 }

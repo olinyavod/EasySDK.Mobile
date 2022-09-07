@@ -232,6 +232,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string SearchDots {
+            get {
+                return ResourceManager.GetString("SearchDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign In.
         /// </summary>
         public static string SignIn {
