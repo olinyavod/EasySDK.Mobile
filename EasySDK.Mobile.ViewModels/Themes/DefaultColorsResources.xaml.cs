@@ -23,7 +23,7 @@ namespace EasySDK.Mobile.ViewModels.Themes
 
 				_lightPalette = value;
 				var app = Application.Current;
-				CurrentOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.UserAppTheme));
+				CurrentOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.RequestedTheme));
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace EasySDK.Mobile.ViewModels.Themes
 
 				_darkPalette = value;
 				var app = Application.Current;
-				CurrentOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.UserAppTheme));
+				CurrentOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.RequestedTheme));
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace EasySDK.Mobile.ViewModels.Themes
 
 			application.RequestedThemeChanged += CurrentOnRequestedThemeChanged;
 
-			CurrentOnRequestedThemeChanged(application, new AppThemeChangedEventArgs(application.UserAppTheme));
+			CurrentOnRequestedThemeChanged(application, new AppThemeChangedEventArgs(application.RequestedTheme));
 		}
 		
 		private void CurrentOnRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)

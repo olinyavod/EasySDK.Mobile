@@ -21,6 +21,7 @@
 		<Setter Property="StartIconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=StartIconColor}}"/>
 		<Setter Property="BoxPadding" Value="{StaticResource EditorPadding}"/>
 		<Setter Property="IsLabelFloating" Value="True"/>
+		<Setter Property="FocusedBorderColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 	</Style>
 
 	<Style TargetType="editors:DateEdit"
