@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddPhoto" xml:space="preserve">
+    <value>Add photo</value>
+  </data>
   <data name="Authorization" xml:space="preserve">
     <value>Authorization...</value>
   </data>
@@ -132,17 +135,32 @@
   <data name="CopyAllLogsMessage" xml:space="preserve">
     <value>The entire log is copied to the clipboard.</value>
   </data>
+  <data name="DeletePhotoQuestion" xml:space="preserve">
+    <value>Delete photo?</value>
+  </data>
+  <data name="FailedAddPhotoMessage" xml:space="preserve">
+    <value>Failed to upload photo.</value>
+  </data>
   <data name="FailedClearLogsMessage" xml:space="preserve">
     <value>Failed to clear log.</value>
   </data>
   <data name="FailedCopyLogsMessage" xml:space="preserve">
     <value>Failed to copy log.</value>
   </data>
+  <data name="FailedDeletePhotoMessage" xml:space="preserve">
+    <value>Failed to delete photo.</value>
+  </data>
+  <data name="FailedDeletePhotoMessage1" xml:space="preserve">
+    <value>Failed to delete photo.</value>
+  </data>
   <data name="FailedShareLogsMessage" xml:space="preserve">
     <value>Failed share logs.</value>
   </data>
   <data name="FailedSignInMessage" xml:space="preserve">
     <value>Failed to login.</value>
+  </data>
+  <data name="FailedUploadPhotoMessage" xml:space="preserve">
+    <value>Failed to upload photo.</value>
   </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Gb</value>
@@ -156,14 +174,23 @@
   <data name="KBFormat" xml:space="preserve">
     <value>{0:F1} Kb</value>
   </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="MBormat" xml:space="preserve">
     <value>{0:F2} Mb</value>
   </data>
+  <data name="NeedAllowAccessCameraMessage" xml:space="preserve">
+    <value>Allow access to the camera to take photos.</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
+  </data>
+  <data name="NoPhotos" xml:space="preserve">
+    <value>No photos</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
@@ -171,8 +198,14 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Photos</value>
+  </data>
   <data name="RequestPermissions" xml:space="preserve">
     <value>Permission request</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Saving...</value>
   </data>
   <data name="SearchDots" xml:space="preserve">
     <value>Search...</value>

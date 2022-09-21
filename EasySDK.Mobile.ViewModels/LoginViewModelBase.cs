@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.ComponentModel;
 using FluentValidation;
 using System.Windows.Input;
 using Acr.UserDialogs;
@@ -11,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using EasySDK.Mobile.ViewModels.Input;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EasySDK.Mobile.ViewModels;
 
@@ -20,13 +19,12 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 	private readonly IUserDialogs _dialogs;
 	private readonly IUserThemeStorage _userThemeStorage;
-	private readonly IAuthService<TLoginForm> _authService;
 
-	private string _login;
-	private string _password;
+	private string? _login;
+	private string? _password;
 	private bool _invalidLogin;
 	private string _title = Properties.Resources.AuthorizationTitle;
-	private ImageSource _logoImageSource;
+	private ImageSource? _logoImageSource;
 
 	#endregion
 
@@ -40,19 +38,19 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 		set => SetProperty(ref _title, value);
 	}
 
-	public ImageSource LogoImageSource
+	public ImageSource? LogoImageSource
 	{
 		get => _logoImageSource;
 		set => SetProperty(ref _logoImageSource, value);
 	}
 
-	public string Login
+	public string? Login
 	{
 		get => _login;
 		set => SetProperty(ref _login, value, LoginOnChanged);
 	}
 
-	public string Password
+	public string? Password
 	{
 		get => _password;
 		set => SetProperty(ref _password, value, PasswordOnChanged);
@@ -67,13 +65,11 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 		IUserDialogs dialogs,
 		IUserThemeStorage userThemeStorage,
 		ILogger logger,
-		IAuthService<TLoginForm> authService,
 		IValidator validator
 	) : base(validator)
 	{
 		_dialogs = dialogs;
 		_userThemeStorage = userThemeStorage;
-		_authService = authService;
 		Log = logger;
 
 		var application = Application.Current;
@@ -160,9 +156,11 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 				return;
 
 			using var loadingDlg = _dialogs.Loading(Properties.Resources.Authorization);
-
+			await using var scope = CreateAsyncScope();
+			var authService = scope.ServiceProvider.GetService<IAuthService<TLoginForm>>()!;
+			
 			var form = CreateForm();
-			var response = await _authService.LoginAsync(form);
+			var response = await authService.LoginAsync(form);
 			
 			switch (response.ErrorCode)
 			{

@@ -39,17 +39,18 @@ public abstract class FakeCrudServiceBase<TModel, TKey>
 
 	#region Public methods
 
-	public Task<IResponseList<TModel>> GetList(IListRequest request) => Task.Run(async () =>
+	public Task<IResponseList<TModel>> GetListAsync(IListRequest request) => Task.Run(async () =>
 	{
 		await Delay();
 		return FakeResponse.FromResultList(Items
 			.Values
-			.Where(i => Search(i, request.Search))
+			.Where(i => Search(i, request))
+			.OrderBy(OrderBy)
 			.Skip(request.Offset)
 			.Take(request.Count), Items.Count);
 	});
 
-	public Task<IResponse<TModel>> GetByKey(TKey key) => Task.Run(async () =>
+	public Task<IResponse<TModel>> GetByKeyAsync(TKey key) => Task.Run(async () =>
 	{
 		await Delay();
 
@@ -58,7 +59,7 @@ public abstract class FakeCrudServiceBase<TModel, TKey>
 			: FakeResponse.FromErrorCode<TModel>(ResponseErrorCodes.NotFound);
 	});
 
-	public Task<IResponse<bool>> Edit(TModel model) => Task.Run(async () =>
+	public Task<IResponse<bool>> UpdateAsync(TModel model) => Task.Run(async () =>
 	{
 		await Delay();
 		var key = _getKey(model);
@@ -70,7 +71,7 @@ public abstract class FakeCrudServiceBase<TModel, TKey>
 		return FakeResponse.FromResult(true);
 	});
 
-	public Task<IResponse<bool>> Delete(TKey key) => Task.Run(async () =>
+	public Task<IResponse<bool>> DeleteAsync(TKey key) => Task.Run(async () =>
 	{
 		await Delay();
 
@@ -83,7 +84,9 @@ public abstract class FakeCrudServiceBase<TModel, TKey>
 
 	#region Protected methods
 
-	protected abstract bool Search(TModel model, string query);
+	protected abstract object OrderBy(TModel model);
+
+	protected abstract bool Search(TModel model, IListRequest request);
 
 	protected async Task Delay()
 	{

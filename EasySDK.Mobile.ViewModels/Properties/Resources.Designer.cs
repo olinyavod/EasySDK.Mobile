@@ -61,6 +61,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add photo.
+        /// </summary>
+        public static string AddPhoto {
+            get {
+                return ResourceManager.GetString("AddPhoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authorization....
         /// </summary>
         public static string Authorization {
@@ -106,6 +115,24 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete photo?.
+        /// </summary>
+        public static string DeletePhotoQuestion {
+            get {
+                return ResourceManager.GetString("DeletePhotoQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to upload photo..
+        /// </summary>
+        public static string FailedAddPhotoMessage {
+            get {
+                return ResourceManager.GetString("FailedAddPhotoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to clear log..
         /// </summary>
         public static string FailedClearLogsMessage {
@@ -124,6 +151,24 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to delete photo..
+        /// </summary>
+        public static string FailedDeletePhotoMessage {
+            get {
+                return ResourceManager.GetString("FailedDeletePhotoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete photo..
+        /// </summary>
+        public static string FailedDeletePhotoMessage1 {
+            get {
+                return ResourceManager.GetString("FailedDeletePhotoMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed share logs..
         /// </summary>
         public static string FailedShareLogsMessage {
@@ -138,6 +183,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         public static string FailedSignInMessage {
             get {
                 return ResourceManager.GetString("FailedSignInMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to upload photo..
+        /// </summary>
+        public static string FailedUploadPhotoMessage {
+            get {
+                return ResourceManager.GetString("FailedUploadPhotoMessage", resourceCulture);
             }
         }
         
@@ -178,6 +232,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Login {
@@ -196,11 +259,29 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow access to the camera to take photos..
+        /// </summary>
+        public static string NeedAllowAccessCameraMessage {
+            get {
+                return ResourceManager.GetString("NeedAllowAccessCameraMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No photos.
+        /// </summary>
+        public static string NoPhotos {
+            get {
+                return ResourceManager.GetString("NoPhotos", resourceCulture);
             }
         }
         
@@ -223,11 +304,29 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Photos.
+        /// </summary>
+        public static string Photos {
+            get {
+                return ResourceManager.GetString("Photos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Permission request.
         /// </summary>
         public static string RequestPermissions {
             get {
                 return ResourceManager.GetString("RequestPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving....
+        /// </summary>
+        public static string Saving {
+            get {
+                return ResourceManager.GetString("Saving", resourceCulture);
             }
         }
         

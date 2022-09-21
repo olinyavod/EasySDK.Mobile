@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
+using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels;
 
@@ -24,6 +26,20 @@ public class ViewModelBase : INotifyPropertyChanged
 	{
 		foreach (var p in properties ?? Array.Empty<string>())
 			OnPropertyChanged(p);
+	}
+
+	protected IServiceScope CreateScope()
+	{
+		var app = (FormsApp) Application.Current;
+
+		return app.ServiceProvider.CreateScope();
+	}
+
+	protected AsyncServiceScope CreateAsyncScope()
+	{
+		var app = (FormsApp) Application.Current;
+
+		return app.ServiceProvider.CreateAsyncScope();
 	}
 
 	#endregion

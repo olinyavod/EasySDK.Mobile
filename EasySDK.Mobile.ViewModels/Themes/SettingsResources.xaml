@@ -14,8 +14,7 @@
 	<Style TargetType="controls:ItemFrame"
 	       x:Key="ItemFrameStyle">
 		<Setter Property="Margin" Value="0"/>
-		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}">
-		</Setter>
+		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
 	</Style>
 
 	<Style TargetType="controls:SwitchSettingsCell"

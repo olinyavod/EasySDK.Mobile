@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:controls="clr-namespace:Fintech.Controls;assembly=Fintech"
+             xmlns:popup="http://schemas.devexpress.com/xamarin/2014/forms/popup"
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+             xmlns:viewModels1="http://easyptog.ru/sdk/mobile"
+             xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+             xmlns:props="clr-namespace:EasySDK.Mobile.ViewModels.Properties;assembly=EasySDK.Mobile.ViewModels"
+             xmlns:controls1="clr-namespace:EasySDK.Mobile.DXPages.Controls;assembly=EasySDK.Mobile.DXPages"
+             x:Class="EasySDK.Mobile.DXPages.Controls.PhotosGalleryControl"
+             Orientation="Vertical">
+	<Button Text="{x:Static props:Resources.AddPhoto}"
+	        ImageSource="ic_add_photo_white_24px.png"
+			IsVisible="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AllowAdd}"
+	        Visual="Material"
+	        Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AddPhotoCommand}"/>
+	
+	<FlexLayout BindableLayout.ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.PhotosSource}"
+	            x:Name="PhotosLayout"
+	            Direction="Row"
+	            Wrap="Wrap"
+	            AlignSelf="Start"
+	            AlignItems="Start"
+	            AlignContent="Start">
+		
+		<BindableLayout.EmptyView>
+			<Label HorizontalTextAlignment="Center"
+			       FlexLayout.Basis="100%"
+				   HeightRequest="100"
+				   VerticalTextAlignment="Center">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="("/>
+						<Span Text="{x:Static props:Resources.NoPhotos}"/>
+						<Span Text=")"/>
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+		</BindableLayout.EmptyView>
+
+		<BindableLayout.ItemTemplate>
+			<DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
+				<ContentView FlexLayout.Basis="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=PhotoWidth}"
+				             Margin="1"
+				             HeightRequest="90"
+				             Padding="0">
+					
+					<ContentView.GestureRecognizers>
+						<TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.OpenPhotoCommand}"
+						                      CommandParameter="{Binding}"/>
+					</ContentView.GestureRecognizers>
+					<forms:CachedImage Aspect="AspectFill"
+					                   Source="{Binding Url}"/>
+				</ContentView>
+			</DataTemplate>
+		</BindableLayout.ItemTemplate>
+	</FlexLayout>
+
+	<popup:DXPopup VerticalAlignment="Center"
+	               AllowScrim="True"
+	               AllowShadow="True"
+	               AllowAnimation="True"
+	               Placement="Bottom"
+	               CornerRadius="5"
+	               IsOpen="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.IsPhotoOpened}"
+	               HorizontalAlignment="Stretch">
+                <AbsoluteLayout>
+	                <CarouselView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.PhotosSource}"
+	                              CurrentItem="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.SelectedPhoto, Mode=TwoWay}">
+		                <CarouselView.ItemTemplate>
+			                <DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
+				                <forms:CachedImage Aspect="AspectFit"
+				                                   Source="{Binding Url}"/>
+			                </DataTemplate>
+		                </CarouselView.ItemTemplate>
+	                </CarouselView>
+
+	                <editors:SimpleButton AbsoluteLayout.LayoutBounds="1, 0, AutoSize, AutoSize"
+	                                      Margin="10"
+                                          Icon="ic_close_white_24px.png"
+	                                      BackgroundColor="Transparent"
+	                                      WidthRequest="30"
+	                                      HeightRequest="30"
+	                                      CornerRadius="15"
+	                                      Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.ClosePhotoCommand}"
+	                                      AbsoluteLayout.LayoutFlags="PositionProportional"
+	                                      IconColor="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}">
+	                </editors:SimpleButton>
+
+	                <Label AbsoluteLayout.LayoutBounds="0.5, 0, AutoSize, AutoSize"
+	                       Margin="20"
+	                       AbsoluteLayout.LayoutFlags="PositionProportional">
+	                    <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.SelectedPhotoIndex}"/>
+                                <Span Text="/"/>
+                                <Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.PhotosCount}"/>
+                            </FormattedString>
+	                    </Label.FormattedText>
+                    </Label>
+
+	                <Button AbsoluteLayout.LayoutBounds="0.5, 1, AutoSize, AutoSize"
+	                        AbsoluteLayout.LayoutFlags="PositionProportional"
+	                        HeightRequest="60"
+							IsVisible="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AllowAdd}"
+	                        WidthRequest="60"
+	                        CornerRadius="30"
+	                        Margin="10"
+	                        Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AddPhotoCommand}"
+	                        ImageSource="ic_big_photo_white_24px.png"/>
+
+                    <Button AbsoluteLayout.LayoutBounds="0.8, 1, AutoSize, AutoSize"
+                            AbsoluteLayout.LayoutFlags="PositionProportional"
+                            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AllowDelete}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.DeletePhotoCommand}"
+                            CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.SelectedPhoto}"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            Margin="0, 20"
+                            CornerRadius="20"
+                            ImageSource="ic_delete_white_24px.png"/>
+                </AbsoluteLayout>
+            </popup:DXPopup>
+</StackLayout>

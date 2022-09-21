@@ -82,5 +82,18 @@ public static class ModelExtensions
 		return map;
 	}
 
+	public static string? ToFirstUpper(this string? text)
+	{
+		if (string.IsNullOrWhiteSpace(text))
+			return text;
+
+		var first = char.ToUpper(text[0]);
+
+		if (text.Length < 2)
+			return first.ToString();
+
+		return first + text.Substring(1);
+	}
+
 	#endregion
 }
