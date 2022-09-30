@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj" />
+    <ProjectReference Include="..\EasySDK.Mobile.RestClient\EasySDK.Mobile.RestClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>

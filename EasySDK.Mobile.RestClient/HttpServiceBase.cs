@@ -85,7 +85,7 @@ public abstract class HttpServiceBase
 	protected HttpClient CreateClient(bool useToken = true)
 	{
 		var client = _httpClientFactory.CreateHttpClient();
-		
+
 		client.BaseAddress = _baseUri;
 		client.Timeout = TimeSpan.FromMinutes(10);
 		client.MaxResponseContentBufferSize = 100 * 1024 * 1024;
@@ -95,22 +95,39 @@ public abstract class HttpServiceBase
 
 		if (_useGZip)
 			client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip");
-		
+
 		if (useToken)
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.Token);
 
 		return client;
 	}
 
+	protected async Task<IResponse<TResult>> BasicAuthAsync<TResult>
+	(
+		string requestUrl,
+		ILoginForm form,
+		Func<JObject, JsonSerializer, IResponse<TResult>> parse = null
+	)
+	{
+		var stopwatch = Stopwatch.StartNew();
+		using var requestContent = form != null ? CreateJsonContent(form) : new StringContent(string.Empty);
+		//requestContent.Headers.TryAddWithoutValidation()
+
+		throw new NotSupportedException();
+	}
+
 	protected async Task<IResponse<TResult>> PostJsonAsync<TResult>
 	(
-		string requestUrl, 
+		string requestUrl,
 		object postModel,
-		bool useToken = true)
+		bool useToken = true,
+		Func<JObject, JsonSerializer, IResponse<TResult>> parse = null
+	)
 	{
 		var stopwatch = Stopwatch.StartNew();
 		using var requestContent = postModel != null ? CreateJsonContent(postModel) : new StringContent(string.Empty);
 		using var client = CreateClient(useToken);
+		
 		using var response = await client.PostAsync(requestUrl, requestContent);
 
 		var content = await response.Content.ReadAsStringAsync();
@@ -121,9 +138,13 @@ public abstract class HttpServiceBase
 		if (!response.IsSuccessStatusCode)
 			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
 
-		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
+		var jsonObject = JObject.Parse(content);
+		var serializer = JsonSerializer.Create(CreateJsonSettings());
+		var result = parse != null
+			? parse(jsonObject, serializer)
+			: jsonObject.ToObject<HttpResponse<TResult>>(serializer); ;
 
-		if(result?.HasError == true)
+		if (result?.HasError == true)
 			LogErrorResponse(response, content);
 
 		return result;

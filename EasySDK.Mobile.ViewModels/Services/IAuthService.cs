@@ -10,7 +10,7 @@ public interface IAuthService<in TLoginFrom>
 
 	Task<IResponse<string>> LoginAsync(TLoginFrom form);
 
-	Task<IResponse<bool>> LogoutAsync();
+	Task<IResponse<bool?>> LogoutAsync();
 
 	#endregion
 }

@@ -22,6 +22,7 @@
 		<Setter Property="BoxPadding" Value="{StaticResource EditorPadding}"/>
 		<Setter Property="IsLabelFloating" Value="True"/>
 		<Setter Property="FocusedBorderColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="FocusedLabelColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 	</Style>
 
 	<Style TargetType="editors:DateEdit"
@@ -79,14 +80,11 @@
 	</Style>
 
 	<Style TargetType="editors:SimpleButton"
-	       x:Key="BackButtonStyle">
+	       x:Key="SecondarySimpleButtonStyle">
 		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
 		<Setter Property="UseRippleEffect" Value="True"/>
-		<Setter Property="Icon" Value="ic_back_white_24px.png"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Padding" Value="10, 9"/>
-		<Setter Property="Text" Value="{Binding Source={x:Static props:Resources.Back}, Converter={StaticResource TextTransformConverter}, ConverterParameter={x:Static TextTransform.Uppercase}}"/>
-
 		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
 		<Setter Property="PressedBackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
 		<Setter Property="DisabledBackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"/>
@@ -95,6 +93,14 @@
 		<Setter Property="IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 		<Setter Property="PressedTextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+	</Style>
+
+
+	<Style TargetType="editors:SimpleButton"
+		   BaseResourceKey="SecondarySimpleButtonStyle"
+	       x:Key="BackButtonStyle">
+		<Setter Property="Icon" Value="ic_back_white_24px.png"/>
+		<Setter Property="Text" Value="{Binding Source={x:Static props:Resources.Back}, Converter={StaticResource TextTransformConverter}, ConverterParameter={x:Static TextTransform.Uppercase}}"/>
 	</Style>
 
 	<Style TargetType="Button"
@@ -277,5 +283,24 @@
 	       x:Key="CustomCheckEditLayoutStyle">
 		<Setter Property="Orientation" Value="Vertical"/>
 		<Setter Property="Spacing" Value="-1"/>
+	</Style>
+
+	<Style TargetType="editors:SimpleButton"
+	       x:Key="IconSimpleButtonStyle">
+		<Setter Property="BackgroundColor" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="WidthRequest" Value="24"/>
+		<Setter Property="HeightRequest" Value="24"/>
+		<Setter Property="DisabledBackgroundColor" Value="Transparent"/>
+		<Setter Property="IconColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
+
+		<Style.Triggers>
+			<Trigger TargetType="editors:SimpleButton"
+			         Property="IsEnabled"
+			         Value="False">
+				<Setter Property="Opacity" Value="0.6"/>
+			</Trigger>
+		</Style.Triggers>
 	</Style>
 </ResourceDictionary>

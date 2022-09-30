@@ -35,7 +35,7 @@
 	</Shell.TitleView>
 
 	<ScrollView>
-		<Grid Padding="10, 15" 
+		<Grid Padding="10, 0" 
 		      VerticalOptions="FillAndExpand"
 		      RowDefinitions="*, Auto, Auto, Auto, *">
 
@@ -64,8 +64,8 @@
 			</dataForm:DataFormView>
 
 			<Button Grid.Row="3" 
-			        Text="{x:Static props:Resources.SignIn}"
-			        Margin="0, 10, 0, 0"
+					Text="{x:Static props:Resources.SignIn}"
+			        Margin="10, 10, 10, 0"
 			        Command="{Binding SignInCommand}"/>
 		</Grid>
 	</ScrollView>

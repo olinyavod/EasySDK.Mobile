@@ -88,13 +88,13 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 	protected abstract ImageSource GetLogoSource(OSAppTheme theme);
 
-	protected virtual TLoginForm CreateForm() => new()
+	protected virtual Task<TLoginForm> CreateForm(IServiceProvider scope) => Task.FromResult(new TLoginForm()
 	{
 		Login = Login,
 		Password = Password
-	};
+	});
 
-	protected abstract Task SignInOnSuccess(TLoginForm form, string token);
+	protected abstract Task SignInOnSuccess(IServiceProvider scope, TLoginForm form, string token);
 
 	protected void SetErrors(IResponse response)
 	{
@@ -159,7 +159,7 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 			await using var scope = CreateAsyncScope();
 			var authService = scope.ServiceProvider.GetService<IAuthService<TLoginForm>>()!;
 			
-			var form = CreateForm();
+			var form = await CreateForm(scope.ServiceProvider);
 			var response = await authService.LoginAsync(form);
 			
 			switch (response.ErrorCode)
@@ -167,7 +167,7 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 				case ResponseErrorCodes.Ok:
 					Login = string.Empty;
 					Password = string.Empty;
-					await SignInOnSuccess(form, response.Result);
+					await SignInOnSuccess(scope.ServiceProvider, form, response.Result);
 					break;
 
 				case ResponseErrorCodes.DataError:

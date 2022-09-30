@@ -25,7 +25,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	private readonly IResponseChecker _responseChecker;
 	
 	private bool _isBusy;
-	private string _searchQuery;
+	private string? _searchQuery;
 	private int _remainingItemsThreshold = -1;
 	private int _itemsCount;
 
@@ -41,7 +41,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		set => SetProperty(ref _isBusy, value);
 	}
 
-	public string SearchQuery
+	public string? SearchQuery
 	{
 		get => _searchQuery;
 		set => SetProperty(ref _searchQuery, value, SearchQueryOnChanged);
@@ -95,11 +95,11 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	#region Protected methods
 
-	protected virtual Task<bool> OnPreLoadItems() => Task.FromResult(true);
+	protected virtual Task<bool> OnPreLoadItems(IServiceProvider scope) => Task.FromResult(true);
 
-	protected virtual Task OnPostLoadItems() => Task.FromResult(true);
+	protected virtual Task OnPostLoadItems(IServiceProvider scope) => Task.FromResult(true);
 
-	protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IListRequest request);
+	protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IServiceProvider scope, IListRequest request);
 
 	protected abstract TItem CreateItem(TModel model);
 
@@ -112,21 +112,21 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		return threshold > 0 ? threshold : -1;
 	}
 
-	protected virtual string GetSearchQueryText()
+	protected virtual string? GetSearchQueryText()
 	{
 		return string.IsNullOrWhiteSpace(SearchQuery) ? null : SearchQuery;
 	}
 
-	protected async Task DoLoadItemsAsync(IListRequest request)
+	protected async Task DoLoadItemsAsync(IServiceProvider scope, IListRequest request)
 	{
 		try
 		{
 			ItemsSource.Clear();
 
-			if (!await OnPreLoadItems())
+			if (!await OnPreLoadItems(scope))
 				return;
 
-			var response = await LoadItemsAsync(request);
+			var response = await LoadItemsAsync(scope, request);
 
 			IsBusy = !response.HasError;
 			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
@@ -140,7 +140,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			ItemsCount = response.TotalCount;
 			RemainingItemsThreshold = CalculateThreshold(response);
 
-			await OnPostLoadItems();
+			await OnPostLoadItems(scope);
 		}
 		catch (Exception ex)
 		{
@@ -170,7 +170,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	private async void OnLoadItems()
 	{
-		await DoLoadItemsAsync(new ListRequest
+		await using var scope = CreateAsyncScope();
+		await DoLoadItemsAsync(scope.ServiceProvider, new ListRequest
 		{
 			Count = DefaultPageSize,
 			Search = GetSearchQueryText()
@@ -187,8 +188,9 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	{
 		try
 		{
+			await using var scope = CreateAsyncScope();
 			var offset = ItemsSource.Count;
-			var response = await LoadItemsAsync(new ListRequest
+			var response = await LoadItemsAsync(scope.ServiceProvider, new ListRequest
 			{
 				Count = DefaultPageSize,
 				Offset = offset, 
