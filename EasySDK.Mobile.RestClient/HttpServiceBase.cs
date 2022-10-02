@@ -1,8 +1,11 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq.Expressions;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -62,6 +65,135 @@ public abstract class HttpServiceBase
 
 	#region Protected methods
 
+	protected async Task<IResponse<TResult>?> PostJsonAsync<TResult>
+	(
+		string requestUrl,
+		object? postModel,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+	)
+	{
+		return await ExecuteAsync
+		(
+			() => postModel != null ? CreateJsonContent(postModel) : new StringContent(string.Empty),
+			(c, r) => c.PostAsync(requestUrl, r),
+			c => CreateResponse(c, parse),
+			useToken
+		);
+	}
+
+	protected async Task<IResponseList<TResult>?> GetJsonListAsync<TResult>
+	(
+		string requestUrl,
+		object? filter = null,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponseList<TResult>>? parse = null
+	)
+	{
+		return await ExecuteAsync
+		(
+			() => new HttpRequestMessage
+			{
+				Content = filter != null ? CreateJsonContent(filter) : new StringContent(string.Empty), 
+				Method = HttpMethod.Get,
+				RequestUri = new Uri(requestUrl, UriKind.Relative)
+			},
+			(c, r) => c.SendAsync(r),
+			(c) =>
+			{
+				var result = CreateResponse(c, parse);
+
+				if (result?.Metadata is { } metadata && metadata.Value<int>("total") is { } total)
+					result.TotalCount = total;
+
+				return result;
+			},
+			useToken
+		);
+	}
+
+	protected async Task<IResponse<TResult>?> GetJsonAsync<TResult>
+	(
+		string requestUrl,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+	)
+	{
+		return await ExecuteAsync
+		(
+			() => new StringContent(string.Empty),
+			(c, _) => c.GetAsync(requestUrl),
+			c => CreateResponse(c, parse),
+			useToken
+		);
+	}
+
+	protected async Task<IResponse<TResult>?> PatchJsonAsync<TResult>
+	(
+		string requestUrl, 
+		object? model,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+	)
+	{
+		return await ExecuteAsync
+		(
+			() => new HttpRequestMessage(HttpMethodPatch, requestUrl)
+			{
+				Content = model != null ? CreateJsonContent(model) : new StringContent(string.Empty)
+			},
+			(c, r) => c.SendAsync(r),
+			c => CreateResponse(c, parse),
+			useToken
+		);
+	}
+
+	protected Task<IResponse<TResult>?> PatchJsonAsync<TForm, TResult>
+	(
+		string requestUri,
+		Expression<Func<TForm>> patch,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+	)
+	{
+		var model = patch.ToJObject();
+
+		return PatchJsonAsync(requestUri, model, useToken, parse);
+	}
+
+	protected async Task<IResponse<TResult>?> DeleteJsonAsync<TResult>
+	(
+		string requestUrl,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+	)
+	{
+		return await ExecuteAsync
+		(
+			() => new StringContent(string.Empty),
+			(c, _) => c.DeleteAsync(requestUrl),
+			c => CreateResponse(c, parse),
+			useToken
+		);
+	}
+
+	protected async Task<IResponse<TResult>?> PostFormAsync<TResult>
+	(
+		string requestUrl,
+		HttpContent form,
+		bool useToken = true,
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+	)
+	{
+		return await ExecuteAsync
+		(
+			() => form,
+			(c, r) => c.PostAsync(requestUrl, r),
+			c => CreateResponse(c, parse),
+			useToken
+		);
+	}
+
 	protected virtual JsonSerializerSettings CreateJsonSettings() => new()
 	{
 		Culture = CultureInfo.CurrentUICulture,
@@ -69,246 +201,6 @@ public abstract class HttpServiceBase
 		DateParseHandling = DateParseHandling.DateTime,
 		DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
 	};
-
-	protected StringContent CreateJsonContent<TModel>(TModel model, JsonSerializerSettings settings = null)
-	{
-		var json = JsonConvert.SerializeObject(model, settings);
-
-		return new StringContent(json, Encoding.UTF8, MediaType);
-	}
-
-	protected void LogErrorResponse(HttpResponseMessage response, string content)
-	{
-		Logger.LogWarning("Response from {0}  error: {1}", response.RequestMessage.RequestUri, content);
-	}
-
-	protected HttpClient CreateClient(bool useToken = true)
-	{
-		var client = _httpClientFactory.CreateHttpClient();
-
-		client.BaseAddress = _baseUri;
-		client.Timeout = TimeSpan.FromMinutes(10);
-		client.MaxResponseContentBufferSize = 100 * 1024 * 1024;
-		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
-		client.DefaultRequestHeaders.AcceptCharset.TryParseAdd("utf-8");
-		client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentUICulture.Name);
-
-		if (_useGZip)
-			client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip");
-
-		if (useToken)
-			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _tokenProvider.Token);
-
-		return client;
-	}
-
-	protected async Task<IResponse<TResult>> BasicAuthAsync<TResult>
-	(
-		string requestUrl,
-		ILoginForm form,
-		Func<JObject, JsonSerializer, IResponse<TResult>> parse = null
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var requestContent = form != null ? CreateJsonContent(form) : new StringContent(string.Empty);
-		//requestContent.Headers.TryAddWithoutValidation()
-
-		throw new NotSupportedException();
-	}
-
-	protected async Task<IResponse<TResult>> PostJsonAsync<TResult>
-	(
-		string requestUrl,
-		object postModel,
-		bool useToken = true,
-		Func<JObject, JsonSerializer, IResponse<TResult>> parse = null
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var requestContent = postModel != null ? CreateJsonContent(postModel) : new StringContent(string.Empty);
-		using var client = CreateClient(useToken);
-		
-		using var response = await client.PostAsync(requestUrl, requestContent);
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		stopwatch.Stop();
-		Logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
-
-		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
-
-		var jsonObject = JObject.Parse(content);
-		var serializer = JsonSerializer.Create(CreateJsonSettings());
-		var result = parse != null
-			? parse(jsonObject, serializer)
-			: jsonObject.ToObject<HttpResponse<TResult>>(serializer); ;
-
-		if (result?.HasError == true)
-			LogErrorResponse(response, content);
-
-		return result;
-	}
-
-	protected async Task<IResponseList<TResult>> GetJsonListAsync<TResult>
-	(
-		string requestUrl,
-		object filter = null,
-		bool useToken = true
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var client = CreateClient(useToken);
-		using var requestContent = filter != null ? CreateJsonContent(filter) : new StringContent(string.Empty);
-		using var request = new HttpRequestMessage
-		{
-			Content = requestContent, 
-			Method = HttpMethod.Get,
-			RequestUri = new Uri(requestUrl, UriKind.Relative)
-		};
-		using var response = await client.SendAsync(request);
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		stopwatch.Stop();
-		Logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
-
-		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse<HttpResponseList<TResult>>(response, content);
-
-		var result = JsonConvert.DeserializeObject<HttpResponseList<TResult>>(content, CreateJsonSettings());
-
-		if(result?.HasError == true)
-			LogErrorResponse(response, content);
-
-		if (result?.Metadata is { } metadata && metadata.Value<int>("total") is { } total)
-			result.TotalCount = total;
-
-		return result;
-	}
-
-	protected async Task<IResponse<TResult>> GetJsonAsync<TResult>
-	(
-		string requestUrl,
-		bool useToken = true
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var client = CreateClient(useToken);
-		using var response = await client.GetAsync(requestUrl);
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		stopwatch.Stop();
-		Logger.LogInformation("Execute GET '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
-
-		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
-
-		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
-
-		if(result?.HasError == true)
-			LogErrorResponse(response, content);
-
-		return result;
-	}
-
-	protected Task<IResponse<TResult>> PatchJsonAsync<TForm, TResult>
-	(
-		string requestUri,
-		Expression<Func<TForm>> patch,
-		bool useToken = true
-	)
-	{
-		var model = patch.ToJObject();
-
-		return PatchJsonAsync<TResult>(requestUri, model, useToken);
-	}
-
-	protected async Task<IResponse<TResult>> PatchJsonAsync<TResult>
-	(
-		string requestUrl, 
-		object model,
-		bool useToken = true
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var client = CreateClient(useToken);
-		using var requestContent = model != null ? CreateJsonContent(model) : new StringContent(string.Empty);
-		using var request = new HttpRequestMessage(HttpMethodPatch, requestUrl)
-		{
-			Content = requestContent
-		};
-		using var response = await client.SendAsync(request);
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		stopwatch.Stop();
-		Logger.LogInformation("Execute PATCH '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
-
-		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
-		
-		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
-		
-		if(result?.HasError == true)
-			LogErrorResponse(response, content);
-
-		return result;
-	}
-
-	protected async Task<IResponse<TResult>> DeleteJsonAsync<TResult>
-	(
-		string requestUrl,
-		bool useToken = true
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var client = CreateClient(useToken);
-		using var response = await client.DeleteAsync(requestUrl);
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		stopwatch.Stop();
-		Logger.LogInformation("Execute DELETE '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
-
-		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
-
-		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
-
-		if(result?.HasError == true)
-			LogErrorResponse(response, content);
-
-		return result;
-	}
-
-	protected async Task<IResponse<TResult>> PostFormAsync<TResult>
-	(
-		string requestUrl,
-		HttpContent form,
-		bool useToken = true
-	)
-	{
-		var stopwatch = Stopwatch.StartNew();
-		using var client = CreateClient(useToken);
-		using var response = await client.PostAsync(requestUrl, form);
-
-		var content = await response.Content.ReadAsStringAsync();
-
-		stopwatch.Stop();
-		Logger.LogInformation("Execute POST '{0}' completed in time: {1}.", requestUrl, stopwatch.Elapsed);
-
-		if (!response.IsSuccessStatusCode)
-			return CreateErrorResponse<HttpResponse<TResult>>(response, content);
-
-		var result = JsonConvert.DeserializeObject<HttpResponse<TResult>>(content, CreateJsonSettings());
-
-		if(result?.HasError == true)
-			LogErrorResponse(response, content);
-
-		return result;
-	}
 
 	protected TResponse CreateErrorResponse<TResponse>
 	(
@@ -342,6 +234,124 @@ public abstract class HttpServiceBase
 			total += readCount;
 			progress.RaiseProgressChanged(total, length);
 		}
+	}
+
+	protected StringContent CreateJsonContent<TModel>(TModel model, JsonSerializerSettings? settings = null)
+	{
+		var json = JsonConvert.SerializeObject(model, settings);
+
+		return new StringContent(json, Encoding.UTF8, MediaType);
+	}
+
+	protected void LogErrorResponse(HttpResponseMessage response, string content)
+	{
+		Logger.LogWarning("Response from {0}  error: {1}", response.RequestMessage.RequestUri, content);
+	}
+
+	protected HttpClient CreateClient()
+	{
+		var client = _httpClientFactory.CreateHttpClient();
+
+		client.BaseAddress = _baseUri;
+		client.Timeout = TimeSpan.FromMinutes(10);
+		client.MaxResponseContentBufferSize = 100 * 1024 * 1024;
+		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
+		client.DefaultRequestHeaders.AcceptCharset.TryParseAdd("utf-8");
+		client.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(CultureInfo.CurrentUICulture.Name);
+
+		if (_useGZip)
+			client.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip");
+
+		return client;
+	}
+
+	protected TResponse? CreateResponse<TResponse>(string content, Func<JObject, JsonSerializer, TResponse>? parse)
+		where TResponse : IResponse
+	{
+		var jsonObject = JObject.Parse(content);
+		var serializer = JsonSerializer.Create(CreateJsonSettings());
+		var result = parse != null
+			? parse(jsonObject, serializer)
+			: jsonObject.ToObject<TResponse>(serializer);
+		
+		return result;
+	}
+	
+	protected async Task<TResponse?> ExecuteAsync<TResponse, TRequest>
+	(
+		Func<TRequest> requestFactory,
+		Func<HttpClient, TRequest, Task<HttpResponseMessage>> execute,
+		Func<string, TResponse?> responseFactory,
+		bool useToken
+	)
+		where TRequest : class, IDisposable
+		where TResponse : HttpResponse, new()
+	{
+
+		HttpResponseMessage? response = null;
+		try
+		{
+			using var client = CreateClient();
+
+			async Task<HttpResponseMessage> GetResponse(HttpClient c, bool requestToken)
+			{
+				if (useToken)
+					await SetToken(c);
+
+				using var request = requestFactory();
+				var r = await execute(c, request);
+
+				if (r.IsSuccessStatusCode
+				    || r.StatusCode != HttpStatusCode.Unauthorized
+				    || !requestToken
+				    || !useToken)
+					return r;
+
+				r.Dispose();
+				_tokenProvider.InvalidateToken();
+
+				return await GetResponse(c, false);
+			}
+
+			var stopwatch = Stopwatch.StartNew();
+
+			response = await GetResponse(client, true);
+
+			var content = await response.Content.ReadAsStringAsync();
+
+			stopwatch.Stop();
+			Logger.LogInformation
+			(
+				"Execute {0} '{1}' completed in time: {2}.",
+				response.RequestMessage.Method,
+				response.RequestMessage.RequestUri,
+				stopwatch.Elapsed
+			);
+
+			if (!response.IsSuccessStatusCode)
+				return CreateErrorResponse<TResponse>(response, content);
+
+			var result = responseFactory(content);
+
+			if (result?.HasError == true)
+				LogErrorResponse(response, content);
+
+			return result;
+		}
+		finally
+		{
+			response?.Dispose();
+		}
+	}
+
+	#endregion
+
+	#region Private methods
+
+	private async Task SetToken(HttpClient client)
+	{
+		var token = await _tokenProvider.TryGetAuthTokenAsync();
+		client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 	}
 
 	#endregion

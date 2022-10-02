@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Android.Accounts;
 using Android.Content;
+using Android.OS;
 using EasySDK.Mobile.ViewModels.Services;
 
 namespace EasySDK.Mobile.Android.Services;
@@ -31,12 +32,18 @@ public class AndroidDeviceAccountService : IDeviceAccountService
 
 	#region Public methods
 
-	public bool AddAccount(string login, string password)
+	public bool AddAccount(string login, string password, string token)
 	{
 		using var am = AccountManager.Get(_context);
 		using var account = new Account(login, _accountType);
 
-		return am?.AddAccountExplicitly(account, password, null) ?? false;
+		if (am?.AddAccountExplicitly(account, password, null) is true)
+		{
+			am.SetAuthToken(account, _authTokenType, token);
+			return true;
+		}
+
+		return false;
 	}
 
 	public string? GetAccountName()
@@ -55,12 +62,21 @@ public class AndroidDeviceAccountService : IDeviceAccountService
 		return am?.RemoveAccountExplicitly(account) ?? false;
 	}
 
-	public Task<string?> TryGetAccountTokenAsync() => Task.Run(() =>
+	public bool InvalidAuthToken()
+	{
+		using var am = AccountManager.Get(_context);
+
+		am?.InvalidateAuthToken(_accountType, _authTokenType);
+
+		return true;
+	}
+
+	public Task<string?> TryGetAuthTokenAsync() => Task.Run(() =>
 	{
 		using var am = AccountManager.Get(_context);
 		using var account = GetAccount(am);
-
-		return am?.BlockingGetAuthToken(account, _accountType, true);
+		
+		return am?.BlockingGetAuthToken(account, _authTokenType, true);
 	});
 	
 	#endregion

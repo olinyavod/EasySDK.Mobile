@@ -78,6 +78,7 @@
     <Compile Include="Renderers\JSBridge.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AccountAuthenticatorBase.cs" />
     <Compile Include="Services\AndroidDeviceAccountService.cs" />
     <Compile Include="Services\AndroidHttpClientFactory.cs" />
     <Compile Include="Services\AndroidPathsService.cs" />
@@ -110,6 +111,10 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj">
+      <Project>{6DB627EF-FBFC-430D-92CB-7DFFFE427899}</Project>
+      <Name>EasySDK.Mobile.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasySDK.Mobile.RestClient\EasySDK.Mobile.RestClient.csproj">
       <Project>{30289fe6-f3b9-4726-8771-798d9cc7196f}</Project>
       <Name>EasySDK.Mobile.RestClient</Name>

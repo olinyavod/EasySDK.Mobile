@@ -13,7 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EasySDK.Mobile.ViewModels;
 
-public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILoginViewModel where TLoginForm: class, ILoginForm, new()
+public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewModelBase, ILoginViewModel 
+	where TLoginForm: class, ILoginForm, new()
+	where TAuthService : IAuthService<TLoginForm>
 {
 	#region Private fields
 
@@ -88,7 +90,7 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 	protected abstract ImageSource GetLogoSource(OSAppTheme theme);
 
-	protected virtual Task<TLoginForm> CreateForm(IServiceProvider scope) => Task.FromResult(new TLoginForm()
+	protected virtual Task<TLoginForm> CreateForm(IServiceProvider scope, TAuthService authService) => Task.FromResult(new TLoginForm()
 	{
 		Login = Login,
 		Password = Password
@@ -157,9 +159,9 @@ public abstract class LoginViewModelBase<TLoginForm> : DataViewModelBase, ILogin
 
 			using var loadingDlg = _dialogs.Loading(Properties.Resources.Authorization);
 			await using var scope = CreateAsyncScope();
-			var authService = scope.ServiceProvider.GetService<IAuthService<TLoginForm>>()!;
+			var authService = scope.ServiceProvider.GetService<TAuthService>()!;
 			
-			var form = await CreateForm(scope.ServiceProvider);
+			var form = await CreateForm(scope.ServiceProvider, authService);
 			var response = await authService.LoginAsync(form);
 			
 			switch (response.ErrorCode)

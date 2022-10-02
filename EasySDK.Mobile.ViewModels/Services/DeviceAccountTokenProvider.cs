@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EasySDK.Mobile.RestClient;
-using Xamarin.Essentials;
 
 namespace EasySDK.Mobile.ViewModels.Services;
 
@@ -12,17 +11,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 	private readonly IDeviceAccountService _deviceAccountService;
 
 	#endregion
-
-	#region Properties
-
-	public string? Token
-	{
-		get => Preferences.Get(nameof(Token), string.Empty);
-		set => Preferences.Set(nameof(Token), value);
-	}
-
-	#endregion
-
+	
 	#region ctor
 
 	public DeviceAccountTokenProvider(IDeviceAccountService deviceAccountService)
@@ -34,7 +23,9 @@ public class DeviceAccountTokenProvider : ITokenProvider
 
 	#region Public methods
 
-	public Task<string?> TruGetTokenAsync() => _deviceAccountService.TryGetAccountTokenAsync();
+	public bool InvalidateToken() => _deviceAccountService.InvalidAuthToken();
+
+	public Task<string?> TryGetAuthTokenAsync() => _deviceAccountService.TryGetAuthTokenAsync();
 
 	#endregion
 }
