@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
@@ -15,7 +17,8 @@ using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels.Managers;
 
-public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IPhotosManagerViewModel where TMediaFile: class, IMediaFile
+public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IPhotosManagerViewModel 
+	where TMediaFile: class, IMediaFile
 {
 	#region Private fields
 
@@ -87,11 +90,26 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 
 	#endregion
 
+	#region Public methods
+
+	public void SetPhotos(IEnumerable<TMediaFile>? photos)
+	{
+		PhotosSource.Clear();
+
+		foreach (var p in photos ?? Enumerable.Empty<TMediaFile>())
+			PhotosSource.Add(new PhotoItemViewModel
+			{
+				Id = p.Id, Url = p.Url
+			});
+	}
+
+	#endregion
+
 	#region Protected methods
 
-	protected abstract Task<IResponse<TMediaFile>> AddPhotoAsync(string fileName, Stream fileContent);
+	protected abstract Task<IResponse<TMediaFile>> AddPhotoAsync(IServiceProvider scope, string fileName, Stream fileContent);
 
-	protected abstract Task<IResponse<bool?>> DeletePhotoAsync(string id);
+	protected abstract Task<IResponse<bool?>> DeletePhotoAsync(IServiceProvider scope, string id);
 
 	#endregion
 
@@ -131,11 +149,12 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 			await Task.Delay(500);
 
 			using var loadingDlh = _dialogs.Loading(Properties.Resources.Saving);
-			using var stream = await _imageService.LoadStream(_ => fileResult.OpenReadAsync())
+			await using var scope = CreateAsyncScope();
+			await using var stream = await _imageService.LoadStream(_ => fileResult.OpenReadAsync())
 				.DownSample(1024)
 				.AsJPGStreamAsync(50);
 
-			var response = await AddPhotoAsync(fileResult.FileName, stream);
+			var response = await AddPhotoAsync(scope.ServiceProvider, fileResult.FileName, stream);
 
 			if (response.HasError)
 			{
@@ -180,8 +199,9 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 				return;
 
 			using var loadingDlg = _dialogs.Loading(Properties.Resources.Loading);
+			await using var scope = CreateAsyncScope();
 
-			var response = await DeletePhotoAsync(item!.Id);
+			var response = await DeletePhotoAsync(scope.ServiceProvider, item!.Id);
 
 			if (response.HasError)
 			{

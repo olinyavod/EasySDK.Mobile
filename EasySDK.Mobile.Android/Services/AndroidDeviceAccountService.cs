@@ -34,47 +34,56 @@ public class AndroidDeviceAccountService : IDeviceAccountService
 
 	public bool AddAccount(string login, string password, string token)
 	{
-		using var am = AccountManager.Get(_context);
-		using var account = new Account(login, _accountType);
+		var am = AccountManager.Get(_context);
+		var account = new Account(login, _accountType);
 
 		if (am?.AddAccountExplicitly(account, password, null) is true)
 		{
 			am.SetAuthToken(account, _authTokenType, token);
+
+			AccountOnAdded(am, account);
 			return true;
 		}
 
 		return false;
 	}
 
+	protected virtual void AccountOnAdded(AccountManager accountManager, Account account)
+	{
+
+	}
+
 	public string? GetAccountName()
 	{
-		using var am = AccountManager.Get(_context);
-		using var account = GetAccount(am);
+		var am = AccountManager.Get(_context);
+		var account = GetAccount(am);
 
 		return account?.Name;
 	}
 
 	public bool RemoveAccount()
 	{
-		using var am = AccountManager.Get(_context);
-		using var account = GetAccount(am);
+		var am = AccountManager.Get(_context);
+		var account = GetAccount(am);
 		
 		return am?.RemoveAccountExplicitly(account) ?? false;
 	}
 
-	public bool InvalidAuthToken()
+	public Task<bool> InvalidAuthToken() => Task.Run(() =>
 	{
-		using var am = AccountManager.Get(_context);
+		var am = AccountManager.Get(_context);
+		var account = GetAccount(am);
+		var token = am?.BlockingGetAuthToken(account, _authTokenType, true);
 
-		am?.InvalidateAuthToken(_accountType, _authTokenType);
+		am?.InvalidateAuthToken(_accountType, token);
 
 		return true;
-	}
+	});
 
 	public Task<string?> TryGetAuthTokenAsync() => Task.Run(() =>
 	{
-		using var am = AccountManager.Get(_context);
-		using var account = GetAccount(am);
+		var am = AccountManager.Get(_context);
+		var account = GetAccount(am);
 		
 		return am?.BlockingGetAuthToken(account, _authTokenType, true);
 	});

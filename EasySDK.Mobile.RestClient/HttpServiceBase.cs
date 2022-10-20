@@ -92,12 +92,7 @@ public abstract class HttpServiceBase
 	{
 		return await ExecuteAsync
 		(
-			() => new HttpRequestMessage
-			{
-				Content = filter != null ? CreateJsonContent(filter) : new StringContent(string.Empty), 
-				Method = HttpMethod.Get,
-				RequestUri = new Uri(requestUrl, UriKind.Relative)
-			},
+			() => CreateGetMessage(requestUrl, filter),
 			(c, r) => c.SendAsync(r),
 			(c) =>
 			{
@@ -115,14 +110,15 @@ public abstract class HttpServiceBase
 	protected async Task<IResponse<TResult>?> GetJsonAsync<TResult>
 	(
 		string requestUrl,
+		object? model = null,
 		bool useToken = true,
 		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
 	)
 	{
 		return await ExecuteAsync
 		(
-			() => new StringContent(string.Empty),
-			(c, _) => c.GetAsync(requestUrl),
+			() => CreateGetMessage(requestUrl, model),
+			(c, r) => c.SendAsync(r),
 			c => CreateResponse(c, parse),
 			useToken
 		);
@@ -308,7 +304,7 @@ public abstract class HttpServiceBase
 					return r;
 
 				r.Dispose();
-				_tokenProvider.InvalidateToken();
+				await _tokenProvider.InvalidateToken();
 
 				return await GetResponse(c, false);
 			}
@@ -344,15 +340,22 @@ public abstract class HttpServiceBase
 		}
 	}
 
-	#endregion
-
-	#region Private methods
-
-	private async Task SetToken(HttpClient client)
+	protected async Task SetToken(HttpClient client)
 	{
 		var token = await _tokenProvider.TryGetAuthTokenAsync();
 		client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 	}
+
+	#endregion
+
+	#region Prrivate methods
+
+	private HttpRequestMessage CreateGetMessage(string requestUrl, object? model) => new()
+	{
+		Content = model != null ? CreateJsonContent(model) : new StringContent(string.Empty),
+		Method = HttpMethod.Get,
+		RequestUri = new Uri(requestUrl, UriKind.Relative)
+	};
 
 	#endregion
 }

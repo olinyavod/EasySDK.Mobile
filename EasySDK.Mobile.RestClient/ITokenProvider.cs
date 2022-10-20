@@ -6,7 +6,7 @@ namespace EasySDK.Mobile.RestClient;
 
 public interface ITokenProvider
 {
-	bool InvalidateToken();
+	Task<bool> InvalidateToken();
 
 	Task<string?> TryGetAuthTokenAsync();
 }

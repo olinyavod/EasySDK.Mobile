@@ -12,7 +12,7 @@ namespace EasySDK.Mobile.ViewModels.Services
 
 		bool RemoveAccount();
 
-		bool InvalidAuthToken();
+		Task<bool> InvalidAuthToken();
 
 		Task<string?> TryGetAuthTokenAsync();
 	}

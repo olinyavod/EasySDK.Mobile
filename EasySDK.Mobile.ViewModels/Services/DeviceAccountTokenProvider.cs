@@ -23,7 +23,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 
 	#region Public methods
 
-	public bool InvalidateToken() => _deviceAccountService.InvalidAuthToken();
+	public Task<bool> InvalidateToken() => _deviceAccountService.InvalidAuthToken();
 
 	public Task<string?> TryGetAuthTokenAsync() => _deviceAccountService.TryGetAuthTokenAsync();
 

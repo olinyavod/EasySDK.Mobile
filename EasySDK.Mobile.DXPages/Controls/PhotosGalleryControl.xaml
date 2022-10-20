@@ -2,7 +2,6 @@
 <StackLayout xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:controls="clr-namespace:Fintech.Controls;assembly=Fintech"
              xmlns:popup="http://schemas.devexpress.com/xamarin/2014/forms/popup"
              xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
              xmlns:viewModels1="http://easyptog.ru/sdk/mobile"
@@ -52,6 +51,7 @@
 						                      CommandParameter="{Binding}"/>
 					</ContentView.GestureRecognizers>
 					<forms:CachedImage Aspect="AspectFill"
+					                   ErrorPlaceholder="fail_stamp_picture.png"
 					                   Source="{Binding Url}"/>
 				</ContentView>
 			</DataTemplate>
@@ -71,8 +71,12 @@
 	                              CurrentItem="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.SelectedPhoto, Mode=TwoWay}">
 		                <CarouselView.ItemTemplate>
 			                <DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
-				                <forms:CachedImage Aspect="AspectFit"
-				                                   Source="{Binding Url}"/>
+								<ContentView Padding="0, 50">
+									<forms:CachedImage Aspect="AspectFit"
+									                   ErrorPlaceholder="fail_stamp_picture.png"
+													   Source="{Binding Url}"/>
+
+								</ContentView>
 			                </DataTemplate>
 		                </CarouselView.ItemTemplate>
 	                </CarouselView>

@@ -129,7 +129,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			var response = await LoadItemsAsync(scope, request);
 
 			IsBusy = !response.HasError;
-			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
+			if (!await _responseChecker.CheckCanContinue(scope, response, GetLoadItemsFailedMessage()))
 				return;
 
 			var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
@@ -197,7 +197,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 				Search = GetSearchQueryText()
 			});
 
-			if (!await _responseChecker.CheckCanContinue(response, GetLoadItemsFailedMessage()))
+			if (!await _responseChecker.CheckCanContinue(scope.ServiceProvider, response, GetLoadItemsFailedMessage()))
 				return;
 
 			var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
@@ -216,4 +216,4 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	}
 
 	#endregion
-}
+}	
