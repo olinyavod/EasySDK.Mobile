@@ -129,6 +129,12 @@
   <data name="BFormat" xml:space="preserve">
     <value>{0} Б</value>
   </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Камера</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
   <data name="ClearAllLogsMessage" xml:space="preserve">
     <value>Очистить весь журнал?</value>
   </data>
@@ -152,6 +158,9 @@
   </data>
   <data name="FailedSignInMessage" xml:space="preserve">
     <value>Не удалось авторизоваться.</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Галерея</value>
   </data>
   <data name="GBFormat" xml:space="preserve">
     <value>{0:F1} Гб</value>
@@ -220,6 +229,9 @@
   <data name="String5" xml:space="preserve">
     <value>Saving</value>
     <comment>Сохранение...</comment>
+  </data>
+  <data name="WhereTakePhoto" xml:space="preserve">
+    <value>Откуда брать фото?</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>

@@ -39,6 +39,8 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 
 	public abstract bool AllowAdd { get; }
 
+	protected virtual bool AllowGallerySource { get; } = false;
+
 	public ObservableCollection<PhotoItemViewModel> PhotosSource { get; } = new();
 
 	public bool IsPhotoOpened
@@ -111,6 +113,28 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 
 	protected abstract Task<IResponse<bool?>> DeletePhotoAsync(IServiceProvider scope, string id);
 
+	protected virtual async Task<FileResult?> GetPhotoAsync()
+	{
+		if (!AllowGallerySource)
+			return await TryCapturePhotoAsync();
+
+		var result =  await _dialogs.ActionSheetAsync
+		(
+			Properties.Resources.WhereTakePhoto,
+			Properties.Resources.Cancel,
+			null,
+			null,
+			Properties.Resources.Camera, Properties.Resources.Gallery);
+
+		if (result == Properties.Resources.Camera)
+			return await TryCapturePhotoAsync();
+
+		if (result == Properties.Resources.Gallery)
+			return await TryPickPhotoAsync();
+
+		return null;
+	}
+
 	#endregion
 
 	#region Private methods
@@ -127,6 +151,45 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 			: 0;
 	}
 
+	private async Task<FileResult?> TryCapturePhotoAsync()
+	{
+		try
+		{
+			if (!await _dialogs.RequestPermissionIfDeny<Xamarin.Essentials.Permissions.Camera>
+			    (
+				    Properties.Resources.NeedAllowAccessCameraMessage
+			    ))
+				return null;
+
+			return await MediaPicker.CapturePhotoAsync();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Capture photo error.");
+			return null;
+		}
+
+	}
+
+	private async Task<FileResult?> TryPickPhotoAsync()
+	{
+		try
+		{
+			if (!await _dialogs.RequestPermissionIfDeny<Xamarin.Essentials.Permissions.Photos>
+			    (
+				    Properties.Resources.NeedAllowAccessCameraMessage
+			    ))
+				return null;
+
+			return await MediaPicker.PickPhotoAsync(new MediaPickerOptions());
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Pick photo error.");
+			return null;
+		}
+	}
+
 	#endregion
 
 	#region AddPhotoCommand
@@ -134,15 +197,14 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 	public ICommand AddPhotoCommand { get; }
 
 	private bool OnCanAddPhoto() => true;
-
+	
 	private async Task OnAddPhoto()
 	{
 		try
 		{
-			if(!await _dialogs.RequestPermissionIfDeny<Xamarin.Essentials.Permissions.Camera>(Properties.Resources.NeedAllowAccessCameraMessage))
-				return;
+			
 
-			var fileResult = await MediaPicker.CapturePhotoAsync();
+			var fileResult = await GetPhotoAsync();
 			if (fileResult == null)
 				return;
 

@@ -97,6 +97,24 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camera.
+        /// </summary>
+        public static string Camera {
+            get {
+                return ResourceManager.GetString("Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear the entire log?.
         /// </summary>
         public static string ClearAllLogsMessage {
@@ -192,6 +210,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         public static string FailedUploadPhotoMessage {
             get {
                 return ResourceManager.GetString("FailedUploadPhotoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gallery.
+        /// </summary>
+        public static string Gallery {
+            get {
+                return ResourceManager.GetString("Gallery", resourceCulture);
             }
         }
         
@@ -345,6 +372,15 @@ namespace EasySDK.Mobile.ViewModels.Properties {
         public static string SignIn {
             get {
                 return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Where to take a photo?.
+        /// </summary>
+        public static string WhereTakePhoto {
+            get {
+                return ResourceManager.GetString("WhereTakePhoto", resourceCulture);
             }
         }
         
