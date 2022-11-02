@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
 using EasySDK.Mobile.RestClient.Extensions;
@@ -24,6 +25,8 @@ public abstract class HttpServiceBase
 	#region Constants
 
 	protected const string MediaType = "application/json";
+
+	private static readonly object _sync = new();
 
 	#endregion
 
@@ -292,7 +295,7 @@ public abstract class HttpServiceBase
 			async Task<HttpResponseMessage> GetResponse(HttpClient c, bool requestToken)
 			{
 				if (useToken)
-					await SetToken(c);
+					await SetToken(c, requestToken);
 
 				using var request = requestFactory();
 				var r = await execute(c, request);
@@ -304,9 +307,18 @@ public abstract class HttpServiceBase
 					return r;
 
 				r.Dispose();
-				await _tokenProvider.InvalidateToken();
 
-				return await GetResponse(c, false);
+				try
+				{
+					Monitor.Enter(_sync);
+					await _tokenProvider.InvalidateToken();
+
+					return await GetResponse(c, false);
+				}
+				finally
+				{
+					Monitor.Exit(_sync);
+				}
 			}
 
 			var stopwatch = Stopwatch.StartNew();
@@ -340,10 +352,21 @@ public abstract class HttpServiceBase
 		}
 	}
 
-	protected async Task SetToken(HttpClient client)
+	protected async Task SetToken(HttpClient client, bool locked)
 	{
-		var token = await _tokenProvider.TryGetAuthTokenAsync();
-		client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+		try
+		{
+			if (locked)
+				Monitor.Enter(_sync);
+
+			var token = await _tokenProvider.TryGetAuthTokenAsync();
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+		}
+		finally
+		{
+			if (locked)
+				Monitor.Exit(_sync);
+		}
 	}
 
 	#endregion
