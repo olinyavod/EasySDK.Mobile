@@ -12,10 +12,20 @@
              Orientation="Vertical">
 	<Button Text="{x:Static props:Resources.AddPhoto}"
 	        ImageSource="ic_add_photo_white_24px.png"
-			IsVisible="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AllowAdd}"
 	        Visual="Material"
-	        Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AddPhotoCommand}"/>
-	
+	        Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AddPhotoCommand}">
+		<Button.IsVisible>
+			<MultiBinding>
+				<MultiBinding.Converter>
+					<controls1:AllTrueConverter/>
+				</MultiBinding.Converter>
+				<Binding Source="{RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}" Path="Manager.AllowAdd" />
+				<Binding Source="{RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}" Path="ShowAddButton" />
+			</MultiBinding>
+			
+		</Button.IsVisible>
+	</Button>
+
 	<FlexLayout BindableLayout.ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.PhotosSource}"
 	            x:Name="PhotosLayout"
 	            Direction="Row"
