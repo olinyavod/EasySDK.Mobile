@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevExpress.XamarinForms.Editors" Version="22.1.5" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj" />
     <ProjectReference Include="..\EasySDK.Mobile.ViewModels\EasySDK.Mobile.ViewModels.csproj" />
   </ItemGroup>
@@ -53,6 +49,10 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.XamarinForms.Editors" Version="22.1.7" />
   </ItemGroup>
 
 </Project>
