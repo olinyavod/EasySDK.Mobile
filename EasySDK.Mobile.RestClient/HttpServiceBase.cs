@@ -308,16 +308,19 @@ public abstract class HttpServiceBase
 
 				r.Dispose();
 
+				var locked = false;
 				try
 				{
-					Monitor.Enter(_sync);
+					Monitor.TryEnter(_sync, TimeSpan.FromSeconds(1), ref locked);
+
 					await _tokenProvider.InvalidateToken();
 
 					return await GetResponse(c, false);
 				}
 				finally
 				{
-					Monitor.Exit(_sync);
+					if (locked)
+						Monitor.Exit(_sync);
 				}
 			}
 
@@ -357,7 +360,7 @@ public abstract class HttpServiceBase
 		try
 		{
 			if (locked)
-				Monitor.Enter(_sync);
+				locked = Monitor.TryEnter(_sync, TimeSpan.FromSeconds(1));
 
 			var token = await _tokenProvider.TryGetAuthTokenAsync();
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
