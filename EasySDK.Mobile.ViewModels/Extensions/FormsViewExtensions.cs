@@ -138,5 +138,12 @@ public static class FormsViewExtensions
 
 	}
 
+	public static IServiceScope CreateScope(this BindableObject _)
+	{
+		var app = (FormsApp) Application.Current;
+
+		return app.ServiceProvider.CreateScope();
+	}
+
 	#endregion
 }

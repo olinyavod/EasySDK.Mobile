@@ -26,8 +26,6 @@ public abstract class HttpServiceBase
 
 	protected const string MediaType = "application/json";
 
-	private static readonly object _sync = new();
-
 	#endregion
 
 	#region Private fields
@@ -295,7 +293,7 @@ public abstract class HttpServiceBase
 			async Task<HttpResponseMessage> GetResponse(HttpClient c, bool requestToken)
 			{
 				if (useToken)
-					await SetToken(c, requestToken);
+					await SetToken(c);
 
 				using var request = requestFactory();
 				var r = await execute(c, request);
@@ -307,21 +305,10 @@ public abstract class HttpServiceBase
 					return r;
 
 				r.Dispose();
+				
+				await _tokenProvider.InvalidateToken();
 
-				var locked = false;
-				try
-				{
-					Monitor.TryEnter(_sync, TimeSpan.FromSeconds(1), ref locked);
-
-					await _tokenProvider.InvalidateToken();
-
-					return await GetResponse(c, false);
-				}
-				finally
-				{
-					if (locked)
-						Monitor.Exit(_sync);
-				}
+				return await GetResponse(c, false);
 			}
 
 			var stopwatch = Stopwatch.StartNew();
@@ -355,21 +342,10 @@ public abstract class HttpServiceBase
 		}
 	}
 
-	protected async Task SetToken(HttpClient client, bool locked)
+	protected async Task SetToken(HttpClient client)
 	{
-		try
-		{
-			if (locked)
-				locked = Monitor.TryEnter(_sync, TimeSpan.FromSeconds(1));
-
-			var token = await _tokenProvider.TryGetAuthTokenAsync();
-			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-		}
-		finally
-		{
-			if (locked)
-				Monitor.Exit(_sync);
-		}
+		var token = await _tokenProvider.TryGetAuthTokenAsync();
+		client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 	}
 
 	#endregion
