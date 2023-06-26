@@ -10,7 +10,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 	#region Private fields
 
 	private readonly IDeviceAccountService _deviceAccountService;
-	private readonly object _sync = new();
+	private readonly SemaphoreSlim _semaphore = new(0);
 
 	private string? _token;
 
@@ -29,31 +29,28 @@ public class DeviceAccountTokenProvider : ITokenProvider
 
 	public async Task<bool> InvalidateToken()
 	{
-		var locked = false;
 		try
 		{
-			Monitor.TryEnter(_sync, TimeSpan.FromSeconds(10), ref locked);
+			await _semaphore.WaitAsync(TimeSpan.FromSeconds(10));
 			_token = null;
 
 			return await _deviceAccountService.InvalidAuthToken();
 		}
 		finally
 		{
-			if (locked)
-				Monitor.Exit(_sync);
+			_semaphore.Release();
 		}
 	}
 
 	public async Task<string?> TryGetAuthTokenAsync()
 	{
-		var locked = false;
 		try
 		{
 			var token = _token;
 			if(!string.IsNullOrWhiteSpace(token))
 				return token;
 
-			Monitor.TryEnter(_sync, TimeSpan.FromSeconds(10), ref locked);
+			await _semaphore.WaitAsync(TimeSpan.FromSeconds(10));
 			
 			token = await _deviceAccountService.TryGetAuthTokenAsync();
 			_token = token;
@@ -62,8 +59,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 		}
 		finally
 		{
-			if(locked)
-				Monitor.Exit(_sync);
+			_semaphore.Release();
 		}
 	}
 
