@@ -26,6 +26,8 @@ public class DefaultLightPalette : ColorPaletteBase
 		SetColor(nameof(DefaultColorThemeKeys.StartIconColor), "#FF505050");
 		SetColor(nameof(DefaultColorThemeKeys.SeparatorColor), "#FF505050");
 		SetColor(nameof(DefaultColorThemeKeys.FlyoutHeaderColor), "#FFFFFF");
+		SetColor(nameof(DefaultColorThemeKeys.FlyoutBackgroundColor), "#FFFFFF");
+		SetColor(nameof(DefaultColorThemeKeys.FlyoutSelectedBackgroundCOlor), "#E6E6E6");
 		SetColor(nameof(DefaultColorThemeKeys.MenuIconColor), "#737373");
 	}
 }

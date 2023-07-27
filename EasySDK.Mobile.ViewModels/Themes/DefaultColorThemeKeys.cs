@@ -23,6 +23,8 @@
 		StartIconColor,
 		SeparatorColor,
 		FlyoutHeaderColor,
+		FlyoutBackgroundColor,
+		FlyoutSelectedBackgroundCOlor,
 		MenuIconColor,
 		UnselectedTextColor
 	}
