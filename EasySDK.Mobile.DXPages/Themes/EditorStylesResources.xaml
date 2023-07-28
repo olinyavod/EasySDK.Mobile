@@ -37,7 +37,9 @@
 	       BaseResourceKey="EditorStyle"/>
 
 	<Style TargetType="editors:ComboBoxEdit"
-	       BaseResourceKey="EditorStyle"/>
+	       BaseResourceKey="EditorStyle">
+		<Setter Property="DropDownSelectedItemBackgroundColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+	</Style>
 
 	<Style TargetType="editors:PasswordEdit"
 	       BaseResourceKey="EditorStyle"/>
