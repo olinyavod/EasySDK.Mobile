@@ -3,6 +3,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:controls="clr-namespace:EasySDK.Mobile.ViewModels.Controls;assembly=EasySDK.Mobile.ViewModels"
                     xmlns:converters="clr-namespace:EasySDK.Mobile.ViewModels.Converters;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+                    BackgroundColor="{DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"
                     Click="SwitchSettingsCellOnClick"
                     HasShadow="False"
                     Padding="25, 5"
@@ -21,15 +23,14 @@
 	    </Grid.ColumnDefinitions>
 
 	    <Label Grid.Column="0"
-	           x:Name="TextLabel"
+	           x:Name="TextLabel" LineHeight="1"
 			   VerticalOptions="CenterAndExpand"
 	           LineBreakMode="WordWrap">
 		    <Label.FormattedText>
 				<FormattedString>
 					<Span Text="{Binding Source={RelativeSource AncestorType={x:Type controls:SwitchSettingsCell}}, Path=Text}"
 					      FontAttributes="Bold"
-						  LineHeight="2"
-					      FontSize="Body"/>
+						  FontSize="Body"/>
 
 					<Span>
 						<Span.Text>
