@@ -30,5 +30,11 @@ public class DefaultDarkPalette : ColorPaletteBase
 		SetColor(nameof(DefaultColorThemeKeys.FlyoutSelectedBackgroundCOlor), "#FF2E2E2E");
 		SetColor(nameof(DefaultColorThemeKeys.MenuIconColor), "#FFFFFF");
 
+		this[nameof(DefaultFontThemeKeys.EditorFontFamily)] = "Proxima Nova";
+		this[nameof(DefaultFontThemeKeys.EditorFontSize)] = 14.0;
+
+		this[nameof(DefaultFontThemeKeys.LabelFontFamily)] = "Proxima Nova";
+		this[nameof(DefaultFontThemeKeys.LabelFontSize)] = 14.0;
+
 	}
 }

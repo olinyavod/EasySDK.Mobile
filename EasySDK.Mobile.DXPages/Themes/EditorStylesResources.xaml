@@ -23,6 +23,10 @@
 		<Setter Property="IsLabelFloating" Value="True"/>
 		<Setter Property="FocusedBorderColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 		<Setter Property="FocusedLabelColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
+		<Setter Property="TextFontFamily" Value="{DynamicResource {themes:DefaultFontThemeKey Key=EditorFontFamily}}"/>
+		<Setter Property="TextFontSize" Value="{DynamicResource {themes:DefaultFontThemeKey Key=EditorFontFamily}}"/>
+		<Setter Property="BottomTextFontFamily" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontFamily}}"/>
+		<Setter Property="BottomTextFontSize" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontSize}}"/>
 	</Style>
 
 	<Style TargetType="editors:DateEdit"
@@ -38,6 +42,8 @@
 
 	<Style TargetType="editors:ComboBoxEdit"
 	       BaseResourceKey="EditorStyle">
+		<Setter Property="DropDownItemFontFamily" Value="{DynamicResource {themes:DefaultFontThemeKey Key=EditorFontFamily}}"/>
+		<Setter Property="DropDownItemFontSize" Value="{DynamicResource {themes:DefaultFontThemeKey Key=EditorFontSize}}"/>
 		<Setter Property="DropDownSelectedItemBackgroundColor" Value="{DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 	</Style>
 
@@ -51,6 +57,8 @@
 
 	<Style TargetType="Button">
 		<Setter Property="TextColor" Value="White"/>
+		<Setter Property="FontSize" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontSize}}"/>
+		<Setter Property="FontFamily" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontFamily}}"/>
 		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
 		<Setter Property="VisualStateManager.VisualStateGroups">
 			<VisualStateGroupList>
@@ -71,6 +79,8 @@
 	</Style>
 
 	<Style TargetType="Label">
+		<Setter Property="FontSize" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontSize}}"/>
+		<Setter Property="FontFamily" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontFamily}}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
 	</Style>
 
@@ -83,6 +93,8 @@
 
 	<Style TargetType="editors:SimpleButton"
 	       x:Key="SecondarySimpleButtonStyle">
+		<Setter Property="FontSize" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontSize}}"/>
+		<Setter Property="FontFamily" Value="{DynamicResource {themes:DefaultFontThemeKey Key=LabelFontFamily}}"/>
 		<Setter Property="CornerRadius" Value="{StaticResource ElementCornerRadius}"/>
 		<Setter Property="UseRippleEffect" Value="True"/>
 		<Setter Property="BorderThickness" Value="1"/>

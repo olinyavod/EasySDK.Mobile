@@ -1,4 +1,6 @@
-﻿namespace EasySDK.Mobile.ViewModels.Themes;
+﻿using Xamarin.Forms;
+
+namespace EasySDK.Mobile.ViewModels.Themes;
 
 public class DefaultLightPalette : ColorPaletteBase
 {
@@ -29,5 +31,11 @@ public class DefaultLightPalette : ColorPaletteBase
 		SetColor(nameof(DefaultColorThemeKeys.FlyoutBackgroundColor), "#FFFFFF");
 		SetColor(nameof(DefaultColorThemeKeys.FlyoutSelectedBackgroundCOlor), "#E6E6E6");
 		SetColor(nameof(DefaultColorThemeKeys.MenuIconColor), "#737373");
+
+		this[nameof(DefaultFontThemeKeys.EditorFontFamily)] = "Proxima Nova";
+		this[nameof(DefaultFontThemeKeys.EditorFontSize)] = 14.0;
+
+		this[nameof(DefaultFontThemeKeys.LabelFontFamily)] = "Proxima Nova";
+		this[nameof(DefaultFontThemeKeys.LabelFontSize)] = 14.0;
 	}
 }
