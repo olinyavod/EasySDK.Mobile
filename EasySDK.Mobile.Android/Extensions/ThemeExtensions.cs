@@ -88,6 +88,7 @@ public static class ThemeExtensions
 	public static void OnThemeChanged(this Application app, Activity activity, string statusColorKey)
 	{
 		SetStatusBarColorKey(app, statusColorKey);
+		
 		SetActivity(app, activity);
 
 		FormsAppOnRequestedThemeChanged(app, new AppThemeChangedEventArgs(app.RequestedTheme));
@@ -95,31 +96,30 @@ public static class ThemeExtensions
 		app.RequestedThemeChanged += FormsAppOnRequestedThemeChanged;
 	}
 
-	#endregion
-
-	#region Private methods
-
-	private static void FormsAppOnRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+	public static void SetNavigationBarColor(this Activity activity, Color value, bool isLight)
 	{
-		var app = (Application) sender;
-		var activity = GetActivity(app);
+		if (activity.Window is not { } window)
+			return;
 
+		window.SetNavigationBarColor(value.ToAndroid());
 
-		if (e.RequestedTheme == OSAppTheme.Dark)
-			ClearLightStatusBar(activity);
+		if (isLight)
+			window.DecorView.SystemUiVisibility |= (StatusBarVisibility) SystemUiFlags.LightNavigationBar;
 		else
-			SetLightStatusBar(activity);
-		
-
-		var statusBarColorKey = GetStatusBarColorKey(app);
-		
-		var element = new BoxView();
-		element.SetDynamicResource(BoxView.ColorProperty, statusBarColorKey);
-
-		activity.Window?.SetStatusBarColor(element.Color.ToAndroid());
+			window.DecorView.SystemUiVisibility &= ~((StatusBarVisibility) SystemUiFlags.LightNavigationBar);
 	}
 
-	private static void SetLightStatusBar(Activity activity)
+	public static void SetStatusBarColor(this Activity activity, Color value, bool isLight)
+	{
+		activity.Window?.SetStatusBarColor(value.ToAndroid());
+
+		if (isLight)
+			SetLightStatusBar(activity);
+		else
+			ClearLightStatusBar(activity);
+	}
+
+	public static void SetLightStatusBar(this Activity activity)
 	{
 		if (Build.VERSION.SdkInt >= BuildVersionCodes.R)
 		{
@@ -137,7 +137,7 @@ public static class ThemeExtensions
 		}
 	}
 
-	private static void ClearLightStatusBar(Activity activity)
+	public static void ClearLightStatusBar(this Activity activity)
 	{
 		if (Build.VERSION.SdkInt >= BuildVersionCodes.R) 
 			activity.Window?.InsetsController?.SetSystemBarsAppearance
@@ -158,5 +158,28 @@ public static class ThemeExtensions
 		}
 	}
 
+	#endregion
+
+	#region Private methods
+
+	private static void FormsAppOnRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+	{
+		var app = (Application) sender;
+		var activity = GetActivity(app);
+
+
+		if (e.RequestedTheme == OSAppTheme.Dark)
+			ClearLightStatusBar(activity);
+		else
+			SetLightStatusBar(activity);
+
+		var statusBarColorKey = GetStatusBarColorKey(app);
+		
+		var element = new BoxView();
+		element.SetDynamicResource(BoxView.ColorProperty, statusBarColorKey);
+
+		activity.Window?.SetStatusBarColor(element.Color.ToAndroid());
+	}
+	
 	#endregion
 }
