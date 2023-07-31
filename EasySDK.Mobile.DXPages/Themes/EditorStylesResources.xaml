@@ -262,7 +262,7 @@
 		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=CollectionBackgroundColor}}"/>
 	</Style>
 
-	<Thickness x:Key="ItemPadding">15, 10</Thickness>
+	<Thickness x:Key="ItemPadding">6, 12</Thickness>
 
 	<Style TargetType="controls:ItemFrame">
 		<Setter Property="HasShadow" Value="True"/>

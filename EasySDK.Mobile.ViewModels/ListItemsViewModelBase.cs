@@ -77,7 +77,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		Log = logger ?? throw new ArgumentNullException(nameof(logger));
 
 		LoadItemsCommand = new Command(OnLoadItems);
-		LoadNextItemsCommand = new AsyncCommand(OnLoadNextItems);
+		LoadNextItemsCommand = new AsyncCommand(OnLoadNextItems, OnCanLoadNext);
 	}
 
 	#endregion
@@ -168,6 +168,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	public ICommand LoadItemsCommand { get; }
 
+	private bool OnCanLoad() => !IsBusy;
+
 	private async void OnLoadItems()
 	{
 		await using var scope = CreateAsyncScope();
@@ -183,6 +185,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	#region LoadNextItemsCommand
 
 	public ICommand LoadNextItemsCommand { get; }
+
+	private bool OnCanLoadNext() => !IsBusy;
 
 	private async Task OnLoadNextItems()
 	{
