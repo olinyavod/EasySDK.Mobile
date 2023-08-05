@@ -51,19 +51,35 @@
 
 		<BindableLayout.ItemTemplate>
 			<DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
-				<ContentView FlexLayout.Basis="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=PhotoWidth}"
-				             Margin="1"
-				             HeightRequest="90"
-				             Padding="0">
+				<Grid FlexLayout.Basis="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=PhotoWidth}"
+				                Margin="1"
+				                HeightRequest="90"
+				                Padding="0">
 					
-					<ContentView.GestureRecognizers>
+					<Grid.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.OpenPhotoCommand}"
 						                      CommandParameter="{Binding}"/>
-					</ContentView.GestureRecognizers>
+					</Grid.GestureRecognizers>
+
 					<forms:CachedImage Aspect="AspectFill"
+									   Margin="0, 15, 15, 0"
 					                   ErrorPlaceholder="fail_stamp_picture.png"
 					                   Source="{Binding Url}"/>
-				</ContentView>
+
+					<editors:SimpleButton IconColor="#24242B"
+										  UseRippleEffect="True"
+										  CornerRadius="15"
+										  Icon="ic_close_white_24px.png"
+										  Padding="0"
+										  ScaleX="0.6" ScaleY="0.6"
+					                      WidthRequest="30"
+					                      HeightRequest="30"
+										  HorizontalOptions="End"
+										  VerticalOptions="Start"
+					                      BackgroundColor="{DynamicResource {themes:DefaultColorThemeKey Key=MenuIconColor}}"
+										  Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.DeletePhotoCommand}"
+										  CommandParameter="{Binding}"/>
+				</Grid>
 			</DataTemplate>
 		</BindableLayout.ItemTemplate>
 	</FlexLayout>

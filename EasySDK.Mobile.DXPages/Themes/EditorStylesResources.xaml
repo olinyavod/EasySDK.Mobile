@@ -301,6 +301,7 @@
 
 	<Style TargetType="editors:SimpleButton"
 	       x:Key="IconSimpleButtonStyle">
+		<Setter Property="UseRippleEffect" Value="True"/>
 		<Setter Property="BackgroundColor" Value="Transparent"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Padding" Value="0"/>
