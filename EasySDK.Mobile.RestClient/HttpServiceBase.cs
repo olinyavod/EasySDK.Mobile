@@ -71,15 +71,17 @@ public abstract class HttpServiceBase
 		string requestUrl,
 		object? postModel,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		return await ExecuteAsync
 		(
 			() => postModel != null ? CreateJsonContent(postModel) : new StringContent(string.Empty),
-			(c, r) => c.PostAsync(requestUrl, r),
+			(c, r, t) => c.PostAsync(requestUrl, r, t),
 			c => CreateResponse(c, parse),
-			useToken
+			useToken,
+			cancellationToken
 		);
 	}
 
@@ -88,13 +90,14 @@ public abstract class HttpServiceBase
 		string requestUrl,
 		object? filter = null,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponseList<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponseList<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		return await ExecuteAsync
 		(
 			() => CreateGetMessage(requestUrl, filter),
-			(c, r) => c.SendAsync(r),
+			(c, r, t) => c.SendAsync(r, t),
 			(c) =>
 			{
 				var result = CreateResponse(c, parse);
@@ -104,7 +107,8 @@ public abstract class HttpServiceBase
 
 				return result;
 			},
-			useToken
+			useToken,
+			cancellationToken
 		);
 	}
 
@@ -113,15 +117,17 @@ public abstract class HttpServiceBase
 		string requestUrl,
 		object? model = null,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		return await ExecuteAsync
 		(
 			() => CreateGetMessage(requestUrl, model),
-			(c, r) => c.SendAsync(r),
+			(c, r, t) => c.SendAsync(r, t),
 			c => CreateResponse(c, parse),
-			useToken
+			useToken,
+			cancellationToken
 		);
 	}
 
@@ -130,7 +136,8 @@ public abstract class HttpServiceBase
 		string requestUrl, 
 		object? model,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		return await ExecuteAsync
@@ -139,9 +146,10 @@ public abstract class HttpServiceBase
 			{
 				Content = model != null ? CreateJsonContent(model) : new StringContent(string.Empty)
 			},
-			(c, r) => c.SendAsync(r),
+			(c, r, t) => c.SendAsync(r, t),
 			c => CreateResponse(c, parse),
-			useToken
+			useToken,
+			cancellationToken
 		);
 	}
 
@@ -150,27 +158,30 @@ public abstract class HttpServiceBase
 		string requestUri,
 		Expression<Func<TForm>> patch,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		var model = patch.ToJObject();
 
-		return PatchJsonAsync(requestUri, model, useToken, parse);
+		return PatchJsonAsync(requestUri, model, useToken, parse, cancellationToken);
 	}
 
 	protected async Task<IResponse<TResult>?> DeleteJsonAsync<TResult>
 	(
 		string requestUrl,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		return await ExecuteAsync
 		(
 			() => new StringContent(string.Empty),
-			(c, _) => c.DeleteAsync(requestUrl),
+			(c, _, t) => c.DeleteAsync(requestUrl, t),
 			c => CreateResponse(c, parse),
-			useToken
+			useToken,
+			cancellationToken
 		);
 	}
 
@@ -179,15 +190,17 @@ public abstract class HttpServiceBase
 		string requestUrl,
 		HttpContent form,
 		bool useToken = true,
-		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null
+		Func<JObject, JsonSerializer, HttpResponse<TResult>>? parse = null,
+		CancellationToken cancellationToken = default
 	)
 	{
 		return await ExecuteAsync
 		(
 			() => form,
-			(c, r) => c.PostAsync(requestUrl, r),
+			(c, r, t) => c.PostAsync(requestUrl, r, t),
 			c => CreateResponse(c, parse),
-			useToken
+			useToken,
+			cancellationToken
 		);
 	}
 
@@ -277,9 +290,10 @@ public abstract class HttpServiceBase
 	protected async Task<TResponse?> ExecuteAsync<TResponse, TRequest>
 	(
 		Func<TRequest> requestFactory,
-		Func<HttpClient, TRequest, Task<HttpResponseMessage>> execute,
+		Func<HttpClient, TRequest, CancellationToken, Task<HttpResponseMessage>> execute,
 		Func<string, TResponse?> responseFactory,
-		bool useToken
+		bool useToken,
+		CancellationToken cancellationToken
 	)
 		where TRequest : class, IDisposable
 		where TResponse : HttpResponse, new()
@@ -290,13 +304,13 @@ public abstract class HttpServiceBase
 		{
 			using var client = CreateClient();
 
-			async Task<HttpResponseMessage> GetResponse(HttpClient c, bool requestToken)
+			async Task<HttpResponseMessage> GetResponse(HttpClient c, bool requestToken, CancellationToken cancelToken)
 			{
 				if (useToken)
 					await SetToken(c);
 
 				using var request = requestFactory();
-				var r = await execute(c, request);
+				var r = await execute(c, request, cancelToken);
 
 				if (r.IsSuccessStatusCode
 				    || r.StatusCode != HttpStatusCode.Unauthorized
@@ -307,13 +321,16 @@ public abstract class HttpServiceBase
 				r.Dispose();
 				
 				await _tokenProvider.InvalidateToken();
+				
+				if (cancelToken.IsCancellationRequested)
+					return r;
 
-				return await GetResponse(c, false);
+				return await GetResponse(c, false, cancelToken);
 			}
 
 			var stopwatch = Stopwatch.StartNew();
 
-			response = await GetResponse(client, true);
+			response = await GetResponse(client, true, cancellationToken);
 
 			var content = await response.Content.ReadAsStringAsync();
 
