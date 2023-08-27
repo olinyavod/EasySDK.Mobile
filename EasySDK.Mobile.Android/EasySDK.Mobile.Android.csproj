@@ -70,6 +70,7 @@
     <Compile Include="LoggerExtensions.cs" />
     <Compile Include="NLogTraceListener.cs" />
     <Compile Include="Permissions\AnswerRejectCallsPlatformPermission.cs" />
+    <Compile Include="Permissions\AndroidAudioRecordPermission.cs" />
     <Compile Include="Permissions\ModifyAudioSettingsPlatformPermission.cs" />
     <Compile Include="PlatformApplication.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
