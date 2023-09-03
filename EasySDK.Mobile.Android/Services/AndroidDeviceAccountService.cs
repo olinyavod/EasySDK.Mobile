@@ -69,7 +69,7 @@ public class AndroidDeviceAccountService : IDeviceAccountService
 		return am?.RemoveAccountExplicitly(account) ?? false;
 	}
 
-	public Task<bool> InvalidAuthToken() => Task.Run(() =>
+	public virtual Task<bool> InvalidAuthToken() => Task.Run(() =>
 	{
 		var am = AccountManager.Get(_context);
 		var account = GetAccount(am);
@@ -80,7 +80,7 @@ public class AndroidDeviceAccountService : IDeviceAccountService
 		return true;
 	});
 
-	public Task<string?> TryGetAuthTokenAsync() => Task.Run(() =>
+	public virtual Task<string?> TryGetAuthTokenAsync() => Task.Run(() =>
 	{
 		var am = AccountManager.Get(_context);
 		var account = GetAccount(am);
