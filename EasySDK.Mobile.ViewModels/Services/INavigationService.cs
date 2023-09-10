@@ -10,6 +10,8 @@ public interface INavigationService
 
 	Task GoToAsync(ShellNavigationState state, bool animate = true);
 
+	Task GoToAsync(string pageName, Dictionary<string, string?>? args, bool animate = true);
+
 	Page CurrentPage { get; }
 
 	IReadOnlyList<Page?> OpenPages { get; }
