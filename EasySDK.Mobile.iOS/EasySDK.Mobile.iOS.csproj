@@ -13,6 +13,7 @@
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>EasySDK.Mobile.iOS</AssemblyName>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,7 +39,7 @@
     <DebugType>portable</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
@@ -48,6 +49,7 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effects\IosTintImageEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,50 +68,84 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\circle_check_white_18.png" />
+    <BundleResource Include="Resources\circle_check_white_18@3x.png" />
+    <BundleResource Include="Resources\error_white_18@3x.png" />
+    <BundleResource Include="Resources\ic_account_dark_24px@3x.png" />
+    <BundleResource Include="Resources\ic_add_photo_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_back_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_big_photo_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_cancel_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_clear_all_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_close_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_copy_all_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_dark_mode_24px@3x.png" />
+    <BundleResource Include="Resources\ic_delete_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_key_white_24px@3x.png" />
+    <BundleResource Include="Resources\ic_light_mode_24px@3x.png" />
+    <BundleResource Include="Resources\ic_logs_dark_24px@3x.png" />
+    <BundleResource Include="Resources\ic_share_white_24px@2x.png" />
+    <BundleResource Include="Resources\ic_share_white_24px@3x.png" />
+    <BundleResource Include="Resources\Lead_works_dark.png" />
+    <BundleResource Include="Resources\Lead_works_light.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\circle_check_white_18@2x.png" />
     <BundleResource Include="Resources\error_white_18.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\error_white_18@2x.png" />
     <BundleResource Include="Resources\ic_account_dark_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_account_dark_24px@2x.png" />
     <BundleResource Include="Resources\ic_add_photo_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_add_photo_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_back_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_back_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_big_photo_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_big_photo_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_cancel_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_cancel_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_clear_all_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_clear_all_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_close_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_close_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_copy_all_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_copy_all_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_dark_mode_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_dark_mode_24px@2x.png" />
     <BundleResource Include="Resources\ic_delete_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_delete_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_key_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_key_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_light_mode_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_light_mode_24px@2x.png" />
     <BundleResource Include="Resources\ic_logs_dark_24px.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\ic_logs_dark_24px@2x.png" />
     <BundleResource Include="Resources\ic_share_white_24px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
