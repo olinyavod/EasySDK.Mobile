@@ -85,8 +85,6 @@
     <BundleResource Include="Resources\ic_logs_dark_24px@3x.png" />
     <BundleResource Include="Resources\ic_share_white_24px@2x.png" />
     <BundleResource Include="Resources\ic_share_white_24px@3x.png" />
-    <BundleResource Include="Resources\Lead_works_dark.png" />
-    <BundleResource Include="Resources\Lead_works_light.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\circle_check_white_18@2x.png" />
