@@ -1,9 +1,10 @@
 using EasySDK.Mobile.iOS.Effects;
 using Xamarin.Forms;
 using EasySDK.Mobile.ViewModels.Effects;
+using Foundation;
 
+[assembly: Preserve(AllMembers = true)]
 [assembly: ExportEffect(typeof(IosTintImageEffect), nameof(TintImageEffect))]
-
 namespace EasySDK.Mobile.iOS.Effects
 {
     using System;
