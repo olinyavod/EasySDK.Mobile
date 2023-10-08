@@ -49,6 +49,7 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppDelegateExtensions.cs" />
     <Compile Include="Effects\IosTintImageEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
