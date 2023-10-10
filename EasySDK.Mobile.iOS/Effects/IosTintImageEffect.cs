@@ -3,7 +3,6 @@ using Xamarin.Forms;
 using EasySDK.Mobile.ViewModels.Effects;
 using Foundation;
 
-[assembly: Preserve(AllMembers = true)]
 [assembly: ExportEffect(typeof(IosTintImageEffect), nameof(TintImageEffect))]
 namespace EasySDK.Mobile.iOS.Effects
 {
@@ -13,6 +12,7 @@ namespace EasySDK.Mobile.iOS.Effects
     using ViewModels.Effects;
     using Xamarin.Forms.Platform.iOS;
 
+    [Preserve(AllMembers = true)]
     public class IosTintImageEffect : PlatformEffect
     {
         protected override void OnAttached()
