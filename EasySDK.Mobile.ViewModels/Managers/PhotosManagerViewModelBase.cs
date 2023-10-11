@@ -213,7 +213,7 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 			using var loadingDlh = _dialogs.Loading(Properties.Resources.Saving);
 			await using var scope = CreateAsyncScope();
 			await using var stream = await _imageService.LoadStream(_ => fileResult.OpenReadAsync())
-				.DownSample(1024)
+				.DownSample(1024, 1024)
 				.AsJPGStreamAsync(50);
 
 			var response = await AddPhotoAsync(scope.ServiceProvider, fileResult.FileName, stream);
