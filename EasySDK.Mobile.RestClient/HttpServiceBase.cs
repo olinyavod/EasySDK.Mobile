@@ -343,6 +343,8 @@ public abstract class HttpServiceBase
 				stopwatch.Elapsed
 			);
 
+			Logger.LogDebug(content);
+
 			if (!response.IsSuccessStatusCode)
 				return CreateErrorResponse<TResponse>(response, content);
 
