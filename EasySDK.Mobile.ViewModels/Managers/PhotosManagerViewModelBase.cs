@@ -11,6 +11,7 @@ using EasySDK.Mobile.Models;
 using EasySDK.Mobile.ViewModels.Extensions;
 using EasySDK.Mobile.ViewModels.Input;
 using FFImageLoading;
+using FFImageLoading.Work;
 using Microsoft.Extensions.Logging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -202,7 +203,6 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 	{
 		try
 		{
-			
 
 			var fileResult = await GetPhotoAsync();
 			if (fileResult == null)
@@ -212,9 +212,30 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 
 			using var loadingDlh = _dialogs.Loading(Properties.Resources.Saving);
 			await using var scope = CreateAsyncScope();
+
+			var maxSize = Device.RuntimePlatform switch
+			{
+				Device.iOS => 1024.0 / DeviceDisplay.MainDisplayInfo.Density,
+
+				_ => 1024.0
+			};
 			await using var stream = await _imageService.LoadStream(_ => fileResult.OpenReadAsync())
-				.DownSample(1024, 1024)
+				.DownSample((int)maxSize, (int)maxSize)
+				.DownSampleMode(InterpolationMode.Medium)
 				.AsJPGStreamAsync(50);
+
+			await _imageService.LoadStream(async t =>
+			{
+				var memory = new MemoryStream();
+				await stream.CopyToAsync(memory, t);
+				memory.Seek(0, SeekOrigin.Begin);
+				return memory;
+			}).Success((info, _) =>
+			{
+				_logger.LogInformation("Try send photo with size: {0}x{1}", info.OriginalWidth, info.OriginalHeight);
+			}).PreloadAsync();
+
+			stream.Seek(0, SeekOrigin.Begin);
 
 			var response = await AddPhotoAsync(scope.ServiceProvider, fileResult.FileName, stream);
 
