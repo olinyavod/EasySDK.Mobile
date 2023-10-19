@@ -52,10 +52,9 @@
 		<BindableLayout.ItemTemplate>
 			<DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
 				<Grid FlexLayout.Basis="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=PhotoWidth}"
-				                Margin="1"
-				                HeightRequest="90"
-				                Padding="0">
-					
+				      Margin="1"
+				      HeightRequest="90"
+				      Padding="0">
 					<Grid.GestureRecognizers>
 						<TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.OpenPhotoCommand}"
 						                      CommandParameter="{Binding}"/>
@@ -63,22 +62,22 @@
 
 					<forms:CachedImage Aspect="AspectFill"
 									   Margin="0, 15, 15, 0"
-					                   ErrorPlaceholder="fail_stamp_picture.png"
-					                   Source="{Binding Url}"/>
-
+									   ErrorPlaceholder="{OnPlatform  Default='fail_stamp_picture.png', iOS='Images/fail_stamp_picture.png'}"
+					                   Source="{Binding ImageSource}"/>
+					
 					<editors:SimpleButton IconColor="#24242B"
-										  UseRippleEffect="True"
-										  CornerRadius="15"
-										  Icon="ic_close_white_24px.png"
-										  Padding="0"
-										  ScaleX="0.6" ScaleY="0.6"
+					                      UseRippleEffect="True"
+					                      CornerRadius="15"
+					                      Icon="ic_close_white_24px.png"
+					                      Padding="0"
+					                      ScaleX="0.6" ScaleY="0.6"
 					                      WidthRequest="30"
 					                      HeightRequest="30"
-										  HorizontalOptions="End"
-										  VerticalOptions="Start"
+					                      HorizontalOptions="End"
+					                      VerticalOptions="Start"
 					                      BackgroundColor="{DynamicResource {themes:DefaultColorThemeKey Key=MenuIconColor}}"
-										  Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.DeletePhotoCommand}"
-										  CommandParameter="{Binding}"/>
+					                      Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.DeletePhotoCommand}"
+					                      CommandParameter="{Binding}"/>
 				</Grid>
 			</DataTemplate>
 		</BindableLayout.ItemTemplate>
@@ -99,8 +98,8 @@
 			                <DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
 								<ContentView Padding="0, 50">
 									<forms:CachedImage Aspect="AspectFit"
-									                   ErrorPlaceholder="fail_stamp_picture.png"
-													   Source="{Binding Url}"/>
+									                   ErrorPlaceholder="{OnPlatform  Default='fail_stamp_picture.png', iOS='Images/fail_stamp_picture.png'}"
+													   Source="{Binding ImageSource}"/>
 
 								</ContentView>
 			                </DataTemplate>
@@ -139,7 +138,7 @@
 	                        CornerRadius="30"
 	                        Margin="10"
 	                        Command="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.AddPhotoCommand}"
-	                        ImageSource="ic_big_photo_white_24px.png"/>
+	                        ImageSource="{OnPlatform Default='ic_big_photo_white_24px.png', iOS='Images/ic_big_photo_white_24px.png'}"/>
 
                     <Button AbsoluteLayout.LayoutBounds="0.8, 1, AutoSize, AutoSize"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -150,7 +149,7 @@
                             WidthRequest="40"
                             Margin="0, 20"
                             CornerRadius="20"
-                            ImageSource="ic_delete_white_24px.png"/>
+                            ImageSource="{OnPlatform Default='ic_delete_white_24px.png', iOS='Images/ic_delete_white_24px.png'}"/>
                 </AbsoluteLayout>
             </popup:DXPopup>
 </StackLayout>

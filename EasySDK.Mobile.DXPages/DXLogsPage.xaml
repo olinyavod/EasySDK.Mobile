@@ -7,13 +7,13 @@
                         x:Class="EasySDK.Mobile.DXPages.DXLogsPage">
 	<pages:ModelContentPage.ToolbarItems>
 		<ToolbarItem Command="{Binding ShareCommand}"
-		             IconImageSource="ic_share_white_24px.png"/>
+		             IconImageSource="{OnPlatform Default='ic_share_white_24px.png', iOS='Images/ic_share_white_24px.png'}"/>
 
 		<ToolbarItem Command="{Binding CopyAllCommand}"
-		             IconImageSource="ic_copy_all_white_24px.png"/>
+		             IconImageSource="{OnPlatform Default='ic_copy_all_white_24px.png', iOS='Images/ic_copy_all_white_24px.png'}"/>
 
 		<ToolbarItem Command="{Binding ClearCommand}"
-		             IconImageSource="ic_clear_all_white_24px.png"/>
+		             IconImageSource="{OnPlatform Default='ic_clear_all_white_24px.png', iOS='Images/ic_clear_all_white_24px.png'}"/>
 	</pages:ModelContentPage.ToolbarItems>
 	
 	<editors:MultilineEdit Text="{Binding Text}"

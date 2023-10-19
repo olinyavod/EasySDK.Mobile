@@ -68,84 +68,95 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\circle_check_white_18.png" />
-    <BundleResource Include="Resources\circle_check_white_18@3x.png" />
-    <BundleResource Include="Resources\error_white_18@3x.png" />
-    <BundleResource Include="Resources\ic_account_dark_24px@3x.png" />
-    <BundleResource Include="Resources\ic_add_photo_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_back_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_big_photo_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_cancel_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_clear_all_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_close_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_copy_all_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_dark_mode_24px@3x.png" />
-    <BundleResource Include="Resources\ic_delete_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_key_white_24px@3x.png" />
-    <BundleResource Include="Resources\ic_light_mode_24px@3x.png" />
-    <BundleResource Include="Resources\ic_logs_dark_24px@3x.png" />
-    <BundleResource Include="Resources\ic_share_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_share_white_24px@3x.png" />
+    <BundleResource Include="Resources\Images\circle_check_white_18.png" />
+    <BundleResource Include="Resources\Images\circle_check_white_18%403x.png" />
+    <BundleResource Include="Resources\Images\error_white_18%403x.png" />
+    <BundleResource Include="Resources\Images\ic_account_dark_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_add_photo_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_back_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_big_photo_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_cancel_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_clear_all_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_close_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_copy_all_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_dark_mode_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_delete_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_key_white_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_light_mode_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_logs_dark_24px%403x.png" />
+    <BundleResource Include="Resources\Images\ic_share_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_share_white_24px%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\circle_check_white_18@2x.png" />
-    <BundleResource Include="Resources\error_white_18.png" />
+    <BundleResource Include="Resources\Images\circle_check_white_18%402x.png" />
+    <BundleResource Include="Resources\Images\error_white_18.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\error_white_18@2x.png" />
-    <BundleResource Include="Resources\ic_account_dark_24px.png" />
+    <BundleResource Include="Resources\Images\error_white_18%402x.png" />
+    <BundleResource Include="Resources\Images\ic_account_dark_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_account_dark_24px@2x.png" />
-    <BundleResource Include="Resources\ic_add_photo_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_account_dark_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_add_photo_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_add_photo_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_back_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_add_photo_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_back_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_back_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_big_photo_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_back_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_big_photo_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_big_photo_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_cancel_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_big_photo_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_cancel_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_cancel_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_clear_all_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_cancel_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_clear_all_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_clear_all_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_close_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_clear_all_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_close_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_close_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_copy_all_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_close_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_copy_all_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_copy_all_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_dark_mode_24px.png" />
+    <BundleResource Include="Resources\Images\ic_copy_all_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_dark_mode_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_dark_mode_24px@2x.png" />
-    <BundleResource Include="Resources\ic_delete_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_dark_mode_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_delete_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_delete_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_key_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_delete_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_key_white_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_key_white_24px@2x.png" />
-    <BundleResource Include="Resources\ic_light_mode_24px.png" />
+    <BundleResource Include="Resources\Images\ic_key_white_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_light_mode_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_light_mode_24px@2x.png" />
-    <BundleResource Include="Resources\ic_logs_dark_24px.png" />
+    <BundleResource Include="Resources\Images\ic_light_mode_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_logs_dark_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_logs_dark_24px@2x.png" />
-    <BundleResource Include="Resources\ic_share_white_24px.png" />
+    <BundleResource Include="Resources\Images\ic_logs_dark_24px%402x.png" />
+    <BundleResource Include="Resources\Images\ic_share_white_24px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Images\fail_stamp_picture%401x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\fail_stamp_picture.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\fail_stamp_picture.imageset\fail_stamp_picture@1x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

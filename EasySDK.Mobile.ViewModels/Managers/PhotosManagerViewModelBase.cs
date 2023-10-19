@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
@@ -15,6 +16,7 @@ using FFImageLoading.Work;
 using Microsoft.Extensions.Logging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using ImageSource = Xamarin.Forms.ImageSource;
 
 namespace EasySDK.Mobile.ViewModels.Managers;
 
@@ -102,13 +104,25 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 		foreach (var p in photos ?? Enumerable.Empty<TMediaFile>())
 			PhotosSource.Add(new PhotoItemViewModel
 			{
-				Id = p.Id, Url = p.Url
+				Id = p.Id, ImageSource = CreateImageSource(p.Url)
 			});
 	}
 
 	#endregion
 
 	#region Protected methods
+
+	protected virtual ImageSource CreateImageSource(string url)
+	{
+		return ImageSource.FromStream(async t =>
+		{
+			using var client = new WebClient();
+
+			var data = await client.DownloadDataTaskAsync(url);
+
+			return new MemoryStream(data);
+		});
+	}
 
 	protected abstract Task<IResponse<TMediaFile>> AddPhotoAsync(IServiceProvider scope, string fileName, Stream fileContent);
 
@@ -198,7 +212,7 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 	public ICommand AddPhotoCommand { get; }
 
 	private bool OnCanAddPhoto() => true;
-	
+
 	private async Task OnAddPhoto()
 	{
 		try
@@ -248,11 +262,11 @@ public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IP
 			var photo = response.Result;
 			var item = new PhotoItemViewModel
 			{
-				Url = photo.Url,
+				ImageSource = CreateImageSource(photo.Url),
 				Id = photo.Id
 			};
 			PhotosSource.Add(item);
-
+			
 			SelectedPhoto = item;
 		}
 		catch (Exception ex)
