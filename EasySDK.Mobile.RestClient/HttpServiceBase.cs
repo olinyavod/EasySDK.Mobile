@@ -250,6 +250,8 @@ public abstract class HttpServiceBase
 	{
 		var json = JsonConvert.SerializeObject(model, settings);
 
+		Logger.LogDebug("Create json for send: {0}", json);
+
 		return new StringContent(json, Encoding.UTF8, MediaType);
 	}
 
@@ -300,39 +302,31 @@ public abstract class HttpServiceBase
 	{
 
 		HttpResponseMessage? response = null;
+
 		try
 		{
 			using var client = CreateClient();
 
-			async Task<HttpResponseMessage> GetResponse(HttpClient c, bool requestToken, CancellationToken cancelToken)
-			{
-				if (useToken)
-					await SetToken(c);
-
-				using var request = requestFactory();
-				var r = await execute(c, request, cancelToken);
-
-				if (r.IsSuccessStatusCode
-				    || r.StatusCode != HttpStatusCode.Unauthorized
-				    || !requestToken
-				    || !useToken)
-					return r;
-
-				r.Dispose();
-				
-				await _tokenProvider.InvalidateToken();
-				
-				if (cancelToken.IsCancellationRequested)
-					return r;
-
-				return await GetResponse(c, false, cancelToken);
-			}
-
 			var stopwatch = Stopwatch.StartNew();
 
-			response = await GetResponse(client, true, cancellationToken);
+			response = await GetResponse
+			(
+				client,
+				useToken,
+				requestFactory,
+				execute,
+				cancellationToken
+			);
+
+			if (response == null)
+			{
+				Logger.LogInformation("Response is null.");
+				return null;
+			}
 
 			var content = await response.Content.ReadAsStringAsync();
+
+			Logger.LogDebug("Response content: {0}", content);
 
 			stopwatch.Stop();
 			Logger.LogInformation
@@ -359,6 +353,68 @@ public abstract class HttpServiceBase
 		{
 			response?.Dispose();
 		}
+	}
+
+	private async Task<HttpResponseMessage?> GetResponse<TRequest>
+	(
+		HttpClient client,
+		bool useToken,
+		Func<TRequest> requestFactory,
+		Func<HttpClient, TRequest, CancellationToken, Task<HttpResponseMessage>> execute,
+		CancellationToken cancelToken
+	) where TRequest : class, IDisposable
+	{
+		var stopwatch = Stopwatch.StartNew();
+		HttpResponseMessage? r = null;
+
+		for (int i = 0; i < 2; i++)
+		{
+			if (useToken)
+			{
+				Logger.LogInformation("Try set token...");
+				stopwatch.Restart();
+				await SetToken(client);
+				Logger.LogInformation("Set token for: {0} time.", stopwatch.Elapsed);
+			}
+
+			using var request = requestFactory();
+
+			Logger.LogInformation("Try get response...");
+			stopwatch.Restart();
+			r = await execute(client, request, cancelToken);
+			Logger.LogInformation("Get response for {0} time", stopwatch.Elapsed);
+
+			if (r.IsSuccessStatusCode
+			    || r.StatusCode != HttpStatusCode.Unauthorized
+			    || !useToken)
+			{
+				Logger.LogInformation("Response is success.");
+				return r;
+			}
+
+			if (i > 0)
+			{
+				Logger.LogInformation("Response is failed.");
+				return r;
+			}
+
+			var isUnauthorized = r.StatusCode == HttpStatusCode.Unauthorized;
+
+			r.Dispose();
+
+			if (isUnauthorized)
+			{
+				Logger.LogInformation("Try reset token.");
+				stopwatch.Restart();
+				await _tokenProvider.InvalidateToken();
+				Logger.LogInformation("Reset token for {0} time.", stopwatch.Elapsed);
+			}
+
+			if (cancelToken.IsCancellationRequested)
+				return r;
+		}
+
+		return r;
 	}
 
 	protected async Task SetToken(HttpClient client)
