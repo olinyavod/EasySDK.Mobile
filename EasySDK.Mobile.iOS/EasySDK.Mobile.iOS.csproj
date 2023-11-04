@@ -158,5 +158,16 @@
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Firebase.iOS.Analytics">
+      <Version>8.10.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Firebase.iOS.CloudMessaging">
+      <Version>8.10.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Firebase.iOS.Installations">
+      <Version>8.10.0.3</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
