@@ -17,7 +17,7 @@ public class ShellNavigationService : INavigationService
 	{
 		if (args != null)
 			baseUri = $"{baseUri}?{string.Join("&", args.Where(i => !string.IsNullOrWhiteSpace(i.Value)).Select(i => $"{i.Key}={i.Value.ToUrlArgs()}"))}";
-
+		
 		return Shell.Current.GoToAsync(baseUri);
 	}
 
