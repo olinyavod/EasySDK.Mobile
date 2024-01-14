@@ -30,11 +30,12 @@ public abstract class HttpServiceBase
 
 	#region Private fields
 
-	private readonly IHttpClientFactory _httpClientFactory;
-	private readonly ITokenProvider _tokenProvider;
-	private readonly Uri _baseUri;
-	private readonly bool _useGZip;
-	protected static readonly HttpMethod HttpMethodPatch = new("PATCH");
+	private readonly          IHttpClientFactory _httpClientFactory;
+	private readonly          ITokenProvider     _tokenProvider;
+	private readonly          Uri                _baseUri;
+	private readonly          bool               _useGZip;
+	private readonly          bool               _autoReauthorize;
+	protected static readonly HttpMethod         HttpMethodPatch = new("PATCH");
 
 	#endregion
 
@@ -52,14 +53,16 @@ public abstract class HttpServiceBase
 		ILogger logger,
 		ITokenProvider tokenProvider,
 		Uri baseUri,
-		bool useGZip = false
+		bool useGZip = false, 
+		bool autoReauthorize = false
 	)
 	{
-		_httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-		Logger = logger;
-		_tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
-		_baseUri = baseUri;
-		_useGZip = useGZip;
+		_httpClientFactory    = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+		Logger                = logger;
+		_tokenProvider        = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
+		_baseUri              = baseUri;
+		_useGZip              = useGZip;
+		_autoReauthorize = autoReauthorize;
 	}
 
 	#endregion
@@ -392,7 +395,7 @@ public abstract class HttpServiceBase
 				return r;
 			}
 
-			if (i > 0)
+			if (i > 0 || !_autoReauthorize)
 			{
 				Logger.LogInformation("Response is failed.");
 				return r;
