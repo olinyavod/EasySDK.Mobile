@@ -54,7 +54,7 @@ public abstract class HttpServiceBase
 		ITokenProvider tokenProvider,
 		Uri baseUri,
 		bool useGZip = false, 
-		bool autoReauthorize = false
+		bool autoReauthorize = true
 	)
 	{
 		_httpClientFactory    = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));

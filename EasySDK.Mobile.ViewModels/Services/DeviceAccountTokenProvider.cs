@@ -34,7 +34,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 
 	#region Public methods
 
-	public async Task<bool> InvalidateToken()
+	public virtual async Task<bool> InvalidateToken()
 	{
 		try
 		{
@@ -50,7 +50,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 		}
 	}
 
-	public async Task<string?> TryGetAuthTokenAsync()
+	public virtual async Task<string?> TryGetAuthTokenAsync()
 	{
 		try
 		{
