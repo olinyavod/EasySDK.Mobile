@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Attributes\" />
     <Folder Include="Input\" />
     <Folder Include="Managers\" />
     <Folder Include="Validators\" />

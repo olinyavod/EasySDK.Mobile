@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EasySDK.Mobile.Models;
+using EasySDK.Mobile.RestClient.Cpnverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,6 +20,7 @@ public class HttpResponse : IResponse
 	public string ErrorMessage { get; set; }
 
 	[JsonProperty("errorMessages")]
+	[JsonConverter(typeof(ErrorsJsonConverter))]
 	public Dictionary<string, IEnumerable<string>> ErrorMessages { get; set; }
 
 	public bool NeedAuthorization => ErrorCode == ResponseErrorCodes.Unauthorized;
