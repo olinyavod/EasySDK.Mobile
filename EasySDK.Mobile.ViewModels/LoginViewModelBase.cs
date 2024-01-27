@@ -119,6 +119,11 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 		}
 	}
 
+	protected virtual void ShowSignInErrors(IResponse response)
+	{
+		_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
+	}
+
 	#endregion
 
 	#region Private methods
@@ -187,7 +192,7 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 					break;
 
 				default:
-					_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
+					ShowSignInErrors(response);
 					break;
 			}
 		}

@@ -58,7 +58,15 @@ public static class FormsViewExtensions
 		});
 	}
 
-	
+	public static int? GetAndroidStyleId(this Application app)
+	{
+		var androidDialogStyles = DependencyService.Resolve<IServiceProvider>().GetService<IAndroidDialogStyles>();
+
+		return app.RequestedTheme == OSAppTheme.Dark
+			? androidDialogStyles?.AlertDarkStyleId ?? 0
+			: androidDialogStyles?.AlertLightStyleId ?? 0;
+	}
+
 	public static Task<bool> ShowConfirmAsync
 	(
 		this IUserDialogs dialogs,
