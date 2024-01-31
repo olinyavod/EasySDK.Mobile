@@ -29,8 +29,18 @@ namespace EasySDK.Mobile.DXPages.Behaviors
 			{
 				if (GetFieldName(_editor) != e.PropertyName)
 					return;
-
-				_editor.HasError = _dataErrorInfo?.GetErrors(e.PropertyName)?.OfType<object>().Any() ?? false;
+					
+				if (_dataErrorInfo?.GetErrors(e.PropertyName)?.OfType<object>().FirstOrDefault() is { } message)
+				{
+					_editor.HasError = true;
+					SetErrorMessage(_editor, message?.ToString());
+				}
+				else
+				{
+					_editor.HasError = false;
+					SetErrorMessage(_editor, null);
+				}
+				
 			}
 
 			private void InitErrorsHandlers(EditBase editor)
@@ -94,6 +104,22 @@ namespace EasySDK.Mobile.DXPages.Behaviors
 		}
 
 		#endregion //AttachedProperty ErrorsController
+
+		#region AttachedProperty ErrorMessage
+
+		public static readonly BindableProperty ErrorMessageProperty = BindableProperty.CreateAttached("ErrorMessage", typeof(string), typeof(HasErrorBehavior), default(string?));
+
+		public static void SetErrorMessage(BindableObject element, string? value)
+		{
+			element.SetValue(ErrorMessageProperty, value);
+		}
+
+		public static string? GetErrorMessage(BindableObject element)
+		{
+			return (string?) element.GetValue(ErrorMessageProperty);
+		}
+
+		#endregion //AttachedProperty ErrorMessage
 
 		protected override void OnAttachedTo(EditBase bindable)
 		{
