@@ -39,6 +39,9 @@
 							</Style.Behaviors>
 						</Style>
 
+						<Style TargetType="editors:AutoCompleteEdit"
+						       BaseResourceKey="FormDataEditStyle"></Style>
+
 						<Style TargetType="editors:DateEdit"
 						       BaseResourceKey="FormDataEditStyle"/>
 
