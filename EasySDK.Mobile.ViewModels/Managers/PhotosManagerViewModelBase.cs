@@ -171,6 +171,12 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			return null;
 		}
 
+		protected virtual Task ShowResponseError(IResponse response, string defaultMessage)
+		{
+			_dialogs.ShowErrorMessage(defaultMessage);
+			return Task.CompletedTask;
+		}
+
 		#endregion
 
 		#region Private methods
@@ -277,7 +283,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 				if (response.HasError)
 				{
-					_dialogs.ShowErrorMessage(Properties.Resources.FailedAddPhotoMessage);
+					await ShowResponseError(response, Properties.Resources.FailedAddPhotoMessage);
 					return;
 				}
 
@@ -324,7 +330,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 				if (response.HasError)
 				{
-					_dialogs.ShowErrorMessage(Properties.Resources.FailedDeletePhotoMessage);
+					await ShowResponseError(response, Properties.Resources.FailedDeletePhotoMessage);
 					return;
 				}
 
