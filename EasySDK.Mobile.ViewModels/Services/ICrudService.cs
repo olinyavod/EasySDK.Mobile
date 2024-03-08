@@ -13,7 +13,7 @@ public interface ICrudService<TModel, TItem, TKey>
 
 	Task<IResponse<TKey>> AddAsync(TModel model);
 
-	Task<IResponse<bool>> UpdateAsync(Expression<Func<TModel>> model);
+	Task<IResponse<bool?>> UpdateAsync(Expression<Func<TModel>> model);
 
-	Task<IResponse<bool>> DeleteAsync(TKey id);
+	Task<IResponse<bool?>> DeleteAsync(TKey id);
 }
