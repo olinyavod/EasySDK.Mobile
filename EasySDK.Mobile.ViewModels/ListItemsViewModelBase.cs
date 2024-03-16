@@ -168,7 +168,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	public ICommand LoadItemsCommand { get; }
 
-	private bool OnCanLoad() => !IsBusy;
+	protected virtual bool OnCanLoad() => !IsBusy;
 
 	private async void OnLoadItems()
 	{
@@ -186,7 +186,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	public ICommand LoadNextItemsCommand { get; }
 
-	private bool OnCanLoadNext() => !IsBusy;
+	protected virtual bool OnCanLoadNext() => !IsBusy;
 
 	private async Task OnLoadNextItems()
 	{
@@ -196,8 +196,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			var offset = ItemsSource.Count;
 			var response = await LoadItemsAsync(scope.ServiceProvider, new ListRequest
 			{
-				Count = DefaultPageSize,
-				Offset = offset, 
+				Count  = DefaultPageSize,
+				Offset = offset,
 				Search = GetSearchQueryText()
 			});
 
@@ -209,13 +209,17 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 			foreach (var item in items)
 				ItemsSource.Add(item);
 
-			ItemsCount = response.TotalCount;
+			ItemsCount              = response.TotalCount;
 			RemainingItemsThreshold = CalculateThreshold(response);
 		}
 		catch (Exception ex)
 		{
 			Log.LogError(ex, $"Load next items for error.");
 			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
+		}
+		finally
+		{
+			IsBusy = false;
 		}
 	}
 
