@@ -4,9 +4,9 @@ namespace EasySDK.Mobile.Tests.Services;
 
 public class TestTokenProvider : ITokenProvider
 {
-	public bool InvalidateToken()
+	public Task<bool> InvalidateToken()
 	{
-		
+		return Task.FromResult(false);
 	}
 
 	public Task<string?> TryGetAuthTokenAsync()
