@@ -52,13 +52,18 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 
 		#endregion
 
-		protected DXListItemsViewModelBase(IUserDialogs dialogs, IResponseChecker responseChecker, ILoggerFactory loggerFactory)
+		protected DXListItemsViewModelBase
+		(
+			IUserDialogs     dialogs,
+			IResponseChecker responseChecker,
+			ILogger          logger
+		)
 		{
 			_dialogs         = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 			_responseChecker = responseChecker ?? throw new ArgumentNullException(nameof(responseChecker));
 
-			Log = loggerFactory.CreateLogger(GetType());
-			
+			Log = logger;
+
 			LoadNextItemsCommand = new Command(OnLoadNext);
 			LoadItemsCommand     = new Command(OnLoadItems);
 		}
