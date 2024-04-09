@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EasySDK.Mobile.RestClient;
+using Microsoft.Extensions.Logging;
 
 namespace EasySDK.Mobile.ViewModels.Services;
 
@@ -11,6 +12,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 
 	private readonly IDeviceAccountService _deviceAccountService;
 	private readonly SemaphoreSlim _semaphore = new(0);
+	private readonly ILogger _logger;
 
 	private string? _token;
 
@@ -18,20 +20,26 @@ public class DeviceAccountTokenProvider : ITokenProvider
 	
 	#region ctor
 
-	public DeviceAccountTokenProvider(IDeviceAccountService deviceAccountService)
+	public DeviceAccountTokenProvider
+	(
+		IDeviceAccountService deviceAccountService,
+		ILoggerFactory loggerFactory
+	)
 	{
 		_deviceAccountService = deviceAccountService;
+		_logger = loggerFactory.CreateLogger<DeviceAccountTokenProvider>();
 	}
 
 	#endregion
 
 	#region Public methods
 
-	public async Task<bool> InvalidateToken()
+	public virtual async Task<bool> InvalidateToken()
 	{
 		try
 		{
-			await _semaphore.WaitAsync(TimeSpan.FromSeconds(10));
+			if(!await _semaphore.WaitAsync(TimeSpan.FromSeconds(10)))
+				_logger.LogInformation("Detect deadlock on invalidate token.");
 			_token = null;
 
 			return await _deviceAccountService.InvalidAuthToken();
@@ -42,7 +50,7 @@ public class DeviceAccountTokenProvider : ITokenProvider
 		}
 	}
 
-	public async Task<string?> TryGetAuthTokenAsync()
+	public virtual async Task<string?> TryGetAuthTokenAsync()
 	{
 		try
 		{
@@ -50,7 +58,8 @@ public class DeviceAccountTokenProvider : ITokenProvider
 			if(!string.IsNullOrWhiteSpace(token))
 				return token;
 
-			await _semaphore.WaitAsync(TimeSpan.FromSeconds(10));
+			if(!await _semaphore.WaitAsync(TimeSpan.FromSeconds(10)))
+				_logger.LogInformation("Detect deadlock on GetAurhToken.");
 			
 			token = await _deviceAccountService.TryGetAuthTokenAsync();
 			_token = token;
