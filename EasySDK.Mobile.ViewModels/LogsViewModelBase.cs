@@ -4,24 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.UserDialogs;
-using EasySDK.Mobile.ViewModels.Extensions;
 using EasySDK.Mobile.ViewModels.Input;
 using EasySDK.Mobile.ViewModels.Pages;
 using EasySDK.Mobile.ViewModels.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels;
 
-public class LogsViewModel : ViewModelBase, ISupportAppearing
+public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
 {
 	#region Private fields
 
 	private readonly IPathsService _pathsService;
-	private readonly IUserDialogs _dialogs;
-	private readonly ILogger<LogsViewModel> _log;
+	private readonly ILogger<LogsViewModelBase> _log;
 
 	private string _text;
 	private string _title = Properties.Resources.Journal;
@@ -46,22 +44,21 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 
 	#region ctor
 
-	public LogsViewModel
+	protected LogsViewModelBase
 	(
-		IPathsService pathsService,
-		ILoggerFactory loggerFactory,
-		IUserDialogs dialogs
-	)
+		IServiceScopeFactory scopeFactory,
+		IPathsService        pathsService,
+		ILoggerFactory       loggerFactory
+	) : base(scopeFactory)
 	{
 		if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 		_pathsService = pathsService ?? throw new ArgumentNullException(nameof(pathsService));
-		_dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 
-		_log = loggerFactory.CreateLogger<LogsViewModel>();
+		_log = loggerFactory.CreateLogger<LogsViewModelBase>();
 
-		ClearCommand = new AsyncCommand(OnClear);
+		ClearCommand   = new AsyncCommand(OnClear);
 		CopyAllCommand = new Command(OnCopyAll);
-		ShareCommand = new AsyncCommand(OnShare);
+		ShareCommand   = new AsyncCommand(OnShare);
 	}
 
 	#endregion
@@ -86,6 +83,16 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 
 	#endregion
 
+	#region Protected methods
+
+	protected abstract void ShowSuccessMessage(string message);
+
+	protected abstract void ShowErrorMessage(string message);
+
+	protected abstract Task<bool> ShowConfirmAsync(string message, string title);
+
+	#endregion
+
 	#region ClearCommand
 
 	public ICommand ClearCommand { get; }
@@ -94,7 +101,7 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 	{
 		try
 		{
-			if (!await _dialogs.ShowConfirmAsync
+			if (!await ShowConfirmAsync
 			    (
 					Properties.Resources.ClearAllLogsMessage,
 					Title
@@ -119,7 +126,7 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 		catch (Exception ex)
 		{
 			_log.LogError(ex, "Clear logs error.");
-			_dialogs.ShowErrorMessage(Properties.Resources.FailedClearLogsMessage);
+			ShowErrorMessage(Properties.Resources.FailedClearLogsMessage);
 		}
 	}
 
@@ -135,12 +142,12 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 		{
 			Clipboard.SetTextAsync(Text);
 
-			_dialogs.ShowSuccessMessage(Properties.Resources.CopyAllLogsMessage);
+			ShowSuccessMessage(Properties.Resources.CopyAllLogsMessage);
 		}
 		catch (Exception ex)
 		{
 			_log.LogError(ex, "Copy logs error.");
-			_dialogs.ShowErrorMessage(Properties.Resources.FailedCopyLogsMessage);
+			ShowErrorMessage(Properties.Resources.FailedCopyLogsMessage);
 		}
 	}
 
@@ -164,7 +171,7 @@ public class LogsViewModel : ViewModelBase, ISupportAppearing
 		catch (Exception ex)
 		{
 			_log.LogError(ex, "Share logs error.");
-			_dialogs.ShowErrorMessage(Properties.Resources.FailedShareLogsMessage);
+			ShowErrorMessage(Properties.Resources.FailedShareLogsMessage);
 		}
 	}
 

@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.UserDialogs;
 using EasySDK.Mobile.Models;
-using EasySDK.Mobile.ViewModels;
-using EasySDK.Mobile.ViewModels.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.DXPages.ViewModels
+namespace EasySDK.Mobile.ViewModels
 {
-	public abstract class DXListItemsViewModelBase<TItem, TModel> : ViewModelBase
+	public abstract class AsyncListItemsViewModelBase<TItem, TModel> : ViewModelBase
 	{
 		#region Private fields
 
-		private readonly IUserDialogs     _dialogs;
 		private readonly IResponseChecker _responseChecker;
 
 		private IList<TItem>? _itemsSource;
@@ -52,14 +49,13 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 
 		#endregion
 
-		protected DXListItemsViewModelBase
+		protected AsyncListItemsViewModelBase
 		(
-			IUserDialogs     dialogs,
+			IServiceScopeFactory scopeFactory,
 			IResponseChecker responseChecker,
 			ILogger          logger
-		)
+		) : base(scopeFactory)
 		{
-			_dialogs         = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 			_responseChecker = responseChecker ?? throw new ArgumentNullException(nameof(responseChecker));
 
 			Log = logger;
@@ -103,9 +99,11 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 			catch (Exception ex)
 			{
 				Log.LogError(ex, $"Load items error.");
-				MainThread.BeginInvokeOnMainThread(() => _dialogs.ShowErrorMessage(GetLoadItemsFailedMessage()));
+				MainThread.BeginInvokeOnMainThread(() => ShowErrorMessage(GetLoadItemsFailedMessage()));
 			}
 		}
+
+		protected abstract void ShowErrorMessage(string message);
 
 		protected virtual Task<bool> OnPreLoadItems(IServiceProvider scope) => Task.FromResult(true);
 

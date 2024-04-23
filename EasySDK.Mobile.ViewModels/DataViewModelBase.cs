@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using EasySDK.Mobile.ViewModels.Attributes;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EasySDK.Mobile.ViewModels;
 
@@ -39,7 +40,11 @@ public abstract class DataViewModelBase : ViewModelBase, INotifyDataErrorInfo
 
 	#region ctor
 
-	protected DataViewModelBase(IValidator validator)
+	protected DataViewModelBase
+	(
+		IServiceScopeFactory scopeFactory,
+		IValidator validator
+	):base(scopeFactory)
 	{
 		_validator = validator ?? throw new ArgumentNullException(nameof(validator));
 	}

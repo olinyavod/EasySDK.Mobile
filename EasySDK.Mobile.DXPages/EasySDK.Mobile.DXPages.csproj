@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EasySDK.Mobile.Forms\EasySDK.Mobile.Forms.csproj" />
     <ProjectReference Include="..\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj" />
     <ProjectReference Include="..\EasySDK.Mobile.ViewModels\EasySDK.Mobile.ViewModels.csproj" />
   </ItemGroup>
@@ -50,6 +51,7 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

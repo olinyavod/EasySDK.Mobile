@@ -122,6 +122,10 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EasySDK.Mobile.Forms\EasySDK.Mobile.Forms.csproj">
+      <Project>{e534c7dc-fd64-4dd2-9d6c-12e5003f6508}</Project>
+      <Name>EasySDK.Mobile.Forms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasySDK.Mobile.Models\EasySDK.Mobile.Models.csproj">
       <Project>{6DB627EF-FBFC-430D-92CB-7DFFFE427899}</Project>
       <Name>EasySDK.Mobile.Models</Name>

@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:ModelContentPage x:TypeArguments="viewModels:LogsViewModel" 
+<pages:ModelContentPage x:TypeArguments="viewModels:LogsViewModelBase" 
                         xmlns="http://xamarin.com/schemas/2014/forms"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:viewModels="clr-namespace:EasySDK.Mobile.ViewModels;assembly=EasySDK.Mobile.ViewModels"
-                        xmlns:pages="clr-namespace:EasySDK.Mobile.ViewModels.Pages;assembly=EasySDK.Mobile.ViewModels"
-                        xmlns:effects="clr-namespace:EasySDK.Mobile.ViewModels.Effects;assembly=EasySDK.Mobile.ViewModels"
+                        xmlns:pages="clr-namespace:EasySDK.Mobile.ViewModels.Pages;assembly=EasySDK.Mobile.Forms"
+                        xmlns:effects1="http://easyptog.ru/sdk/mobile"
+                        xmlns:forms="clr-namespace:EasySDK.Mobile.Forms;assembly=EasySDK.Mobile.Forms"
                         Title="{Binding Title}"
-                        x:DataType="viewModels:LogsViewModel"
+                        x:DataType="forms:LogsViewModel"
                         x:Class="EasySDK.Mobile.ViewModels.Pages.LogsPage">
 	<pages:ModelContentPage.ToolbarItems>
 		<ToolbarItem Command="{Binding ShareCommand}"
@@ -21,10 +22,10 @@
     <Grid>
 		<Editor Text="{Binding Text}"
 		        VerticalOptions="FillAndExpand"
-		        effects:ShowLinesEffect.FillVertical="True"
+		        effects1:ShowLinesEffect.FillVertical="True"
 		        IsReadOnly="True">
 			<Editor.Effects>
-	            <effects:ShowLinesEffect/>
+	            <effects1:ShowLinesEffect/>
 			</Editor.Effects>
 		</Editor>
     </Grid>

@@ -3,11 +3,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.UserDialogs;
 using EasySDK.Mobile.Models;
-using EasySDK.Mobile.ViewModels.Extensions;
 using EasySDK.Mobile.ViewModels.Input;
 using EasySDK.Mobile.ViewModels.Pages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 
@@ -20,8 +19,6 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	#region Private fields
 
 	private const int DefaultPageSize = 30;
-
-	private readonly IUserDialogs _dialogs;
 	private readonly IResponseChecker _responseChecker;
 	
 	private bool _isBusy;
@@ -67,16 +64,15 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 
 	protected ListItemsViewModelBase
 	(
-		IUserDialogs dialogs,
-		IResponseChecker responseChecker,
-		ILogger logger
-	)
+		IServiceScopeFactory scopeFactory,
+		IResponseChecker     responseChecker,
+		ILogger              logger
+	) : base(scopeFactory)
 	{
-		_dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 		_responseChecker = responseChecker ?? throw new ArgumentNullException(nameof(responseChecker));
-		Log = logger ?? throw new ArgumentNullException(nameof(logger));
+		Log              = logger ?? throw new ArgumentNullException(nameof(logger));
 
-		LoadItemsCommand = new Command(OnLoadItems);
+		LoadItemsCommand     = new Command(OnLoadItems);
 		LoadNextItemsCommand = new AsyncCommand(OnLoadNextItems, OnCanLoadNext);
 	}
 
@@ -94,6 +90,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 	#endregion
 
 	#region Protected methods
+
+	protected abstract void ShowErrorMessage(string message);
 
 	protected virtual Task<bool> OnPreLoadItems(IServiceProvider scope) => Task.FromResult(true);
 
@@ -145,7 +143,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		catch (Exception ex)
 		{
 			Log.LogError(ex, $"Load items error.");
-			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
+			ShowErrorMessage(GetLoadItemsFailedMessage());
 		}
 		finally
 		{
@@ -215,7 +213,7 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		catch (Exception ex)
 		{
 			Log.LogError(ex, $"Load next items for error.");
-			_dialogs.ShowErrorMessage(GetLoadItemsFailedMessage());
+			ShowErrorMessage(GetLoadItemsFailedMessage());
 		}
 		finally
 		{
