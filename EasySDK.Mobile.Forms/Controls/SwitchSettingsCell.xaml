@@ -4,17 +4,16 @@
                     xmlns:controls="clr-namespace:EasySDK.Mobile.Forms.Controls;assembly=EasySDK.Mobile.Forms"
                     xmlns:themes="clr-namespace:EasySDK.Mobile.Forms.Themes;assembly=EasySDK.Mobile.Forms"
                     xmlns:converters="http://easyptog.ru/sdk/mobile"
+                    xmlns:converters1="clr-namespace:EasySDK.Mobile.Forms.Converters;assembly=EasySDK.Mobile.Forms"
                     BackgroundColor="{DynamicResource {themes:DefaultColorThemeKey Key=PageBackgroundColor}}"
                     Click="SwitchSettingsCellOnClick"
                     HasShadow="False"
                     Padding="25, 5"
                     x:Class="EasySDK.Mobile.Forms.Controls.SwitchSettingsCell">
 	<controls:ItemFrame.Resources>
-		<converters:EmptyStringToObjectConverter x:Key="EmptyStringToObjectConverter"
+		<converters1:EmptyStringToObjectConverter x:Key="EmptyStringToObjectConverter"
 		                                         NotEmptyValue="{x:Static x:Environment.NewLine}"
-		                                         EmptyValue="{x:Static x:String.Empty}">
-
-		</converters:EmptyStringToObjectConverter>
+		                                         EmptyValue="{x:Static x:String.Empty}"/>
 	</controls:ItemFrame.Resources>
 	<Grid>
 	    <Grid.ColumnDefinitions>

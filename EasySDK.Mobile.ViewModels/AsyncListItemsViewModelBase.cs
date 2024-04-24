@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using EasySDK.Mobile.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels
 {
@@ -59,9 +58,9 @@ namespace EasySDK.Mobile.ViewModels
 			_responseChecker = responseChecker ?? throw new ArgumentNullException(nameof(responseChecker));
 
 			Log = logger;
-
-			LoadNextItemsCommand = new Command(OnLoadNext);
-			LoadItemsCommand     = new Command(OnLoadItems);
+			
+			LoadNextItemsCommand = new RelayCommand(OnLoadNext);
+			LoadItemsCommand     = new RelayCommand(OnLoadItems);
 		}
 
 		#region Protected methods
@@ -99,7 +98,7 @@ namespace EasySDK.Mobile.ViewModels
 			catch (Exception ex)
 			{
 				Log.LogError(ex, $"Load items error.");
-				MainThread.BeginInvokeOnMainThread(() => ShowErrorMessage(GetLoadItemsFailedMessage()));
+				ShowErrorMessage(GetLoadItemsFailedMessage());
 			}
 		}
 

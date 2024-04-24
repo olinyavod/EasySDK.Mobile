@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:ModelContentPage x:TypeArguments="m:ILoginViewModel" 
+<pages:ModelContentPage x:TypeArguments="viewModels:ILoginViewModel" 
                     xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:dataForm="http://schemas.devexpress.com/xamarin/2014/forms/dataform"
@@ -7,7 +7,8 @@
                     xmlns:props="clr-namespace:EasySDK.Mobile.ViewModels.Properties;assembly=EasySDK.Mobile.ViewModels"
                     xmlns:pages="clr-namespace:EasySDK.Mobile.Forms.Pages;assembly=EasySDK.Mobile.Forms"
                     xmlns:m="http://easyptog.ru/sdk/mobile"
-                    x:DataType="m:ILoginViewModel"
+                    xmlns:viewModels="clr-namespace:EasySDK.Mobile.ViewModels;assembly=EasySDK.Mobile.Forms"
+                    x:DataType="viewModels:ILoginViewModel"
                     Shell.NavBarHasShadow="False"
                     x:Class="EasySDK.Mobile.DXPages.LoginPage">
 	<pages:ModelContentPage.Resources>

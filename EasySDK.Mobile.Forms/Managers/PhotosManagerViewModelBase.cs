@@ -8,10 +8,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
+using CommunityToolkit.Mvvm.Input;
 using EasySDK.Mobile.Forms.Extensions;
 using EasySDK.Mobile.Models;
 using EasySDK.Mobile.ViewModels;
-using EasySDK.Mobile.ViewModels.Input;
 using FFImageLoading;
 using FFImageLoading.Work;
 using Microsoft.Extensions.DependencyInjection;
@@ -91,8 +91,8 @@ namespace EasySDK.Mobile.Forms.Managers
 
 			PhotosSource.CollectionChanged += PhotosSourceOnCollectionChanged;
 
-			AddPhotoCommand    = new AsyncCommand(OnAddPhoto, OnCanAddPhoto);
-			DeletePhotoCommand = new AsyncCommand<PhotoItemViewModel?>(OnDeletePhoto, OnCanDeletePhoto);
+			AddPhotoCommand    = new AsyncRelayCommand(OnAddPhoto, OnCanAddPhoto);
+			DeletePhotoCommand = new AsyncRelayCommand<PhotoItemViewModel?>(OnDeletePhoto, OnCanDeletePhoto);
 			OpenPhotoCommand   = new Command<PhotoItemViewModel?>(OnOpenPhoto, OnCanOpenPhoto);
 			ClosePhotoCommand  = new Command(OnClosePhoto, OnCanClosePhoto);
 		}

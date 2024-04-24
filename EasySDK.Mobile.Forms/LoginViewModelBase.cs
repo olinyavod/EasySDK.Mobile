@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
+using CommunityToolkit.Mvvm.Input;
 using EasySDK.Mobile.Forms.Extensions;
 using EasySDK.Mobile.Forms.Services;
 using EasySDK.Mobile.Models;
 using EasySDK.Mobile.ViewModels;
 using EasySDK.Mobile.ViewModels.Extensions;
-using EasySDK.Mobile.ViewModels.Input;
 using EasySDK.Mobile.ViewModels.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,7 +85,7 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 		LogoImageSource = GetLogoSource(application.RequestedTheme);
 
 		ChangeThemeCommand = new Command(OnChangeTheme);
-		SignInCommand = new AsyncCommand(OnSignIn);
+		SignInCommand = new AsyncRelayCommand(OnSignIn);
 	}
 
 	#endregion

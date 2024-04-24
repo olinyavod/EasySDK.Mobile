@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using EasySDK.Mobile.ViewModels.Input;
+using CommunityToolkit.Mvvm.Input;
 using EasySDK.Mobile.ViewModels.Pages;
 using EasySDK.Mobile.ViewModels.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels;
 
@@ -18,23 +16,25 @@ public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
 {
 	#region Private fields
 
-	private readonly IPathsService _pathsService;
+	private readonly IShareService              _shareService;
+	private readonly IClipboardService          _clipboardService;
+	private readonly IPathsService              _pathsService;
 	private readonly ILogger<LogsViewModelBase> _log;
 
-	private string _text;
-	private string _title = Properties.Resources.Journal;
+	private string? _text;
+	private string? _title = Properties.Resources.Journal;
 
 	#endregion
 
 	#region Properties
 
-	public string Text
+	public string? Text
 	{
 		get => _text;
 		set => SetProperty(ref _text, value);
 	}
 
-	public string Title
+	public string? Title
 	{
 		get => _title;
 		set => SetProperty(ref _title, value);
@@ -46,19 +46,23 @@ public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
 
 	protected LogsViewModelBase
 	(
+		IShareService        shareService,
+		IClipboardService    clipboardService,
 		IServiceScopeFactory scopeFactory,
 		IPathsService        pathsService,
 		ILoggerFactory       loggerFactory
 	) : base(scopeFactory)
 	{
 		if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
-		_pathsService = pathsService ?? throw new ArgumentNullException(nameof(pathsService));
+		_shareService     = shareService ?? throw new ArgumentNullException(nameof(shareService));
+		_clipboardService = clipboardService;
+		_pathsService     = pathsService ?? throw new ArgumentNullException(nameof(pathsService));
 
 		_log = loggerFactory.CreateLogger<LogsViewModelBase>();
 
-		ClearCommand   = new AsyncCommand(OnClear);
-		CopyAllCommand = new Command(OnCopyAll);
-		ShareCommand   = new AsyncCommand(OnShare);
+		ClearCommand   = new AsyncRelayCommand(OnClear);
+		CopyAllCommand = new RelayCommand(OnCopyAll);
+		ShareCommand   = new AsyncRelayCommand(OnShare);
 	}
 
 	#endregion
@@ -104,7 +108,7 @@ public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
 			if (!await ShowConfirmAsync
 			    (
 					Properties.Resources.ClearAllLogsMessage,
-					Title
+					Title!
 			    ))
 				return;
 
@@ -140,7 +144,7 @@ public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
 	{
 		try
 		{
-			Clipboard.SetTextAsync(Text);
+			_clipboardService.SetTextAsync(Text ?? string.Empty);
 
 			ShowSuccessMessage(Properties.Resources.CopyAllLogsMessage);
 		}
@@ -166,7 +170,8 @@ public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
 			if(!File.Exists(file))
 				return;
 
-			await Share.RequestAsync(new ShareFileRequest(Path.GetFileName(file), new ShareFile(file, "text/plain")));
+			await _shareService.ShareFileAsync(file, "text/plain");
+			//  Share.RequestAsync(new ShareFileRequest(Path.GetFileName(file), new ShareFile(file, "text/plain")));
 		}
 		catch (Exception ex)
 		{

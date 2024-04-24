@@ -8,10 +8,11 @@
                     xmlns:controls="clr-namespace:EasySDK.Mobile.Forms.Controls;assembly=EasySDK.Mobile.Forms"
                     xmlns:effects="clr-namespace:EasySDK.Mobile.Forms.Effects;assembly=EasySDK.Mobile.Forms"
                     xmlns:converters="http://easyptog.ru/sdk/mobile"
+                    xmlns:converters1="clr-namespace:EasySDK.Mobile.Forms.Converters;assembly=EasySDK.Mobile.Forms"
                     x:Class="EasySDK.Mobile.DXPages.Themes.EditorStylesResources">
 
-	<converters:TextTransformConverter x:Key="TextTransformConverter"/>
-	<converters:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
+	<converters1:TextTransformConverter x:Key="TextTransformConverter"/>
+	<converters1:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
 
 	<Thickness x:Key="EditorPadding">10</Thickness>
 	<system:Int32 x:Key="ElementCornerRadius">5</system:Int32>

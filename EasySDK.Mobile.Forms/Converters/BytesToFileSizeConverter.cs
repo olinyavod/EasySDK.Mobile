@@ -3,7 +3,7 @@ using System.Globalization;
 using EasySDK.Mobile.ViewModels.Extensions;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Converters;
+namespace EasySDK.Mobile.Forms.Converters;
 
 public class BytesToFileSizeConverter : IValueConverter
 {

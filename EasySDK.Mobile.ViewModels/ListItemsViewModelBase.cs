@@ -3,12 +3,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using EasySDK.Mobile.Models;
-using EasySDK.Mobile.ViewModels.Input;
 using EasySDK.Mobile.ViewModels.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Xamarin.Forms;
 
 namespace EasySDK.Mobile.ViewModels;
 
@@ -72,8 +71,8 @@ public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISu
 		_responseChecker = responseChecker ?? throw new ArgumentNullException(nameof(responseChecker));
 		Log              = logger ?? throw new ArgumentNullException(nameof(logger));
 
-		LoadItemsCommand     = new Command(OnLoadItems);
-		LoadNextItemsCommand = new AsyncCommand(OnLoadNextItems, OnCanLoadNext);
+		LoadItemsCommand     = new RelayCommand(OnLoadItems);
+		LoadNextItemsCommand = new AsyncRelayCommand(OnLoadNextItems, OnCanLoadNext);
 	}
 
 	#endregion

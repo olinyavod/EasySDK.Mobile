@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using EasySDK.Mobile.Forms.Extensions;
 using EasySDK.Mobile.ViewModels;
-using EasySDK.Mobile.ViewModels.Extensions;
 using EasySDK.Mobile.ViewModels.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,11 +21,13 @@ public class LogsViewModel : LogsViewModelBase
 
 	public LogsViewModel
 	(
+		IShareService shareService,
+		IClipboardService clipboardService,	
 		IServiceScopeFactory scopeFactory,
 		IUserDialogs         dialogs,
 		IPathsService        pathsService,
 		ILoggerFactory       loggerFactory
-	) : base(scopeFactory, pathsService, loggerFactory)
+	) : base(shareService, clipboardService, scopeFactory, pathsService, loggerFactory)
 	{
 		_dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 	}

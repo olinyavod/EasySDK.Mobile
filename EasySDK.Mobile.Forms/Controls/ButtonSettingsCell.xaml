@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <controls:ItemFrame xmlns="http://xamarin.com/schemas/2014/forms" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:converters="clr-namespace:EasySDK.Mobile.ViewModels.Converters;assembly=EasySDK.Mobile.ViewModels"
                     xmlns:controls="clr-namespace:EasySDK.Mobile.Forms.Controls;assembly=EasySDK.Mobile.Forms"
+                    xmlns:converters="clr-namespace:EasySDK.Mobile.Forms.Converters;assembly=EasySDK.Mobile.Forms"
                     Click="ButtonSettingsCellOnClick"
                     HasShadow="False"
                     Padding="25, 5"

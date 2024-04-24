@@ -3,7 +3,7 @@ using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Shapes;
 
-namespace EasySDK.Mobile.ViewModels.Converters;
+namespace EasySDK.Mobile.Forms.Converters;
 
 public class StringToGeometryConverter : IValueConverter
 {
