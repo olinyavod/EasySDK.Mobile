@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Behaviors;
+namespace EasySDK.Mobile.Forms.Behaviors;
 
 public class ResourceDictionaryBehavior : Behavior<VisualElement>
 {

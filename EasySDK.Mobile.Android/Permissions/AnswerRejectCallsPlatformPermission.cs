@@ -1,5 +1,5 @@
 ﻿using EasySDK.Mobile.Android.Permissions;
-using EasySDK.Mobile.ViewModels.Permissions;
+using EasySDK.Mobile.Forms.Permissions;
 using Xamarin.Forms;
 
 [assembly:Dependency(typeof(AnswerRejectCallsPlatformPermission))]

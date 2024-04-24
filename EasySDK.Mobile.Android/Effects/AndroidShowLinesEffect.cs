@@ -3,7 +3,7 @@ using System.Linq;
 using Android.Views;
 using Android.Widget;
 using EasySDK.Mobile.Android.Effects;
-using EasySDK.Mobile.ViewModels.Effects;
+using EasySDK.Mobile.Forms.Effects;
 using Google.Android.Material.TextField;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;

@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms.Xaml;
 
-namespace EasySDK.Mobile.ViewModels.Pages;
+namespace EasySDK.Mobile.Forms.Pages;
 
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class LogsPage

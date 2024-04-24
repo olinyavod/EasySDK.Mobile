@@ -1,4 +1,4 @@
-﻿namespace EasySDK.Mobile.ViewModels.Themes
+﻿namespace EasySDK.Mobile.Forms.Themes
 {
 	public enum DefaultColorThemeKeys
 	{

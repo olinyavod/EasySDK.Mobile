@@ -1,7 +1,7 @@
 ﻿using Xamarin.Forms;
-using static EasySDK.Mobile.ViewModels.Themes.DefaultColorThemeKeys;
+using static EasySDK.Mobile.Forms.Themes.DefaultColorThemeKeys;
 
-namespace EasySDK.Mobile.ViewModels.Themes
+namespace EasySDK.Mobile.Forms.Themes
 {
 	public class ThemedShell : Shell
 	{

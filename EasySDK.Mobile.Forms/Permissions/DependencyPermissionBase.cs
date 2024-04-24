@@ -2,7 +2,7 @@
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Permissions;
+namespace EasySDK.Mobile.Forms.Permissions;
 
 public abstract class DependencyPermissionBase<TPermission> : Xamarin.Essentials.Permissions.BasePermission
 	where TPermission : class, IPlatformPermission

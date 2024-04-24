@@ -3,13 +3,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
                     xmlns:system="clr-namespace:System;assembly=netstandard"
-                    xmlns:controls="http://easyptog.ru/sdk/mobile"
                     xmlns:props="clr-namespace:EasySDK.Mobile.DXPages.Properties;assembly=EasySDK.Mobile.DXPages"
-                    xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:themes="clr-namespace:EasySDK.Mobile.Forms.Themes;assembly=EasySDK.Mobile.Forms"
+                    xmlns:controls="clr-namespace:EasySDK.Mobile.Forms.Controls;assembly=EasySDK.Mobile.Forms"
+                    xmlns:effects="clr-namespace:EasySDK.Mobile.Forms.Effects;assembly=EasySDK.Mobile.Forms"
+                    xmlns:converters="http://easyptog.ru/sdk/mobile"
                     x:Class="EasySDK.Mobile.DXPages.Themes.EditorStylesResources">
 
-	<controls:TextTransformConverter x:Key="TextTransformConverter"/>
-	<controls:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
+	<converters:TextTransformConverter x:Key="TextTransformConverter"/>
+	<converters:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
 
 	<Thickness x:Key="EditorPadding">10</Thickness>
 	<system:Int32 x:Key="ElementCornerRadius">5</system:Int32>
@@ -88,7 +90,7 @@
 		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
 		<Setter Property="PlaceholderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
-		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 	</Style>
 
 	<Style TargetType="editors:SimpleButton"
@@ -205,22 +207,22 @@
 	<Style TargetType="controls:DataDatePicker">
 		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey TextColor}}"/>
-		<Setter Property="controls:EntryIconEffect.HintColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
-		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.HintColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 	</Style>
 
 	<Style TargetType="controls:DataPicker">
 		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
 		<Setter Property="TitleColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
-		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 	</Style>
 
 	<Style TargetType="controls:DataTimePicker">
 		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=TextColor}}"/>
-		<Setter Property="controls:EntryIconEffect.HintColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
-		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}">
+		<Setter Property="effects:EntryIconEffect.HintColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}">
 		</Setter>
 	</Style>
 
@@ -228,13 +230,13 @@
 		<Setter Property="HeightRequest" Value="{StaticResource FieldHeight}"/>
 		<Setter Property="TextColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey TextColor}}"/>
 		<Setter Property="PlaceholderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey PlaceholderColor}}"/>
-		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 	</Style>
 
 	<Style TargetType="Editor">
 		<Setter Property="TextColor" Value="{x:DynamicResource TextColor}"/>
 		<Setter Property="PlaceholderColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
-		<Setter Property="controls:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
+		<Setter Property="effects:EntryIconEffect.IconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PlaceholderColor}}"/>
 	</Style>
 
 	<Style TargetType="controls:ErrorLabel">
@@ -255,7 +257,7 @@
 	<Style TargetType="RefreshView">
 		<Setter Property="RefreshColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=PrimaryColor}}"/>
 		<Setter Property="BackgroundColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=RefreshBackgroundColor}}"/>
-		<Setter Property="controls:ShadowEffect.Elevation" Value="20"/>
+		<Setter Property="effects:ShadowEffect.Elevation" Value="20"/>
 	</Style>
 
 	<Style TargetType="CollectionView">

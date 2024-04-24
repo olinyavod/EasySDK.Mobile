@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EasySDK.Mobile.ViewModels;
+namespace EasySDK.Mobile.Forms;
 
 public interface IPlatformApplication
 {

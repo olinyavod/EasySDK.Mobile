@@ -1,7 +1,8 @@
-﻿using EasySDK.Mobile.ViewModels;
+﻿using EasySDK.Mobile.Forms;
 using Xamarin.Forms;
 
-[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"EasySDK.Mobile.ViewModels.{nameof(EasySDK.Mobile.ViewModels.Effects)}")]
-[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"EasySDK.Mobile.ViewModels.{nameof(EasySDK.Mobile.ViewModels.Controls)}")]
-[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"EasySDK.Mobile.ViewModels.{nameof(EasySDK.Mobile.ViewModels.Pages)}")]
-[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"EasySDK.Mobile.ViewModels.{nameof(EasySDK.Mobile.ViewModels.Behaviors)}")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"{Constants.BaseNamespace}")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"{Constants.BaseNamespace}.{nameof(EasySDK.Mobile.Forms.Effects)}")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"{Constants.BaseNamespace}.{nameof(EasySDK.Mobile.Forms.Controls)}")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"{Constants.BaseNamespace}.{nameof(EasySDK.Mobile.Forms.Pages)}")]
+[assembly:XmlnsDefinition("http://easyptog.ru/sdk/mobile", $"{Constants.BaseNamespace}.{nameof(EasySDK.Mobile.Forms.Behaviors)}")]

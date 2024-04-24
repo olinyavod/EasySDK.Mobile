@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace EasySDK.Mobile.ViewModels.Permissions;
+namespace EasySDK.Mobile.Forms.Permissions;
 
 public interface IPlatformPermission
 {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
-using EasySDK.Mobile.ViewModels.Services;
+using EasySDK.Mobile.Forms.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Extensions;
+namespace EasySDK.Mobile.Forms.Extensions;
 
 public static class FormsViewExtensions
 {
@@ -81,10 +81,10 @@ public static class FormsViewExtensions
 		
 		return dialogs.ConfirmAsync(new ConfirmConfig
 		{
-			Message = message,
-			Title = title,
-			CancelText = no ?? Properties.Resources.No,
-			OkText = yes ?? Properties.Resources.Yes,
+			Message    = message,
+			Title      = title,
+			CancelText = no ?? ViewModels.Properties.Resources.No,
+			OkText     = yes ?? ViewModels.Properties.Resources.Yes,
 			AndroidStyleId = app.RequestedTheme == OSAppTheme.Dark
 				? androidDialogStyles?.AlertDarkStyleId ?? 0
 				: androidDialogStyles?.AlertLightStyleId ?? 0
@@ -104,9 +104,9 @@ public static class FormsViewExtensions
 
 		return dialog.AlertAsync(new AlertConfig
 		{
-			OkText = ok ?? Properties.Resources.Ok,
+			OkText  = ok ?? ViewModels.Properties.Resources.Ok,
 			Message = message,
-			Title = title,
+			Title   = title,
 			AndroidStyleId = app.RequestedTheme == OSAppTheme.Dark
 				? androidDialogStyles?.AlertDarkStyleId ?? 0
 				: androidDialogStyles?.AlertLightStyleId ?? 0
@@ -133,12 +133,12 @@ public static class FormsViewExtensions
 				return false;
 
 			case PermissionStatus.Denied when Device.RuntimePlatform == Device.iOS:
-				await dialogs.ShowAlertAsync(promptGoToSettings, title ?? Properties.Resources.RequestPermissions);
+				await dialogs.ShowAlertAsync(promptGoToSettings, title ?? ViewModels.Properties.Resources.RequestPermissions);
 				return false;
 		}
 
 		if (Xamarin.Essentials.Permissions.ShouldShowRationale<TPermission>())
-			await dialogs.ShowAlertAsync(rationaleMessage, title ?? Properties.Resources.RequestPermissions);
+			await dialogs.ShowAlertAsync(rationaleMessage, title ?? ViewModels.Properties.Resources.RequestPermissions);
 
 		status = await Xamarin.Essentials.Permissions.RequestAsync<TPermission>();
 

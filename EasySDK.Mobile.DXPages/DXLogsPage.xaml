@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:ModelContentPage x:TypeArguments="pages:LogsViewModel" xmlns="http://xamarin.com/schemas/2014/forms"
+<pages1:ModelContentPage x:TypeArguments="forms:LogsViewModel" 
+                        xmlns="http://xamarin.com/schemas/2014/forms"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:pages="http://easyptog.ru/sdk/mobile"
                         xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
-                        x:DataType="pages:LogsViewModel"
+                        xmlns:forms="clr-namespace:EasySDK.Mobile.Forms;assembly=EasySDK.Mobile.Forms"
+                        xmlns:pages1="clr-namespace:EasySDK.Mobile.Forms.Pages;assembly=EasySDK.Mobile.Forms"
+                        x:DataType="forms:LogsViewModel"
                         x:Class="EasySDK.Mobile.DXPages.DXLogsPage">
-	<pages:ModelContentPage.ToolbarItems>
+	<pages1:ModelContentPage.ToolbarItems>
 		<ToolbarItem Command="{Binding ShareCommand}"
 		             IconImageSource="{OnPlatform Default='ic_share_white_24px.png', iOS='Images/ic_share_white_24px.png'}"/>
 
@@ -14,10 +17,10 @@
 
 		<ToolbarItem Command="{Binding ClearCommand}"
 		             IconImageSource="{OnPlatform Default='ic_clear_all_white_24px.png', iOS='Images/ic_clear_all_white_24px.png'}"/>
-	</pages:ModelContentPage.ToolbarItems>
+	</pages1:ModelContentPage.ToolbarItems>
 	
 	<editors:MultilineEdit Text="{Binding Text}"
 	                       VerticalOptions="FillAndExpand"
 	                       IsReadOnly="True"/>
 	
-</pages:ModelContentPage>
+</pages1:ModelContentPage>

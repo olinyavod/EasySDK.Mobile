@@ -1,10 +1,11 @@
 ﻿using System;
-using EasySDK.Mobile.ViewModels.Themes;
+using EasySDK.Mobile.Forms.Themes;
+using EasySDK.Mobile.ViewModels.Pages;
 using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace EasySDK.Mobile.ViewModels.Pages;
+namespace EasySDK.Mobile.Forms.Pages;
 
 public abstract class ModelContentPage<TViewModel> : ContentPage
 {

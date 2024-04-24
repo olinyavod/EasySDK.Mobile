@@ -1,3 +1,4 @@
+using EasySDK.Mobile.Forms;
 using EasySDK.Mobile.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 

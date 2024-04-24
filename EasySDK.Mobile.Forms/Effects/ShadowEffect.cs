@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Effects;
+namespace EasySDK.Mobile.Forms.Effects;
 
 public class ShadowEffect : RoutingEffect
 {

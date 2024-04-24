@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Android.Content;
 using EasySDK.Mobile.Android.Renderers;
-using EasySDK.Mobile.ViewModels.Controls;
+using EasySDK.Mobile.Forms.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Material.Android;
 using Xamarin.Forms.Platform.Android;

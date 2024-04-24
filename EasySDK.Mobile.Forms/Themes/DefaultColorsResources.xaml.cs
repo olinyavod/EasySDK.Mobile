@@ -4,7 +4,7 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace EasySDK.Mobile.ViewModels.Themes
+namespace EasySDK.Mobile.Forms.Themes
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DefaultColorsResources

@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms.Xaml;
 
-namespace EasySDK.Mobile.ViewModels.Controls
+namespace EasySDK.Mobile.Forms.Controls
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FlyoutMenuItemViewCell

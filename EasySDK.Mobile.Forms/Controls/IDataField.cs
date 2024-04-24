@@ -1,4 +1,4 @@
-﻿namespace EasySDK.Mobile.ViewModels.Controls;
+﻿namespace EasySDK.Mobile.Forms.Controls;
 
 public interface IDataField
 {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace EasySDK.Mobile.ViewModels.Managers;
+namespace EasySDK.Mobile.Forms.Managers;
 
 public interface IPhotosManagerViewModel
 {

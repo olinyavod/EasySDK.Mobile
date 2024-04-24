@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Linq;
-using EasySDK.Mobile.ViewModels.Effects;
+using EasySDK.Mobile.Forms.Effects;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Behaviors;
+namespace EasySDK.Mobile.Forms.Behaviors;
 
 class DataFieldBehavior : DataFieldBehaviorBase
 {

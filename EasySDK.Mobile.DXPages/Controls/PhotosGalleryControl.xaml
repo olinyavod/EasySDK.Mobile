@@ -4,10 +4,10 @@
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:popup="http://schemas.devexpress.com/xamarin/2014/forms/popup"
              xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
-             xmlns:viewModels1="http://easyptog.ru/sdk/mobile"
-             xmlns:themes="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
              xmlns:props="clr-namespace:EasySDK.Mobile.ViewModels.Properties;assembly=EasySDK.Mobile.ViewModels"
              xmlns:controls1="clr-namespace:EasySDK.Mobile.DXPages.Controls;assembly=EasySDK.Mobile.DXPages"
+             xmlns:forms1="clr-namespace:EasySDK.Mobile.Forms;assembly=EasySDK.Mobile.Forms"
+             xmlns:themes="clr-namespace:EasySDK.Mobile.Forms.Themes;assembly=EasySDK.Mobile.Forms"
              x:Class="EasySDK.Mobile.DXPages.Controls.PhotosGalleryControl"
              Orientation="Vertical">
 	<Button Text="{x:Static props:Resources.AddPhoto}"
@@ -50,7 +50,7 @@
 		</BindableLayout.EmptyView>
 
 		<BindableLayout.ItemTemplate>
-			<DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
+			<DataTemplate x:DataType="forms1:PhotoItemViewModel">
 				<Grid FlexLayout.Basis="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=PhotoWidth}"
 				      Margin="1"
 				      HeightRequest="90"
@@ -95,7 +95,7 @@
 	                <CarouselView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.PhotosSource}"
 	                              CurrentItem="{Binding Source={RelativeSource AncestorType={x:Type controls1:PhotosGalleryControl}}, Path=Manager.SelectedPhoto, Mode=TwoWay}">
 		                <CarouselView.ItemTemplate>
-			                <DataTemplate x:DataType="viewModels1:PhotoItemViewModel">
+			                <DataTemplate x:DataType="forms1:PhotoItemViewModel">
 								<ContentView Padding="0, 50">
 									<forms:CachedImage Aspect="AspectFit"
 									                   ErrorPlaceholder="{OnPlatform  Default='fail_stamp_picture.png', iOS='Images/fail_stamp_picture.png'}"

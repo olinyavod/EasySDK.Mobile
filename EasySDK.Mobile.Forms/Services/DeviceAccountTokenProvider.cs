@@ -2,9 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EasySDK.Mobile.RestClient;
+using EasySDK.Mobile.ViewModels.Services;
 using Microsoft.Extensions.Logging;
 
-namespace EasySDK.Mobile.ViewModels.Services;
+namespace EasySDK.Mobile.Forms.Services;
 
 public class DeviceAccountTokenProvider : ITokenProvider
 {

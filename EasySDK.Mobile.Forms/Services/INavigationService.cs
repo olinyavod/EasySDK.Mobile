@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Services;
+namespace EasySDK.Mobile.Forms.Services;
 
 public interface INavigationService
 {

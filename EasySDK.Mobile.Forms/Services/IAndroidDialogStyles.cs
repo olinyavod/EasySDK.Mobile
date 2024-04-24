@@ -1,4 +1,4 @@
-﻿namespace EasySDK.Mobile.ViewModels.Services;
+﻿namespace EasySDK.Mobile.Forms.Services;
 
 public interface IAndroidDialogStyles
 {

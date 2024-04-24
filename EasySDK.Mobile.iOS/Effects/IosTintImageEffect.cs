@@ -1,7 +1,7 @@
 using System.ComponentModel;
+using EasySDK.Mobile.Forms.Effects;
 using EasySDK.Mobile.iOS.Effects;
 using Xamarin.Forms;
-using EasySDK.Mobile.ViewModels.Effects;
 using Foundation;
 
 [assembly: ExportEffect(typeof(IosTintImageEffect), nameof(TintImageEffect))]
@@ -10,7 +10,6 @@ namespace EasySDK.Mobile.iOS.Effects
     using System;
     using System.Linq;
     using UIKit;
-    using ViewModels.Effects;
     using Xamarin.Forms.Platform.iOS;
 
     [Preserve(AllMembers = true)]

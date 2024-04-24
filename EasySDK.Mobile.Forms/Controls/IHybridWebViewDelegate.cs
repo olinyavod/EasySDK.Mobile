@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Controls;
+namespace EasySDK.Mobile.Forms.Controls;
 
 public interface IHybridWebViewDelegate : IWebViewDelegate
 {

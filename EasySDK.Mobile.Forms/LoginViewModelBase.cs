@@ -1,17 +1,20 @@
 ﻿using System;
-using FluentValidation;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
+using EasySDK.Mobile.Forms.Extensions;
+using EasySDK.Mobile.Forms.Services;
 using EasySDK.Mobile.Models;
+using EasySDK.Mobile.ViewModels;
 using EasySDK.Mobile.ViewModels.Extensions;
+using EasySDK.Mobile.ViewModels.Input;
 using EasySDK.Mobile.ViewModels.Services;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
-using System.Threading.Tasks;
-using EasySDK.Mobile.ViewModels.Input;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace EasySDK.Mobile.ViewModels;
+namespace EasySDK.Mobile.Forms;
 
 public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewModelBase, ILoginViewModel 
 	where TLoginForm: class, ILoginForm, new()
@@ -22,10 +25,10 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 	private readonly IUserDialogs _dialogs;
 	private readonly IUserThemeStorage _userThemeStorage;
 
-	private string? _login;
-	private string? _password;
-	private bool _invalidLogin;
-	private string _title = Properties.Resources.AuthorizationTitle;
+	private string?      _login;
+	private string?      _password;
+	private bool         _invalidLogin;
+	private string       _title = ViewModels.Properties.Resources.AuthorizationTitle;
 	private ImageSource? _logoImageSource;
 
 	#endregion
@@ -64,11 +67,12 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 
 	protected LoginViewModelBase
 	(
+		IServiceScopeFactory scopeFactory,
 		IUserDialogs dialogs,
 		IUserThemeStorage userThemeStorage,
 		ILogger logger,
 		IValidator validator
-	) : base(validator)
+	) : base(scopeFactory, validator)
 	{
 		_dialogs = dialogs;
 		_userThemeStorage = userThemeStorage;
@@ -100,7 +104,7 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 
 	protected virtual void ShowInvalidAuthData(IResponse response)
 	{
-		SetError(Properties.Resources.InvalidUserOrPassword, nameof(Login));
+		SetError(ViewModels.Properties.Resources.InvalidUserOrPassword, nameof(Login));
 	}
 
 	protected virtual void SetErrors(IResponse response)
@@ -121,7 +125,7 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 
 	protected virtual void ShowSignInErrors(IResponse response)
 	{
-		_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
+		_dialogs.ShowErrorMessage(ViewModels.Properties.Resources.FailedSignInMessage);
 	}
 
 	#endregion
@@ -167,7 +171,7 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 			if(!await ValidateAsync())
 				return;
 
-			using var loadingDlg = _dialogs.Loading(Properties.Resources.Authorization);
+			using var loadingDlg = _dialogs.Loading(ViewModels.Properties.Resources.Authorization);
 			await using var scope = CreateAsyncScope();
 			var authService = scope.ServiceProvider.GetService<TAuthService>()!;
 			
@@ -199,7 +203,7 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 		catch (Exception ex)
 		{
 			Log.LogError(ex, "Login error.");
-			_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
+			_dialogs.ShowErrorMessage(ViewModels.Properties.Resources.FailedSignInMessage);
 		}
 	}
 

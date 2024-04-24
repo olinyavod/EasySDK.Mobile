@@ -1,20 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<m:ModelContentPage x:TypeArguments="m:ILoginViewModel" 
+<pages:ModelContentPage x:TypeArguments="m:ILoginViewModel" 
                     xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:m="http://easyptog.ru/sdk/mobile"
                     xmlns:dataForm="http://schemas.devexpress.com/xamarin/2014/forms/dataform"
                     xmlns:behaviors1="clr-namespace:EasySDK.Mobile.DXPages.Behaviors;assembly=EasySDK.Mobile.DXPages"
                     xmlns:props="clr-namespace:EasySDK.Mobile.ViewModels.Properties;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:pages="clr-namespace:EasySDK.Mobile.Forms.Pages;assembly=EasySDK.Mobile.Forms"
+                    xmlns:m="http://easyptog.ru/sdk/mobile"
                     x:DataType="m:ILoginViewModel"
                     Shell.NavBarHasShadow="False"
                     x:Class="EasySDK.Mobile.DXPages.LoginPage">
-	<m:ModelContentPage.Resources>
+	<pages:ModelContentPage.Resources>
 		<ResourceDictionary>
 		</ResourceDictionary>
-	</m:ModelContentPage.Resources>
+	</pages:ModelContentPage.Resources>
 
-	<m:ModelContentPage.ToolbarItems>
+	<pages:ModelContentPage.ToolbarItems>
 		<ToolbarItem Command="{Binding ChangeThemeCommand}">
 			<ToolbarItem.IconImageSource>
 				<x:AppThemeBinding
@@ -22,7 +23,7 @@
 					Dark="ic_light_mode_24px.png"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
-	</m:ModelContentPage.ToolbarItems>
+	</pages:ModelContentPage.ToolbarItems>
 
 	<Shell.TitleView>
 		<Label Text="{Binding Title}"
@@ -69,4 +70,4 @@
 			        Command="{Binding SignInCommand}"/>
 		</Grid>
 	</ScrollView>
-</m:ModelContentPage>
+</pages:ModelContentPage>

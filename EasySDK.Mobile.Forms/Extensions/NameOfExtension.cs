@@ -4,7 +4,7 @@ using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace EasySDK.Mobile.ViewModels.Extensions;
+namespace EasySDK.Mobile.Forms.Extensions;
 
 [ContentProperty(nameof(Member))]
 public class NameOfExtension : IMarkupExtension

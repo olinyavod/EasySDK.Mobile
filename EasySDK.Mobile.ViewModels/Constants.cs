@@ -2,5 +2,5 @@
 
 static class Constants
 {
-	public const string BaseNamespace = "EasySDK.Mobile.ViewModels";
+	public const string BaseNamespace = $"{nameof(EasySDK)}.{nameof(Mobile)}.{nameof(ViewModels)}";
 }

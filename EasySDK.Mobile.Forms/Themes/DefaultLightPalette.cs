@@ -1,6 +1,4 @@
-﻿using Xamarin.Forms;
-
-namespace EasySDK.Mobile.ViewModels.Themes;
+﻿namespace EasySDK.Mobile.Forms.Themes;
 
 public class DefaultLightPalette : ColorPaletteBase
 {

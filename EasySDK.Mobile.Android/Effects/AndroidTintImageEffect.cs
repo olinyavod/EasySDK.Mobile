@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Android.Graphics;
 using Android.Widget;
 using EasySDK.Mobile.Android.Effects;
-using EasySDK.Mobile.ViewModels.Effects;
+using EasySDK.Mobile.Forms.Effects;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 

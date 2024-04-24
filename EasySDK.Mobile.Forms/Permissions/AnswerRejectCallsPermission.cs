@@ -1,4 +1,4 @@
-﻿namespace EasySDK.Mobile.ViewModels.Permissions;
+﻿namespace EasySDK.Mobile.Forms.Permissions;
 
 public class AnswerRejectCallsPermission : DependencyPermissionBase<IAnswerRejectCallsPermission>
 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Extensions;
+namespace EasySDK.Mobile.Forms.Extensions;
 
 public static class RouteExtensions
 {

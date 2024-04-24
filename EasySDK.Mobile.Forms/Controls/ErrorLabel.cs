@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Linq;
-using EasySDK.Mobile.ViewModels.Behaviors;
-using EasySDK.Mobile.ViewModels.Effects;
+using EasySDK.Mobile.Forms.Behaviors;
+using EasySDK.Mobile.Forms.Effects;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Controls;
+namespace EasySDK.Mobile.Forms.Controls;
 
 public class ErrorLabel : Label, IDataField
 {

@@ -3,7 +3,7 @@ using System.Windows.Input;
 using EasySDK.Mobile.ViewModels.Extensions;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Controls;
+namespace EasySDK.Mobile.Forms.Controls;
 
 public class ItemFrame : Frame
 {

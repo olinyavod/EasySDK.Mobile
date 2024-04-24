@@ -2,7 +2,7 @@
 using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
 using EasySDK.Mobile.Android.Effects;
-using EasySDK.Mobile.ViewModels.Effects;
+using EasySDK.Mobile.Forms.Effects;
 using Google.Android.Material.TextField;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;

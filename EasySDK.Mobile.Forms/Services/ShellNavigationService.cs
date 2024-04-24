@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EasySDK.Mobile.ViewModels.Extensions;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Services;
+namespace EasySDK.Mobile.Forms.Services;
 
 public class ShellNavigationService : INavigationService
 {

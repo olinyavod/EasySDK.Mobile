@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Controls;
+namespace EasySDK.Mobile.Forms.Controls;
 
 public class HybridWebView : WebView
 {

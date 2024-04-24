@@ -2,7 +2,7 @@
 using Android.Content;
 using Android.Webkit;
 using EasySDK.Mobile.Android.Renderers;
-using EasySDK.Mobile.ViewModels.Controls;
+using EasySDK.Mobile.Forms.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using WebView = Xamarin.Forms.WebView;

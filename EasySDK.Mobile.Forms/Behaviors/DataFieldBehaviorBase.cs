@@ -2,10 +2,10 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
-using EasySDK.Mobile.ViewModels.Controls;
+using EasySDK.Mobile.Forms.Controls;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Behaviors;
+namespace EasySDK.Mobile.Forms.Behaviors;
 
 abstract class DataFieldBehaviorBase
 {

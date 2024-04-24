@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Android.Content.Res;
 using EasySDK.Mobile.Android.Effects;
-using EasySDK.Mobile.ViewModels.Effects;
+using EasySDK.Mobile.Forms.Effects;
 using EasySDK.Mobile.ViewModels.Extensions;
 using Google.Android.Material.TextField;
 using Xamarin.Forms;

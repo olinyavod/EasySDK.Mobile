@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <controls:ItemFrame xmlns="http://xamarin.com/schemas/2014/forms" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:controls="clr-namespace:EasySDK.Mobile.ViewModels.Controls;assembly=EasySDK.Mobile.ViewModels"
                     xmlns:converters="clr-namespace:EasySDK.Mobile.ViewModels.Converters;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:controls="clr-namespace:EasySDK.Mobile.Forms.Controls;assembly=EasySDK.Mobile.Forms"
                     Click="ButtonSettingsCellOnClick"
                     HasShadow="False"
                     Padding="25, 5"
-                    x:Class="EasySDK.Mobile.ViewModels.Controls.ButtonSettingsCell">
+                    x:Class="EasySDK.Mobile.Forms.Controls.ButtonSettingsCell">
 	<controls:ItemFrame.Resources>
 		<converters:EmptyStringToObjectConverter x:Key="EmptyStringToObjectConverter"
 		                                         NotEmptyValue="{x:Static x:Environment.NewLine}"

@@ -2,12 +2,11 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:dataForm="http://schemas.devexpress.com/xamarin/2014/forms/dataform"
-                    xmlns:dxPages="clr-namespace:EasySDK.Mobile.DXPages;assembly=EasySDK.Mobile.DXPages"
                     xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
                     xmlns:behaviors="clr-namespace:EasySDK.Mobile.DXPages.Behaviors;assembly=EasySDK.Mobile.DXPages"
-                    xmlns:behaviors1="http://easyptog.ru/sdk/mobile"
                     xmlns:themes="clr-namespace:EasySDK.Mobile.DXPages.Themes;assembly=EasySDK.Mobile.DXPages"
-                    xmlns:themes1="clr-namespace:EasySDK.Mobile.ViewModels.Themes;assembly=EasySDK.Mobile.ViewModels"
+                    xmlns:themes1="clr-namespace:EasySDK.Mobile.Forms.Themes;assembly=EasySDK.Mobile.Forms"
+                    xmlns:behaviors1="clr-namespace:EasySDK.Mobile.Forms.Behaviors;assembly=EasySDK.Mobile.Forms"
                     x:Class="EasySDK.Mobile.DXPages.Themes.DataFormResources">
 	
 	<Style TargetType="dataForm:DataFormView"

@@ -4,22 +4,23 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
+using EasySDK.Mobile.Forms.Extensions;
 using EasySDK.Mobile.Models;
-using EasySDK.Mobile.ViewModels.Extensions;
+using EasySDK.Mobile.ViewModels;
 using EasySDK.Mobile.ViewModels.Input;
 using FFImageLoading;
 using FFImageLoading.Work;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using ImageSource = Xamarin.Forms.ImageSource;
 
-namespace EasySDK.Mobile.ViewModels.Managers
+namespace EasySDK.Mobile.Forms.Managers
 {
 
 	public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IPhotosManagerViewModel
@@ -78,21 +79,22 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 		protected PhotosManagerViewModelBase
 		(
-			IUserDialogs dialogs,
-			IImageService imageService,
-			ILogger logger
-		)
+			IServiceScopeFactory scopeFactory,
+			IUserDialogs         dialogs,
+			IImageService        imageService,
+			ILogger              logger
+		) : base(scopeFactory)
 		{
-			_dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
+			_dialogs      = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
 			_imageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
-			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			_logger       = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			PhotosSource.CollectionChanged += PhotosSourceOnCollectionChanged;
 
-			AddPhotoCommand = new AsyncCommand(OnAddPhoto, OnCanAddPhoto);
+			AddPhotoCommand    = new AsyncCommand(OnAddPhoto, OnCanAddPhoto);
 			DeletePhotoCommand = new AsyncCommand<PhotoItemViewModel?>(OnDeletePhoto, OnCanDeletePhoto);
-			OpenPhotoCommand = new Command<PhotoItemViewModel?>(OnOpenPhoto, OnCanOpenPhoto);
-			ClosePhotoCommand = new Command(OnClosePhoto, OnCanClosePhoto);
+			OpenPhotoCommand   = new Command<PhotoItemViewModel?>(OnOpenPhoto, OnCanOpenPhoto);
+			ClosePhotoCommand  = new Command(OnClosePhoto, OnCanClosePhoto);
 		}
 
 		#endregion
@@ -156,16 +158,16 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 			var result = await _dialogs.ActionSheetAsync
 			(
-				Properties.Resources.WhereTakePhoto,
-				Properties.Resources.Cancel,
+				ViewModels.Properties.Resources.WhereTakePhoto,
+				ViewModels.Properties.Resources.Cancel,
 				null,
 				null,
-				Properties.Resources.Camera, Properties.Resources.Gallery);
+				ViewModels.Properties.Resources.Camera, ViewModels.Properties.Resources.Gallery);
 
-			if (result == Properties.Resources.Camera)
+			if (result == ViewModels.Properties.Resources.Camera)
 				return await TryCapturePhotoAsync();
 
-			if (result == Properties.Resources.Gallery)
+			if (result == ViewModels.Properties.Resources.Gallery)
 				return await TryPickPhotoAsync();
 
 			return null;
@@ -199,7 +201,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			{
 				if (!await _dialogs.RequestPermissionIfDeny<Xamarin.Essentials.Permissions.Camera>
 				    (
-					    Properties.Resources.NeedAllowAccessCameraMessage
+					    ViewModels.Properties.Resources.NeedAllowAccessCameraMessage
 				    ))
 					return null;
 
@@ -219,7 +221,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			{
 				if (!await _dialogs.RequestPermissionIfDeny<Xamarin.Essentials.Permissions.Photos>
 				    (
-					    Properties.Resources.NeedAllowAccessCameraMessage
+					    ViewModels.Properties.Resources.NeedAllowAccessCameraMessage
 				    ))
 					return null;
 
@@ -251,7 +253,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 				await Task.Delay(500);
 
-				using var loadingDlh = _dialogs.Loading(Properties.Resources.Saving);
+				using var loadingDlh = _dialogs.Loading(ViewModels.Properties.Resources.Saving);
 				await using var scope = CreateAsyncScope();
 
 				var maxSize = Device.RuntimePlatform switch
@@ -283,7 +285,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 				if (response.HasError)
 				{
-					await ShowResponseError(response, Properties.Resources.FailedAddPhotoMessage);
+					await ShowResponseError(response, ViewModels.Properties.Resources.FailedAddPhotoMessage);
 					return;
 				}
 
@@ -300,7 +302,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex, "AddAsync photo error.");
-				_dialogs.ShowErrorMessage(Properties.Resources.FailedAddPhotoMessage);
+				_dialogs.ShowErrorMessage(ViewModels.Properties.Resources.FailedAddPhotoMessage);
 			}
 		}
 
@@ -318,19 +320,19 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			{
 				if (!await _dialogs.ShowConfirmAsync
 				    (
-					    Properties.Resources.DeletePhotoQuestion,
-					    Properties.Resources.Photos
+					    ViewModels.Properties.Resources.DeletePhotoQuestion,
+					    ViewModels.Properties.Resources.Photos
 				    ))
 					return;
 
-				using var loadingDlg = _dialogs.Loading(Properties.Resources.Loading);
+				using var loadingDlg = _dialogs.Loading(ViewModels.Properties.Resources.Loading);
 				await using var scope = CreateAsyncScope();
 
 				var response = await DeletePhotoAsync(scope.ServiceProvider, item!.Id);
 
 				if (response.HasError)
 				{
-					await ShowResponseError(response, Properties.Resources.FailedDeletePhotoMessage);
+					await ShowResponseError(response, ViewModels.Properties.Resources.FailedDeletePhotoMessage);
 					return;
 				}
 
@@ -343,7 +345,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			{
 				_logger.LogError(ex, "Delete photo error.");
 
-				_dialogs.ShowErrorMessage(Properties.Resources.FailedDeletePhotoMessage);
+				_dialogs.ShowErrorMessage(ViewModels.Properties.Resources.FailedDeletePhotoMessage);
 			}
 		}
 

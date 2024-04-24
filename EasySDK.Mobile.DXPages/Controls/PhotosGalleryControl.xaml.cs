@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using EasySDK.Mobile.Forms.Managers;
 using EasySDK.Mobile.ViewModels.Managers;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

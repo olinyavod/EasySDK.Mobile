@@ -2,11 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels;
+namespace EasySDK.Mobile.Forms;
 
 public abstract class FormsApp : Application
 {
-	internal const string BaseNamespace = $"{nameof(EasySDK)}.{nameof(Mobile)}.{nameof(ViewModels)}";
+	
 
 	#region Properties
 

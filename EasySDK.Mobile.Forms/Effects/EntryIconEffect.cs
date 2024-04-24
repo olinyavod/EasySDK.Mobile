@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels.Effects;
+namespace EasySDK.Mobile.Forms.Effects;
 
 public class EntryIconEffect : RoutingEffect
 {

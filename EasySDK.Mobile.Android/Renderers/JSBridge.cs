@@ -1,6 +1,6 @@
 ﻿using System;
 using Android.Webkit;
-using EasySDK.Mobile.ViewModels.Controls;
+using EasySDK.Mobile.Forms.Controls;
 using Java.Interop;
 
 namespace EasySDK.Mobile.Android.Renderers;

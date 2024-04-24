@@ -1,8 +1,9 @@
-﻿using Xamarin.Forms;
+﻿using EasySDK.Mobile.ViewModels;
+using Xamarin.Forms;
 
-namespace EasySDK.Mobile.ViewModels;
+namespace EasySDK.Mobile.Forms;
 
-public class PhotoItemViewModel : ViewModelBase
+public class PhotoItemViewModel : NotifyPropertyChangedBase
 {
 	#region Properties
 

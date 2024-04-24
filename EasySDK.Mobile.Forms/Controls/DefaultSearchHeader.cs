@@ -1,14 +1,13 @@
-﻿using EasySDK.Mobile.ViewModels.Themes;
+﻿using EasySDK.Mobile.Forms.Themes;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-namespace EasySDK.Mobile.ViewModels.Controls
+namespace EasySDK.Mobile.Forms.Controls
 {
 	public class DefaultSearchHeader : SearchHandler
 	{
 		public DefaultSearchHeader()
 		{
-			Placeholder = Properties.Resources.SearchDots;
+			Placeholder         = ViewModels.Properties.Resources.SearchDots;
 			SearchBoxVisibility = SearchBoxVisibility.Collapsible;
 
 			var application = Application.Current;
