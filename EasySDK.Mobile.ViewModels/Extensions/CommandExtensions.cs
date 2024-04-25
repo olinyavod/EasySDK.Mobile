@@ -6,7 +6,7 @@ public static class CommandExtensions
 {
     #region Public methods
 
-    public static void TryExecute(this ICommand command, object parameter = null)
+    public static void TryExecute(this ICommand? command, object? parameter = null)
     {
         if(command?.CanExecute(parameter) != true)
             return;

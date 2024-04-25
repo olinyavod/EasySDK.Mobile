@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EasySDK.Mobile.ViewModels;
 
-public abstract class LogsViewModelBase : ViewModelBase, ISupportAppearing
+public abstract class LogsViewModelBase : ScopedViewModelBase, ISupportAppearing
 {
 	#region Private fields
 

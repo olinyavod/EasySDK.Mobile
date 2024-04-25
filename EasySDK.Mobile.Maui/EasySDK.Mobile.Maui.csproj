@@ -29,4 +29,8 @@
 	  <ProjectReference Include="..\EasySDK.Mobile.ViewModels\EasySDK.Mobile.ViewModels.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Extensions\" />
+	</ItemGroup>
+
 </Project>

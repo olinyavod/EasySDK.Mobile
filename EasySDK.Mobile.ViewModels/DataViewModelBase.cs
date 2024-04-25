@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EasySDK.Mobile.ViewModels;
 
-public abstract class DataViewModelBase : ViewModelBase, INotifyDataErrorInfo
+public abstract class DataViewModelBase : ScopedViewModelBase, INotifyDataErrorInfo
 {
 	#region Private fields
 

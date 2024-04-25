@@ -11,8 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace EasySDK.Mobile.ViewModels;
 
-public abstract class ListItemsViewModelBase<TItem, TModel> : ViewModelBase, ISupportAppearing
-	where TItem : ViewModelBase
+public abstract class ListItemsViewModelBase<TItem, TModel> : ScopedViewModelBase, ISupportAppearing
+	where TItem : ScopedViewModelBase
 	where TModel : class
 {
 	#region Private fields

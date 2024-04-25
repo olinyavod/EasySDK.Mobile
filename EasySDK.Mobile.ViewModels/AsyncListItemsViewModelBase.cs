@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EasySDK.Mobile.ViewModels
 {
-	public abstract class AsyncListItemsViewModelBase<TItem, TModel> : ViewModelBase
+	public abstract class AsyncListItemsViewModelBase<TItem, TModel> : ScopedViewModelBase
 	{
 		#region Private fields
 
