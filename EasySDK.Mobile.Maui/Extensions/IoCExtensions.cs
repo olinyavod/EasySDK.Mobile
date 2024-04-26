@@ -68,5 +68,16 @@ public static class IoCExtensions
 		Routing.RegisterRoute(viewModelKey, new RouteFactory<TPage,TViewModel>());
 	}
 
+	public static void RegisterDialogView<TView, TViewModel>(this IServiceCollection services)
+		where TView : BindableObject
+		where TViewModel : class
+	{
+		services.AddTransient<TView>();
+		services.AddScoped<TViewModel>();
+
+		services.AddKeyedTransient<DataTemplate>(typeof(TViewModel),
+			(_, _) => new DataTemplate(typeof(TView)));
+	}
+
 	#endregion
 }
