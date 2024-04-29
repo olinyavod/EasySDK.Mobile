@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
 
 namespace EasySDK.Mobile.ViewModels.Services;
@@ -8,9 +9,9 @@ public interface IAuthService<in TLoginFrom>
 {
 	#region Methods
 
-	Task<IResponse<string>> LoginAsync(TLoginFrom form);
+	Task<IResponse<string>> LoginAsync(TLoginFrom form, CancellationToken cancellationToken = default);
 
-	Task<IResponse<bool?>> LogoutAsync();
+	Task<IResponse<bool?>> LogoutAsync(CancellationToken cancellationToken = default);
 
 	#endregion
 }
