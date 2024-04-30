@@ -30,7 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Converters\" />
 	  <Folder Include="Extensions\" />
 	</ItemGroup>
 
