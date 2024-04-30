@@ -76,11 +76,9 @@ namespace EasySDK.Mobile.ViewModels
 
 				var response = await LoadItemsAsync(scope, request);
 
-				IsBusy = !response.HasError;
 				if (!await _responseChecker.CheckCanContinue(scope, response, GetLoadItemsFailedMessage()))
 					return;
 
-				
 				var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
 				bool hasItems = false;
 
@@ -99,6 +97,10 @@ namespace EasySDK.Mobile.ViewModels
 			{
 				Log.LogError(ex, $"Load items error.");
 				ShowErrorMessage(GetLoadItemsFailedMessage());
+			}
+			finally
+			{
+				IsBusy = false;
 			}
 		}
 
