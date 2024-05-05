@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -16,9 +17,10 @@ namespace EasySDK.Mobile.ViewModels
 
 		private readonly IResponseChecker _responseChecker;
 
-		private IList<TItem>? _itemsSource;
-		private bool          _isBusy;
-		private bool          _isEmpty = true;
+		private IList<TItem>?            _itemsSource;
+		private bool                     _isBusy;
+		private bool                     _isEmpty = true;
+		private CancellationTokenSource? _loadCancelSource;
 
 		#endregion
 
@@ -65,42 +67,60 @@ namespace EasySDK.Mobile.ViewModels
 
 		#region Protected methods
 
-		protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IServiceProvider scope, IListRequest request);
+		protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IServiceProvider scope, IListRequest request,
+			CancellationToken                                                          token);
 
-		protected async Task DoLoadItemsAsync(IServiceProvider scope, IListRequest request)
+		protected async Task DoLoadItemsAsync(IServiceProvider scope, IListRequest request, CancellationToken token)
 		{
+			LinkedList<TItem> addedItems = new();
 			try
 			{
 				if (!await OnPreLoadItems(scope))
 					return;
 
-				var response = await LoadItemsAsync(scope, request);
+				var response = await LoadItemsAsync(scope, request, token);
+
+				if (token.IsCancellationRequested)
+					throw new OperationCanceledException();
 
 				if (!await _responseChecker.CheckCanContinue(scope, response, GetLoadItemsFailedMessage()))
 					return;
 
+				if(token.IsCancellationRequested)
+					throw new OperationCanceledException();
+				
 				var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
 				bool hasItems = false;
 
 				foreach (var item in items)
 				{
+					if (token.IsCancellationRequested)
+						throw new OperationCanceledException();
+
 					hasItems = true;
 					ItemsSource?.Add(item);
+					addedItems.AddLast(item);
 				}
 
 				if (!hasItems)
-					await Task.Delay(1000);
+					await Task.Delay(500, token);
+
+				if (token.IsCancellationRequested)
+					throw new OperationCanceledException();
 
 				await OnPostLoadItems(scope);
+			}
+			catch (OperationCanceledException)
+			{
+				foreach (var item in addedItems)
+					ItemsSource?.Remove(item);
+
+				throw;
 			}
 			catch (Exception ex)
 			{
 				Log.LogError(ex, $"Load items error.");
 				ShowErrorMessage(GetLoadItemsFailedMessage());
-			}
-			finally
-			{
-				IsBusy = false;
 			}
 		}
 
@@ -114,15 +134,23 @@ namespace EasySDK.Mobile.ViewModels
 
 		protected abstract TItem CreateItem(TModel model);
 
-		#endregion
-
-		#region Private methods
-
-		private async Task LoadItemsAsync(bool clearAllItems)
+		protected async Task LoadItemsAsync(bool clearAllItems)
 		{
-			await Task.Run(async () =>
+			if (_loadCancelSource?.IsCancellationRequested is false)
 			{
-				if(ItemsSource is null || clearAllItems)
+				_loadCancelSource.Cancel();
+				await Task.Yield();
+			}
+
+			CancellationTokenSource? cancelSource = null;
+
+			try
+			{
+				IsBusy            = true;
+				_loadCancelSource = cancelSource = new CancellationTokenSource();
+				await Task.Delay(250, cancelSource.Token);
+				
+				if (ItemsSource is null || clearAllItems)
 					ItemsSource = new List<TItem>();
 
 				await using var scope = CreateAsyncScope();
@@ -130,14 +158,25 @@ namespace EasySDK.Mobile.ViewModels
 				await DoLoadItemsAsync(scope.ServiceProvider, new ListRequest
 				{
 					Offset = ItemsSource.Count, Count = PageSize
-				});
-			});
-			IsEmpty = ItemsSource?.Any() is not true;
-			IsBusy  = false;
+				}, cancelSource.Token);
+
+			}
+			catch (OperationCanceledException)
+			{
+
+			}
+			finally
+			{
+				cancelSource?.Dispose();
+				_loadCancelSource = null;
+
+				IsEmpty = ItemsSource?.Any() is not true;
+				IsBusy  = false;
+			}
 		}
 
 		#endregion
-
+		
 		#region LoadItemsCommand
 
 		public ICommand LoadItemsCommand { get; }

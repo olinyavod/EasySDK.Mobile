@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
 
@@ -7,7 +8,7 @@ namespace EasySDK.Mobile.ViewModels.Services;
 
 public interface ICrudService<TModel, TItem, TKey>
 {
-	Task<IResponseList<TItem>> GetListAsync(IListRequest request);
+	Task<IResponseList<TItem>> GetListAsync(IListRequest request, CancellationToken token);
 
 	Task<IResponse<TModel>> GetByKeyAsync(TKey key);
 
