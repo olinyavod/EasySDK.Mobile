@@ -147,11 +147,15 @@ namespace EasySDK.Mobile.ViewModels
 			try
 			{
 				IsBusy            = true;
+				
 				_loadCancelSource = cancelSource = new CancellationTokenSource();
 				await Task.Delay(250, cancelSource.Token);
-				
+
 				if (ItemsSource is null || clearAllItems)
+				{
 					ItemsSource = new List<TItem>();
+					await Task.Yield();
+				}
 
 				await using var scope = CreateAsyncScope();
 
@@ -160,6 +164,8 @@ namespace EasySDK.Mobile.ViewModels
 					Offset = ItemsSource.Count, Count = PageSize
 				}, cancelSource.Token);
 
+				IsEmpty = ItemsSource?.Any() is not true;
+				IsBusy  = false;
 			}
 			catch (OperationCanceledException)
 			{
@@ -170,8 +176,7 @@ namespace EasySDK.Mobile.ViewModels
 				cancelSource?.Dispose();
 				_loadCancelSource = null;
 
-				IsEmpty = ItemsSource?.Any() is not true;
-				IsBusy  = false;
+
 			}
 		}
 
