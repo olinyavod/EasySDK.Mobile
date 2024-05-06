@@ -70,13 +70,14 @@ namespace EasySDK.Mobile.ViewModels
 		protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IServiceProvider scope, IListRequest request,
 			CancellationToken                                                          token);
 
-		protected async Task DoLoadItemsAsync(IServiceProvider scope, IListRequest request, CancellationToken token)
+		protected async Task<IEnumerable<TItem>> DoLoadItemsAsync(IServiceProvider scope, IListRequest request,
+			bool clearAllItems, CancellationToken token)
 		{
 			LinkedList<TItem> addedItems = new();
 			try
 			{
 				if (!await OnPreLoadItems(scope))
-					return;
+					return addedItems;
 
 				var response = await LoadItemsAsync(scope, request, token);
 
@@ -84,13 +85,16 @@ namespace EasySDK.Mobile.ViewModels
 					throw new OperationCanceledException();
 
 				if (!await _responseChecker.CheckCanContinue(scope, response, GetLoadItemsFailedMessage()))
-					return;
+					return addedItems;
 
 				if(token.IsCancellationRequested)
 					throw new OperationCanceledException();
 				
 				var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
 				bool hasItems = false;
+
+				if (ItemsSource is null || clearAllItems)
+					ItemsSource = new List<TItem>();
 
 				foreach (var item in items)
 				{
@@ -109,6 +113,8 @@ namespace EasySDK.Mobile.ViewModels
 					throw new OperationCanceledException();
 
 				await OnPostLoadItems(scope);
+
+				return addedItems;
 			}
 			catch (OperationCanceledException)
 			{
@@ -121,7 +127,11 @@ namespace EasySDK.Mobile.ViewModels
 			{
 				Log.LogError(ex, $"Load items error.");
 				ShowErrorMessage(GetLoadItemsFailedMessage());
+
+				return addedItems;
 			}
+
+			
 		}
 
 		protected abstract void ShowErrorMessage(string message);
@@ -134,49 +144,57 @@ namespace EasySDK.Mobile.ViewModels
 
 		protected abstract TItem CreateItem(TModel model);
 
+		private TaskCompletionSource<bool>? _loadingTask;
+
 		protected async Task LoadItemsAsync(bool clearAllItems)
 		{
 			if (_loadCancelSource?.IsCancellationRequested is false)
 			{
 				_loadCancelSource.Cancel();
-				await Task.Yield();
+
+				if (_loadingTask?.Task is { } loadingTask)
+					await loadingTask;
+				else
+					await Task.Yield();
 			}
 
 			CancellationTokenSource? cancelSource = null;
+			IEnumerable<TItem>? newItems = null;
 
 			try
 			{
-				IsBusy            = true;
-				
-				_loadCancelSource = cancelSource = new CancellationTokenSource();
-				await Task.Delay(250, cancelSource.Token);
+				IsBusy = true;
 
-				if (ItemsSource is null || clearAllItems)
-				{
-					ItemsSource = new List<TItem>();
-					await Task.Yield();
-				}
+				_loadingTask      = new TaskCompletionSource<bool>();
+				_loadCancelSource = cancelSource = new CancellationTokenSource();
+				await Task.Delay(100, cancelSource.Token);
 
 				await using var scope = CreateAsyncScope();
 
-				await DoLoadItemsAsync(scope.ServiceProvider, new ListRequest
+				newItems = await DoLoadItemsAsync(scope.ServiceProvider, new ListRequest
 				{
-					Offset = ItemsSource.Count, Count = PageSize
-				}, cancelSource.Token);
+					Offset = clearAllItems ? 0 : ItemsSource?.Count ?? 0, Count = PageSize
+				}, clearAllItems, cancelSource.Token);
+
+				if (cancelSource.IsCancellationRequested)
+					throw new OperationCanceledException();
 
 				IsEmpty = ItemsSource?.Any() is not true;
 				IsBusy  = false;
 			}
 			catch (OperationCanceledException)
 			{
+				if (newItems == null)
+					return;
 
+				foreach (var item in newItems)
+					ItemsSource?.Remove(item);
 			}
 			finally
 			{
 				cancelSource?.Dispose();
 				_loadCancelSource = null;
-
-
+				_loadingTask?.TrySetResult(true);
 			}
 		}
 
