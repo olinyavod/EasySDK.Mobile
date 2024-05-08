@@ -174,9 +174,6 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 
 				if (cancelSource.IsCancellationRequested)
 					throw new OperationCanceledException();
-
-				IsEmpty = ItemsSource?.Any() is not true;
-				IsBusy  = false;
 			}
 			catch (OperationCanceledException)
 			{
@@ -188,6 +185,8 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 			}
 			finally
 			{
+				IsEmpty = ItemsSource?.Any() is not true;
+				IsBusy  = false;
 				cancelSource?.Dispose();
 				_loadCancelSource = null;
 				_loadingTask?.TrySetResult(true);
