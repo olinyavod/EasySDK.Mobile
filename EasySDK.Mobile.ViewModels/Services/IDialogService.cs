@@ -4,16 +4,15 @@ using System.Threading.Tasks;
 
 namespace EasySDK.Mobile.ViewModels.Services;
 
-public enum DialogIcons
-{
-	None, Success, Error, Warning, Question, Information
-}
-
 public interface IDialogService
 {
-	Task AlertAsync(string message, string? title = null, string? ok = null, DialogIcons icon = DialogIcons.None);
+	#region Methods
 
-	Task<bool> ConfirmAsync(string              message,    string? title = null, string? ok = null, string? cancel = null, DialogIcons icon = DialogIcons.None);
+	Task<TResult?> ShowAsync<TViewModel, TResult>(Action<TViewModel>? configure = null)
+		where TViewModel : class, IDialogViewModel;
 
-	IDisposable Loading(CancellationTokenSource cancelSource, string title);
+	IShowScope<TViewModel> Show<TViewModel>(Action<TViewModel>? configure = null) 
+		where TViewModel : class;
+
+	#endregion
 }
