@@ -17,10 +17,11 @@ namespace EasySDK.Mobile.ViewModels
 
 		private readonly IResponseChecker _responseChecker;
 
-		private IList<TItem>?            _itemsSource;
-		private bool                     _isBusy;
-		private bool                     _isEmpty = true;
-		private CancellationTokenSource? _loadCancelSource;
+		private IList<TItem>?               _itemsSource;
+		private bool                        _isBusy;
+		private bool                        _isEmpty = true;
+		private CancellationTokenSource?    _loadCancelSource;
+		private TaskCompletionSource<bool>? _loadingTask;
 
 		#endregion
 
@@ -70,8 +71,74 @@ namespace EasySDK.Mobile.ViewModels
 		protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IServiceProvider scope, IListRequest request,
 			CancellationToken                                                          token);
 
-		protected async Task<IEnumerable<TItem>> DoLoadItemsAsync(IServiceProvider scope, IListRequest request,
-			bool clearAllItems, CancellationToken token)
+		protected async Task LoadItemsAsync(bool clearAllItems)
+		{
+			if (_loadCancelSource?.IsCancellationRequested is false)
+			{
+				_loadCancelSource.Cancel();
+
+				if (_loadingTask?.Task is { } loadingTask)
+					await loadingTask;
+				else
+					await Task.Yield();
+			}
+
+			CancellationTokenSource? cancelSource = null;
+			IEnumerable<TItem>? newItems = null;
+
+			try
+			{
+				IsBusy = true;
+
+				_loadingTask      = new TaskCompletionSource<bool>();
+				_loadCancelSource = cancelSource = new CancellationTokenSource();
+				await Task.Delay(250, cancelSource.Token);
+
+				await using var scope = CreateAsyncScope();
+
+				newItems = await DoLoadItemsAsync(scope.ServiceProvider, new ListRequest
+				{
+					Offset = clearAllItems ? 0 : ItemsSource?.Count ?? 0, Count = PageSize
+				}, clearAllItems, cancelSource.Token);
+
+				if (cancelSource.IsCancellationRequested)
+					throw new OperationCanceledException();
+
+				IsEmpty = ItemsSource?.Any() is not true;
+				IsBusy  = false;
+			}
+			catch (OperationCanceledException)
+			{
+				if (newItems == null)
+					return;
+
+				foreach (var item in newItems)
+					ItemsSource?.Remove(item);
+			}
+			finally
+			{
+				cancelSource?.Dispose();
+				_loadCancelSource = null;
+				_loadingTask?.TrySetResult(true);
+			}
+		}
+
+		protected abstract void ShowErrorMessage(string message);
+
+		protected virtual Task<bool> OnPreLoadItems(IServiceProvider scope) => Task.FromResult(true);
+
+		protected virtual Task OnPostLoadItems(IServiceProvider scope) => Task.CompletedTask;
+
+		protected abstract string GetLoadItemsFailedMessage();
+
+		protected abstract TItem CreateItem(TModel model);
+
+		#endregion
+
+		#region Private methods
+
+		private async Task<IEnumerable<TItem>> DoLoadItemsAsync(IServiceProvider scope,         IListRequest      request,
+			bool                                                                 clearAllItems, CancellationToken token)
 		{
 			LinkedList<TItem> addedItems = new();
 			try
@@ -130,76 +197,10 @@ namespace EasySDK.Mobile.ViewModels
 
 				return addedItems;
 			}
-
-			
-		}
-
-		protected abstract void ShowErrorMessage(string message);
-
-		protected virtual Task<bool> OnPreLoadItems(IServiceProvider scope) => Task.FromResult(true);
-
-		protected virtual Task OnPostLoadItems(IServiceProvider scope) => Task.CompletedTask;
-
-		protected abstract string GetLoadItemsFailedMessage();
-
-		protected abstract TItem CreateItem(TModel model);
-
-		private TaskCompletionSource<bool>? _loadingTask;
-
-		protected async Task LoadItemsAsync(bool clearAllItems)
-		{
-			if (_loadCancelSource?.IsCancellationRequested is false)
-			{
-				_loadCancelSource.Cancel();
-
-				if (_loadingTask?.Task is { } loadingTask)
-					await loadingTask;
-				else
-					await Task.Yield();
-			}
-
-			CancellationTokenSource? cancelSource = null;
-			IEnumerable<TItem>? newItems = null;
-
-			try
-			{
-				IsBusy = true;
-
-				_loadingTask      = new TaskCompletionSource<bool>();
-				_loadCancelSource = cancelSource = new CancellationTokenSource();
-				await Task.Delay(100, cancelSource.Token);
-
-				await using var scope = CreateAsyncScope();
-
-				newItems = await DoLoadItemsAsync(scope.ServiceProvider, new ListRequest
-				{
-					Offset = clearAllItems ? 0 : ItemsSource?.Count ?? 0, Count = PageSize
-				}, clearAllItems, cancelSource.Token);
-
-				if (cancelSource.IsCancellationRequested)
-					throw new OperationCanceledException();
-
-				IsEmpty = ItemsSource?.Any() is not true;
-				IsBusy  = false;
-			}
-			catch (OperationCanceledException)
-			{
-				if (newItems == null)
-					return;
-
-				foreach (var item in newItems)
-					ItemsSource?.Remove(item);
-			}
-			finally
-			{
-				cancelSource?.Dispose();
-				_loadCancelSource = null;
-				_loadingTask?.TrySetResult(true);
-			}
 		}
 
 		#endregion
-		
+
 		#region LoadItemsCommand
 
 		public ICommand LoadItemsCommand { get; }
