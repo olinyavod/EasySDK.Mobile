@@ -69,7 +69,7 @@ public abstract class HttpServiceBase
 
 	#region Protected methods
 
-	protected async Task<IResponse<TResult>?> PostJsonAsync<TResult>
+	protected async Task<IResponse<TResult>> PostJsonAsync<TResult>
 	(
 		string requestUrl,
 		object? postModel,
@@ -88,7 +88,7 @@ public abstract class HttpServiceBase
 		);
 	}
 
-	protected async Task<IResponseList<TResult>?> GetJsonListAsync<TResult>
+	protected async Task<IResponseList<TResult>> GetJsonListAsync<TResult>
 	(
 		string requestUrl,
 		object? filter = null,
@@ -115,7 +115,7 @@ public abstract class HttpServiceBase
 		);
 	}
 
-	protected async Task<IResponse<TResult>?> GetJsonAsync<TResult>
+	protected async Task<IResponse<TResult>> GetJsonAsync<TResult>
 	(
 		string requestUrl,
 		object? model = null,
@@ -134,7 +134,7 @@ public abstract class HttpServiceBase
 		);
 	}
 
-	protected async Task<IResponse<TResult>?> PatchJsonAsync<TResult>
+	protected async Task<IResponse<TResult>> PatchJsonAsync<TResult>
 	(
 		string requestUrl, 
 		object? model,
@@ -292,11 +292,11 @@ public abstract class HttpServiceBase
 		return result;
 	}
 	
-	protected async Task<TResponse?> ExecuteAsync<TResponse, TRequest>
+	protected async Task<TResponse> ExecuteAsync<TResponse, TRequest>
 	(
 		Func<TRequest> requestFactory,
 		Func<HttpClient, TRequest, CancellationToken, Task<HttpResponseMessage>> execute,
-		Func<string, TResponse?> responseFactory,
+		Func<string, TResponse> responseFactory,
 		bool useToken,
 		CancellationToken cancellationToken
 	)
@@ -350,7 +350,7 @@ public abstract class HttpServiceBase
 			if (result?.HasError == true)
 				LogErrorResponse(response, content);
 
-			return result;
+			return result ?? default!;
 		}
 		finally
 		{
@@ -432,7 +432,7 @@ public abstract class HttpServiceBase
 
 	private HttpRequestMessage CreateGetMessage(string requestUrl, object? model) => new()
 	{
-		Content = model != null ? CreateJsonContent(model) : new StringContent(string.Empty),
+		Content = model != null ? CreateJsonContent(model) : null,
 		Method = HttpMethod.Get,
 		RequestUri = new Uri(requestUrl, UriKind.Relative)
 	};
