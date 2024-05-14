@@ -9,7 +9,7 @@ public interface IAuthService<in TLoginFrom>
 {
 	#region Methods
 
-	Task<IResponse<string>> LoginAsync(TLoginFrom form, CancellationToken cancellationToken = default);
+	Task<IResponse<string?>> LoginAsync(TLoginFrom form, CancellationToken cancellationToken = default);
 
 	Task<IResponse<bool?>> LogoutAsync(CancellationToken cancellationToken = default);
 

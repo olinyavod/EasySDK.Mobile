@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -154,9 +155,9 @@ namespace EasySDK.Mobile.ViewModels
 				if (!await _responseChecker.CheckCanContinue(scope, response, GetLoadItemsFailedMessage()))
 					return addedItems;
 
-				if(token.IsCancellationRequested)
+				if (token.IsCancellationRequested)
 					throw new OperationCanceledException();
-				
+
 				var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
 				bool hasItems = false;
 
@@ -180,6 +181,21 @@ namespace EasySDK.Mobile.ViewModels
 					throw new OperationCanceledException();
 
 				await OnPostLoadItems(scope);
+
+				return addedItems;
+			}
+			catch (WebException ex)
+			{
+				if (string.Compare(ex.Message, "Canceled", StringComparison.CurrentCultureIgnoreCase) == 0)
+				{
+					foreach (var item in addedItems)
+						ItemsSource?.Remove(item);
+
+					throw new OperationCanceledException();
+				}
+
+				Log.LogError(ex, $"Load items error.");
+				ShowErrorMessage(GetLoadItemsFailedMessage());
 
 				return addedItems;
 			}
