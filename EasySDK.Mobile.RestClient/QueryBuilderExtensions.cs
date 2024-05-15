@@ -6,11 +6,6 @@ namespace EasySDK.Mobile.RestClient;
 
 public static class QueryBuilderExtensions
 {
-	public interface IQueryBuilder<out TUrl>
-	{
-		TUrl Build();
-	}
-
 	class QueryStringBuilder : IQueryBuilder<string>
 	{
 		private readonly string                     _baseUrl;
@@ -37,9 +32,12 @@ public static class QueryBuilderExtensions
 		}
 	}
 
+	public static IQueryBuilder<string> CreateQueryBuilder(this string query)
+		=> new QueryStringBuilder(query);
+
 	public static IQueryBuilder<string> AddQuery(this string query, string name, string? value)
 	{
-		var builder = new QueryStringBuilder(query);
+		var builder = query.CreateQueryBuilder();
 
 		builder.AddQuery(name, value);
 

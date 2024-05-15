@@ -36,7 +36,7 @@ public interface IResponse<out TResult> : IResponse
 
 	IResponse<TNewResult> Convert<TNewResult>(Func<TResult, TNewResult> convert);
 
-	IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert);
+	IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert, int totalCount = 0);
 
 	#endregion
 }

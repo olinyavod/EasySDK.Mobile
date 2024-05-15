@@ -119,11 +119,14 @@ public class HttpResponse<TResult> : HttpResponse, IResponse<TResult>
 		? new HttpResponse<TNewResult>(this)
 		: Success(convert(Result));
 
-	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert)
+	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert, int totalCount = 0)
 	{
 		return HasError
 			? new HttpResponseList<TNewResult>(this)
-			: new HttpResponseList<TNewResult>(convert(Result));
+			: new HttpResponseList<TNewResult>(convert(Result))
+			{
+				TotalCount = totalCount
+			};
 	}
 
 	#endregion
