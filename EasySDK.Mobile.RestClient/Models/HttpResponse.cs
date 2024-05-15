@@ -1,32 +1,38 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using EasySDK.Mobile.Models;
-using EasySDK.Mobile.RestClient.Cpnverters;
+using EasySDK.Mobile.RestClient.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace EasySDK.Mobile.RestClient.Models;
 
+[JsonConverter(typeof(ResponseJsonConverter))]
 public class HttpResponse : IResponse
 {
 	#region Properties
 
 	public bool HasError => ErrorCode != 0;
 
-	[JsonProperty("errorCode")]
+	[MultiPropertyNames("errorCode", "code")]
 	public int ErrorCode { get; set; }
 
 	[JsonProperty("errorMessage")]
-	public string ErrorMessage { get; set; }
+	public string? ErrorMessage { get; set; }
+
+	[JsonProperty("description")]
+	public string? ErrorDescription { get; set; }
 
 	[JsonProperty("errorMessages")]
 	[JsonConverter(typeof(ErrorsJsonConverter))]
-	public Dictionary<string, IEnumerable<string>> ErrorMessages { get; set; }
+	public Dictionary<string, IEnumerable<string>>? ErrorMessages { get; set; }
 
 	public bool NeedAuthorization => ErrorCode == ResponseErrorCodes.Unauthorized;
 
 	[JsonProperty("_meta")]
-	public JToken Metadata { get; set; }
+	public JToken? Metadata { get; set; }
 
 	#endregion
 

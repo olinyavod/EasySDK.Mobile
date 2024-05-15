@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace EasySDK.Mobile.RestClient.Cpnverters;
+namespace EasySDK.Mobile.RestClient.Converters;
 
 class ErrorsJsonConverter : JsonConverter
 {

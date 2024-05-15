@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 
 namespace EasySDK.Mobile.Models;
@@ -12,6 +14,8 @@ public interface IResponse
 	int ErrorCode { get; }
 
 	string ErrorMessage { get; }
+
+	string? ErrorDescription { get; }
 
 	Dictionary<string, IEnumerable<string>> ErrorMessages { get; }
 

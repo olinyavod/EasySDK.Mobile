@@ -53,7 +53,8 @@
 	<Style TargetType="editors:PasswordEdit"
 	       BaseResourceKey="EditorStyle"/>
 
-	<Style TargetType="editors:MultilineEdit">
+	<Style TargetType="editors:MultilineEdit"
+	       BaseResourceKey="EditorStyle">
 		<Setter Property="StartIconColor" Value="{x:DynamicResource {themes:DefaultColorThemeKey Key=StartIconColor}}"/>
 		<Setter Property="IsLabelFloating" Value="True"/>
 	</Style>

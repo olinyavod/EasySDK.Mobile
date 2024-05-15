@@ -8,7 +8,7 @@ namespace EasySDK.Mobile.ViewModels.Services;
 
 public interface ICrudService<TModel, TItem, TKey>
 {
-	Task<IResponseList<TItem>> GetListAsync(IListRequest request, CancellationToken token);
+	Task<IResponseList<TItem>> GetListAsync(IListRequest request, CancellationToken cancellationToken = default);
 
 	Task<IResponse<TModel>> GetByKeyAsync(TKey key);
 
