@@ -4,9 +4,13 @@ namespace EasySDK.Mobile.ViewModels.Services;
 
 public interface IViewModelNavigationService
 {
-	Task GoToAsync<TViewModel>(object? parameter = null, bool animate = true) where TViewModel: class;
-	
-	Task GoToRootAsync<TViewModel>(object? parameter = null, bool animate = true) where TViewModel: class;
+	#region Methods
 
-	Task GotToBackAsync(bool animate = true);
+	Task GoToAsync<TViewModel>(object? parameter = null, bool animate = true, bool removeCurrent = false) where TViewModel: class;
+	
+	Task GoToRootAsync<TViewModel>(object? parameter = null, bool animate = true, bool removeCurrent = false) where TViewModel: class;
+
+	Task GoToBackAsync(bool animate = true);
+
+	#endregion
 }

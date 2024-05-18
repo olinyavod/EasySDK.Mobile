@@ -7,21 +7,21 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 {
 	#region Public methods
 
-	public Task GoToAsync<TViewModel>(object? parameter = null, bool animate = true) where TViewModel : class
+	public Task GoToAsync<TViewModel>(object? parameter = null, bool animate = true, bool removeCurrent = false) where TViewModel : class
 	{
 		var viewName = typeof(TViewModel).GetViewKey();
 
-		return GoToAsync(viewName, parameter, animate);
+		return GoToAsync(viewName, parameter, animate, removeCurrent);
 	}
 
-	public Task GoToRootAsync<TViewModel>(object? parameter = null, bool animate = true) where TViewModel : class
+	public Task GoToRootAsync<TViewModel>(object? parameter = null, bool animate = true, bool removeCurrent = false) where TViewModel : class
 	{
 		var viewName = typeof(TViewModel).GetViewKey();
 
-		return GoToAsync($"//{viewName}", parameter, animate);
+		return GoToAsync($"//{viewName}", parameter, animate, removeCurrent);
 	}
 
-	public Task GotToBackAsync(bool animate = true) => Current.GoToAsync("..", animate);
+	public Task GoToBackAsync(bool animate = true) => Current.GoToAsync("..", animate);
 
 	#endregion
 
@@ -29,15 +29,28 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 
 	private Shell Current => Shell.Current;
 
-	private Task GoToAsync(string route, object? parameter, bool animate)
-	{
-		if (parameter == null)
-			return Shell.Current.GoToAsync(route, animate);
-
-		return Current.GoToAsync(route, animate,  new Dictionary<string, object>
+	private async Task GoToAsync(string route, object? parameter, bool animate, bool removeCurrent)
+	{var currentShell = Current;
+			var currentPage = currentShell.CurrentPage;
+			
+		try
 		{
-			{"Parameter", parameter}
-		});
+			if (parameter == null)
+			{
+				await Shell.Current.GoToAsync(route, animate);
+				return;
+			}
+
+			await Current.GoToAsync(route, animate, new Dictionary<string, object>
+			{
+				{"Parameter", parameter}
+			});
+		}
+		finally
+		{
+			if (removeCurrent)
+				currentShell.Navigation.RemovePage(currentPage);
+		}
 	}
 
 	#endregion
