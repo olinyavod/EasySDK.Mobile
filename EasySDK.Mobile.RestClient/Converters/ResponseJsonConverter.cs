@@ -44,7 +44,7 @@ public class ResponseJsonConverter:JsonConverter
 		{
 			return token.ToObject(property.PropertyType, serializer);
 		}
-		catch
+		catch(Exception ex)
 		{
 			return property.DefaultValue;
 		}
