@@ -121,12 +121,12 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 
 				return addedItems;
 			}
-			catch (OperationCanceledException)
+			catch (Exception ex) when (token.IsCancellationRequested)
 			{
 				foreach (var item in addedItems)
 					ItemsSource?.Remove(item);
 
-				throw;
+				throw new OperationCanceledException("Load list was canceled.", token);
 			}
 			catch (Exception ex)
 			{
