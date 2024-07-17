@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -24,8 +25,8 @@ class ErrorsJsonConverter : JsonConverter
 		{
 			switch (item)
 			{
-				case JProperty {Value: {Type: JTokenType.Array} arrayToken}:
-					result[item.Path] = arrayToken.Value<string[]>();
+				case JProperty {Value: JArray {Type: JTokenType.Array} arrayToken}:
+					result[item.Path] = arrayToken.Values<string>().ToArray();
 					break;
 
 				case JProperty {Value: {Type: JTokenType.String} messageToken}:
