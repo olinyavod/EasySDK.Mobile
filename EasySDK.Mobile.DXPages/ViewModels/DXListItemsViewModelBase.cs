@@ -84,7 +84,9 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 				if (!await OnPreLoadItems(scope))
 					return addedItems;
 
-				var response = await LoadItemsAsync(scope, request, token);
+				var responseTask = LoadItemsAsync(scope, request, token);
+				await Task.WhenAll(responseTask, Task.Delay(500, token));
+				var response = await responseTask;
 
 				if (token.IsCancellationRequested)
 					throw new OperationCanceledException();
@@ -96,8 +98,7 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 					throw new OperationCanceledException();
 				
 				var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
-				bool hasItems = false;
-
+				
 				if (ItemsSource is null || clearAllItems)
 					ItemsSource = new List<TItem>();
 
@@ -106,14 +107,10 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 					if (token.IsCancellationRequested)
 						throw new OperationCanceledException();
 
-					hasItems = true;
 					ItemsSource?.Add(item);
 					addedItems.AddLast(item);
 				}
-
-				if (!hasItems)
-					await Task.Delay(500, token);
-
+				
 				if (token.IsCancellationRequested)
 					throw new OperationCanceledException();
 
@@ -144,19 +141,25 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 
 		protected async Task LoadItemsAsync(bool clearAllItems)
 		{
-			if (_loadCancelSource?.IsCancellationRequested is false)
+			switch (_loadCancelSource?.IsCancellationRequested)
 			{
-				_loadCancelSource.Cancel();
+				case false:
+				{
+					_loadCancelSource.Cancel();
 
-				if (_loadingTask?.Task is { } loadingTask)
-					await loadingTask;
-				else
-					await Task.Yield();
+					if (_loadingTask?.Task is { } loadingTask)
+						await loadingTask;
+					else
+						await Task.Yield();
+					break;
+				}
+				case true:
+					return;
 			}
 
 			CancellationTokenSource? cancelSource = null;
 			IEnumerable<TItem>? newItems = null;
-
+			
 			try
 			{
 				IsBusy = true;
@@ -185,11 +188,12 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 			}
 			finally
 			{
-				IsEmpty = ItemsSource?.Any() is not true;
-				IsBusy  = false;
 				cancelSource?.Dispose();
 				_loadCancelSource = null;
 				_loadingTask?.TrySetResult(true);
+
+				IsEmpty = ItemsSource?.Any() is not true;
+				IsBusy  = false;
 			}
 		}
 
