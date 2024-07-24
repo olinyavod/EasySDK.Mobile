@@ -109,10 +109,10 @@
       <Version>1.8.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>5.0.0.2622</Version>
+      <Version>5.0.0.2662</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Visual.Material">
-      <Version>5.0.0.2622</Version>
+      <Version>5.0.0.2662</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
