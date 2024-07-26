@@ -54,6 +54,8 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 
 		#endregion
 
+		#region ctor
+
 		protected DXListItemsViewModelBase
 		(
 			IUserDialogs     dialogs,
@@ -69,6 +71,17 @@ namespace EasySDK.Mobile.DXPages.ViewModels
 			LoadNextItemsCommand = new Command(OnLoadNext);
 			LoadItemsCommand     = new Command(OnLoadItems);
 		}
+
+		#endregion
+
+		#region Public methods
+
+		public void Cancel()
+		{
+			_loadCancelSource?.Cancel();
+		}
+
+		#endregion
 
 		#region Protected methods
 
