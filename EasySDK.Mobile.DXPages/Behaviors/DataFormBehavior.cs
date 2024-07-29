@@ -148,6 +148,55 @@ namespace EasySDK.Mobile.DXPages.Behaviors
 
 		#endregion //AttachedProperty RetrunCommand
 
+		#region AttachedProperty EndIcon
+
+		public static readonly BindableProperty EndIconProperty = BindableProperty.CreateAttached(
+			"EndIcon", typeof(ImageSource), typeof(DataFormBehavior), default(ImageSource?));
+
+		public static void SetEndIcon(BindableObject element, ImageSource? value)
+		{
+			element.SetValue(EndIconProperty, value);
+		}
+
+		public static ImageSource? GetEndIcon(BindableObject element)
+		{
+			return (ImageSource?) element.GetValue(EndIconProperty);
+		}
+
+		#endregion //AttachedProperty EndIcon
+
+		#region AttachedProperty EndIconCommand
+
+		public static readonly BindableProperty EndIconCommandProperty = BindableProperty.CreateAttached("EndIconCommand", typeof(ICommand), typeof(DataFormBehavior), default(ICommand?));
+
+		public static void SetEndIconCommand(BindableObject element, ICommand? value)
+		{
+			element.SetValue(EndIconCommandProperty, value);
+		}
+
+		public static ICommand? GetEndIconCommand(BindableObject element)
+		{
+			return (ICommand?) element.GetValue(EndIconCommandProperty);
+		}
+
+		#endregion //AttachedProperty EndIconCommand
+
+		#region AttachedProperty EndIconCommandParameter
+
+		public static readonly BindableProperty EndIconCommandParameterProperty = BindableProperty.CreateAttached("EndIconCommandParameter", typeof(object), typeof(DataFormBehavior), default(object?));
+
+		public static void SetEndIconCommandParameter(BindableObject element, object? value)
+		{
+			element.SetValue(EndIconCommandParameterProperty, value);
+		}
+
+		public static object? GetEndIconCommandParameter(BindableObject element)
+		{
+			return (object?) element.GetValue(EndIconCommandParameterProperty);
+		}
+
+		#endregion //AttachedProperty EndIconCommandParameter
+
 		#endregion
 
 		#region Protected methods
@@ -166,6 +215,12 @@ namespace EasySDK.Mobile.DXPages.Behaviors
 
 				if (GetRetrunCommand(parent) is { } returnCommand)
 					editor.ReturnCommand = returnCommand;
+
+				if (GetEndIcon(parent) is { } endIcon)
+					editor.EndIcon = endIcon;
+
+				if(GetEndIconCommand(parent) is { } endIconCommand)
+					editor.EndIconCommand = endIconCommand;
 			}
 
 			editor.Focused += EditorOnFocused;

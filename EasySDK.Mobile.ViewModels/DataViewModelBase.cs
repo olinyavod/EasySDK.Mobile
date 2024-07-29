@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using EasySDK.Mobile.ViewModels.Attributes;
 using FluentValidation;
 
 namespace EasySDK.Mobile.ViewModels;
@@ -129,6 +130,36 @@ public abstract class DataViewModelBase : ViewModelBase, INotifyDataErrorInfo
 	{
 		base.OnPropertyChanged(propertyName);
 		ClearErrors(propertyName);
+	}
+
+	protected void SetDataErrors(IDictionary<string, IEnumerable<string>>? errors)
+	{
+		if(errors == null || errors.Count == 0)
+			return;
+
+		var propertiesMap = TypeDescriptor.GetProperties(this)
+			.OfType<PropertyDescriptor>()
+			.ToDictionary(GetPropertyName, i => i.Name);
+
+		foreach (var error in errors)
+		{
+			if(!propertiesMap.TryGetValue(error.Key, out var propertyName))
+				continue;
+
+			SetErrors(error.Value, propertyName);
+		}
+	}
+
+	#endregion
+
+	#region Private methods
+
+	private string GetPropertyName(PropertyDescriptor propertyDescriptor)
+	{
+		if (propertyDescriptor.Attributes[typeof(FieldNameAttribute)] is FieldNameAttribute att)
+			return att.Name ?? propertyDescriptor.Name;
+
+		return propertyDescriptor.Name;
 	}
 
 	#endregion

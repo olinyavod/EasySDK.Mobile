@@ -98,7 +98,12 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 
 	protected abstract Task SignInOnSuccess(IServiceProvider scope, TLoginForm form, string token);
 
-	protected void SetErrors(IResponse response)
+	protected virtual void ShowInvalidAuthData(IResponse response)
+	{
+		SetError(Properties.Resources.InvalidUserOrPassword, nameof(Login));
+	}
+
+	protected virtual void SetErrors(IResponse response)
 	{
 		if (response.ErrorMessages is not { } errors)
 			return;
@@ -112,6 +117,11 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 
 			SetErrors(error.Value, propertyName);
 		}
+	}
+
+	protected virtual void ShowSignInErrors(IResponse response)
+	{
+		_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
 	}
 
 	#endregion
@@ -177,12 +187,12 @@ public abstract class LoginViewModelBase<TAuthService, TLoginForm> : DataViewMod
 					break;
 
 				case ResponseErrorCodes.NotFound:
-					SetError(Properties.Resources.InvalidUserOrPassword, nameof(Login));
+					ShowInvalidAuthData(response);
 					_invalidLogin = true;
 					break;
 
 				default:
-					_dialogs.ShowErrorMessage(Properties.Resources.FailedSignInMessage);
+					ShowSignInErrors(response);
 					break;
 			}
 		}
