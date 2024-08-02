@@ -30,9 +30,10 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 	private Shell Current => Shell.Current;
 
 	private async Task GoToAsync(string route, object? parameter, bool animate, bool removeCurrent)
-	{var currentShell = Current;
-			var currentPage = currentShell.CurrentPage;
-			
+	{
+		var currentShell = Current;
+		var currentPage = currentShell.CurrentPage;
+
 		try
 		{
 			if (parameter == null)
@@ -49,7 +50,17 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 		finally
 		{
 			if (removeCurrent)
-				currentShell.Navigation.RemovePage(currentPage);
+			{
+				if (Shell.GetPresentationMode(currentPage) is PresentationMode.Modal or PresentationMode.ModalAnimated
+				    or PresentationMode.ModalNotAnimated)
+				{
+					await currentShell.Navigation.PopModalAsync(false);
+				}
+				else
+				{
+					currentShell.Navigation.RemovePage(currentPage);
+				}
+			}
 		}
 	}
 
