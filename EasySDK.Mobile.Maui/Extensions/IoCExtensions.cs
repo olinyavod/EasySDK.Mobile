@@ -1,4 +1,6 @@
 ﻿using EasySDK.Mobile.ViewModels.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls;
 
 namespace EasySDK.Mobile.Maui.Extensions;
 
