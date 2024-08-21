@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -18,7 +19,7 @@ namespace EasySDK.Mobile.ViewModels
 
 		private readonly IResponseChecker _responseChecker;
 
-		private IList<TItem>?               _itemsSource;
+		private ObservableCollection<TItem>?               _itemsSource;
 		private bool                        _isBusy;
 		private bool                        _isEmpty = true;
 		private CancellationTokenSource?    _loadCancelSource;
@@ -28,7 +29,7 @@ namespace EasySDK.Mobile.ViewModels
 
 		#region Properties
 
-		public IList<TItem>? ItemsSource
+		public ObservableCollection<TItem>? ItemsSource
 		{
 			get => _itemsSource;
 			set => SetProperty(ref _itemsSource, value);
@@ -162,7 +163,7 @@ namespace EasySDK.Mobile.ViewModels
 				bool hasItems = false;
 
 				if (ItemsSource is null || clearAllItems)
-					ItemsSource = new List<TItem>();
+					ItemsSource = new();
 
 				foreach (var item in items)
 				{
