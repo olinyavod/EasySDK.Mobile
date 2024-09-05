@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
 using EasySDK.Mobile.ViewModels.Converters;
@@ -93,6 +95,28 @@ public static class ModelExtensions
 			return first.ToString();
 
 		return first + text.Substring(1);
+	}
+
+	private static readonly Regex _clearPhoneRegex = new
+	(
+		@"[^\d\+]",
+		RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled
+	);
+
+	public static string? ClearPhone(this string? phone)
+	{
+		if(string.IsNullOrWhiteSpace(phone))
+			return phone;
+
+		try
+		{
+			return _clearPhoneRegex.Replace(phone, "");
+		}
+		catch(Exception ex)
+		{
+			Debug.WriteLine("Clear phone error");
+			return phone;
+		}
 	}
 
 	#endregion
