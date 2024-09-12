@@ -41,7 +41,7 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 				await Shell.Current.GoToAsync(route, animate);
 				return;
 			}
-
+			
 			await Current.GoToAsync(route, animate, new Dictionary<string, object>
 			{
 				{"Parameter", parameter}
@@ -54,7 +54,8 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 				if (Shell.GetPresentationMode(currentPage) is PresentationMode.Modal or PresentationMode.ModalAnimated
 				    or PresentationMode.ModalNotAnimated)
 				{
-					await currentShell.Navigation.PopModalAsync(false);
+					if(currentShell.Navigation.ModalStack is IList<Page> s)
+						s.Remove(currentPage);
 				}
 				else
 				{
