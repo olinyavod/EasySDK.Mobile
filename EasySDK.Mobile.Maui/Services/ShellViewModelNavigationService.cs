@@ -33,9 +33,13 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 	{
 		var currentShell = Current;
 		var currentPage = currentShell.CurrentPage;
+		var isModal = currentShell.Navigation.ModalStack.Contains(currentPage);
 
 		try
 		{
+			if (isModal)
+				_ = currentShell.Navigation.PopModalAsync(false);
+
 			if (parameter == null)
 			{
 				await Shell.Current.GoToAsync(route, animate);
@@ -49,19 +53,8 @@ public class ShellViewModelNavigationService : IViewModelNavigationService
 		}
 		finally
 		{
-			if (removeCurrent)
-			{
-				if (Shell.GetPresentationMode(currentPage) is PresentationMode.Modal or PresentationMode.ModalAnimated
-				    or PresentationMode.ModalNotAnimated)
-				{
-					if(currentShell.Navigation.ModalStack is IList<Page> s)
-						s.Remove(currentPage);
-				}
-				else
-				{
-					currentShell.Navigation.RemovePage(currentPage);
-				}
-			}
+			if (removeCurrent && !isModal)
+				currentShell.Navigation.RemovePage(currentPage);
 		}
 	}
 
