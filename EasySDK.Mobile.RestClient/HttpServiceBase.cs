@@ -328,7 +328,6 @@ public abstract class HttpServiceBase
 			}
 
 			var content = await response.Content.ReadAsStringAsync();
-
 			Logger.LogDebug("Response content: {0}", content);
 
 			stopwatch.Stop();
