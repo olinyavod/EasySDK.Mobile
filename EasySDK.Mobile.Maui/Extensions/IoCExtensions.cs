@@ -1,4 +1,5 @@
 ﻿using EasySDK.Mobile.ViewModels.Extensions;
+using EasySDK.Mobile.ViewModels.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 
@@ -53,6 +54,12 @@ public static class IoCExtensions
 
 			if (page.BindingContext is not TViewModel)
 				page.BindingContext = c.GetRequiredService<TViewModel>();
+
+			if (page.BindingContext is ISupportAppearing appearing)
+				page.Appearing += (_, _) => appearing.OnAppearing();
+
+			if (page.BindingContext is ISupportDisappearing disappearing)
+				page.Disappearing += (_, _) => disappearing.OnDisappearing();
 
 			return page;
 		});
