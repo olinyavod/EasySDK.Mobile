@@ -23,6 +23,17 @@ public static class QueryBuilderExtensions
 		return builder;
 	}
 
+	public static QueryStringBuilder AddEnum<TEnum>(this QueryStringBuilder builder, string name, TEnum? value)
+		where TEnum : Enum
+		=> value != null
+			? builder.AddEnum(name, Enumerable.Repeat(value, 1))
+			: builder;
+
+	public static QueryStringBuilder AddEnum<TEnum>(this string query, string name, TEnum? value)
+		where TEnum : Enum
+		=> query.CreateQueryBuilder()
+			.AddEnum(name, value);
+
 	public static QueryStringBuilder AddEnum<TValue>(this string query, string name, IEnumerable<TValue>? value)
 		where TValue : Enum
 	{
