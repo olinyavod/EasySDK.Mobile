@@ -14,12 +14,14 @@ public class QueryStringBuilder : IQueryBuilder<string>
 		_baseUrl = baseUrl ?? throw new ArgumentNullException(nameof(baseUrl));
 	}
 
-	public void AddQuery(string name, string value)
+	public QueryStringBuilder AddQuery(string name, string value)
 	{
 		if(string.IsNullOrEmpty(value))
-			return;
+			return this;
 
 		_params[name] = Uri.EscapeDataString(value);
+
+		return this;
 	}
 
 	public string Build()
