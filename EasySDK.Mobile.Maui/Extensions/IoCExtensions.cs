@@ -56,7 +56,13 @@ public static class IoCExtensions
 				page.BindingContext = c.GetRequiredService<TViewModel>();
 
 			if (page.BindingContext is ISupportAppearing appearing)
-				page.Appearing += (_, _) => appearing.OnAppearing();
+				page.Appearing += (_, _) =>
+				{
+					if (MainThread.IsMainThread)
+						appearing.OnAppearing();
+					else
+						MainThread.InvokeOnMainThreadAsync(appearing.OnAppearing);
+				};
 
 			if (page.BindingContext is ISupportDisappearing disappearing)
 				page.Disappearing += (_, _) => disappearing.OnDisappearing();
