@@ -319,7 +319,7 @@ public abstract class HttpServiceBase
 				requestFactory,
 				execute,
 				cancellationToken
-			);
+			).ConfigureAwait(false);
 
 			if (response == null)
 			{
@@ -327,7 +327,7 @@ public abstract class HttpServiceBase
 				return null;
 			}
 
-			var content = await response.Content.ReadAsStringAsync();
+			var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 			Logger.LogDebug("Response content: {0}", content);
 
 			stopwatch.Stop();
