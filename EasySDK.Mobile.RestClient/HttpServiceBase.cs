@@ -112,7 +112,7 @@ public abstract class HttpServiceBase
 			},
 			useToken,
 			cancellationToken
-		);
+		).ConfigureAwait(false);
 	}
 
 	protected async Task<IResponse<TResult>> GetJsonAsync<TResult>
