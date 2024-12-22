@@ -20,12 +20,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
     <MtouchNoSymbolStrip>True</MtouchNoSymbolStrip>
+    <EnableSGenConc>False</EnableSGenConc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
     <MtouchNoSymbolStrip>True</MtouchNoSymbolStrip>
+    <EnableSGenConc>False</EnableSGenConc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Test|net9.0-ios|AnyCPU'">
     <MtouchNoSymbolStrip>True</MtouchNoSymbolStrip>
+    <EnableSGenConc>False</EnableSGenConc>
+    <MtouchUseLlvm>False</MtouchUseLlvm>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
