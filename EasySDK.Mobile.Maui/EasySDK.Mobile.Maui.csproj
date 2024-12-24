@@ -5,6 +5,7 @@
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
     <UseMaui>true</UseMaui>
+    <IsTrimmable>true</IsTrimmable>
     <SingleProject>true</SingleProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -21,10 +22,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
     <MtouchNoSymbolStrip>True</MtouchNoSymbolStrip>
     <EnableSGenConc>False</EnableSGenConc>
+    <MtouchLink>None</MtouchLink>
+    <MtouchUseLlvm>False</MtouchUseLlvm>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
     <MtouchNoSymbolStrip>True</MtouchNoSymbolStrip>
     <EnableSGenConc>False</EnableSGenConc>
+    <MtouchUseLlvm>False</MtouchUseLlvm>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Test|net9.0-ios|AnyCPU'">
     <MtouchNoSymbolStrip>True</MtouchNoSymbolStrip>
