@@ -207,6 +207,12 @@
   <data name="SignIn" xml:space="preserve">
     <value>Войти</value>
   </data>
+  <data name="WhereTakePhoto" xml:space="preserve">
+    <value>Откуда брать фото?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
   <data name="String" xml:space="preserve">
     <value>ActCompletedWork</value>
   </data>
@@ -229,11 +235,5 @@
   <data name="String5" xml:space="preserve">
     <value>Saving</value>
     <comment>Сохранение...</comment>
-  </data>
-  <data name="WhereTakePhoto" xml:space="preserve">
-    <value>Откуда брать фото?</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Да</value>
   </data>
 </root>
