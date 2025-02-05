@@ -19,6 +19,14 @@ public abstract class ShellViewModelNavigationServiceBase : IViewModelNavigation
 	{
 		var viewName = typeof(TViewModel).GetViewKey();
 
+		if (parameter != null 
+		    && GetShell() is { CurrentPage: { BindingContext: TViewModel viewModel } }
+		    && viewModel.GetType().GetProperty("Parameter") is { } info)
+		{
+			info.SetValue(viewModel, parameter);
+			return Task.CompletedTask;
+		}
+
 		return GoToAsync($"//{viewName}", parameter, animate, removeCurrent);
 	}
 
