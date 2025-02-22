@@ -3,7 +3,7 @@ using Microsoft.Maui.Controls.Shapes;
 
 namespace EasySDK.Mobile.Maui.Converters;
 
-public class StringToGeometryConverter : IValueConverter
+public class StringToGeometryConverter : IMarkupExtension, IValueConverter
 {
 	private static readonly PathGeometryConverter GeometryConverter = new();
 
@@ -15,5 +15,10 @@ public class StringToGeometryConverter : IValueConverter
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		throw new NotImplementedException();
+	}
+
+	public object ProvideValue(IServiceProvider serviceProvider)
+	{
+		return this;
 	}
 }
