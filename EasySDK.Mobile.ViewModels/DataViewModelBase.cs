@@ -30,6 +30,8 @@ public abstract class DataViewModelBase : ScopedViewModelBase, INotifyDataErrorI
 
 	#region Properties
 
+	protected IValidator Validator => _validator;
+
 	public bool HasErrors
 	{
 		get => _hasErrors;
