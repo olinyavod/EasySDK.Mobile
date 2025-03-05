@@ -303,7 +303,6 @@ public abstract class HttpServiceBase
 		where TRequest : class, IDisposable
 		where TResponse : HttpResponse, new()
 	{
-
 		HttpResponseMessage? response = null;
 
 		try
