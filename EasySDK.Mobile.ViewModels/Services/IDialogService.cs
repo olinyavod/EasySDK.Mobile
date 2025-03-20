@@ -11,7 +11,7 @@ public interface IDialogService
 	Task<TResult?> ShowAsync<TViewModel, TResult>(Action<TViewModel>? configure = null)
 		where TViewModel : class, IDialogViewModel;
 
-	IShowScope<TViewModel> Show<TViewModel>(Action<TViewModel>? configure = null) 
+	Task<IShowScope<TViewModel>> Show<TViewModel>(Action<TViewModel>? configure = null) 
 		where TViewModel : class;
 
 	#endregion
