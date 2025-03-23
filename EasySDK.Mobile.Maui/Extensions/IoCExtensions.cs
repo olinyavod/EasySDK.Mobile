@@ -71,6 +71,7 @@ public static class IoCExtensions
 		});
 	}
 
+
 	public static void RegisterRoute<TPage, TViewModel>(this IServiceCollection services)
 		where TPage : Page
 		where TViewModel : class
