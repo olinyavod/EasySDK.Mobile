@@ -91,6 +91,7 @@ namespace EasySDK.Mobile.ViewModels
 			try
 			{
 				IsBusy = true;
+				IsEmpty = false;
 
 				_loadingTask      = new TaskCompletionSource<bool>();
 				_loadCancelSource = cancelSource = new CancellationTokenSource();
