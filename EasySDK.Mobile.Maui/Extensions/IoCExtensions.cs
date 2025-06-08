@@ -45,7 +45,7 @@ public static class IoCExtensions
 	{
 		const string key = "ROOT";
 
-		services.AddTransient<TViewModel>();
+		services.AddSingleton<TViewModel>();
 		services.AddKeyedTransient<TPage>(key);
 
 		services.AddTransient<TPage>(c =>
