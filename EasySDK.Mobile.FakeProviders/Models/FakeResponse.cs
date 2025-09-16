@@ -12,7 +12,9 @@ public class FakeResponse : IResponse
 
 	public int ErrorCode { get; set; }
 
-	public string ErrorMessage { get; set; }
+	public string? ErrorMessage { get; set; }
+
+	public string? ErrorDescription { get; set; }
 
 	public Dictionary<string, IEnumerable<string>> ErrorMessages { get; } = new();
 
@@ -83,9 +85,9 @@ class FakeResponse<TResult> : FakeResponse, IResponse<TResult>
 		? new FakeResponse<TNewResult>(convert(Result))
 		: new FakeResponse<TNewResult>(this);
 
-	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert) => HasError
+	public IResponseList<TNewResult> ConvertToList<TNewResult>(Func<TResult, IEnumerable<TNewResult>> convert, int totalCount = 0) => HasError
 			? new FakeResponseList<TNewResult>(this)
-			: new FakeResponseList<TNewResult>(convert(Result));
+			: new FakeResponseList<TNewResult>(convert(Result)) { TotalCount = totalCount };
 	
 	#endregion
 }
