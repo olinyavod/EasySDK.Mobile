@@ -80,7 +80,8 @@ namespace EasySDK.Mobile.ViewModels.Managers
 		(
 			IUserDialogs dialogs,
 			IImageService imageService,
-			ILogger logger
+			ILogger logger,
+			bool allowGallerySource = false
 		)
 		{
 			_dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
@@ -88,6 +89,8 @@ namespace EasySDK.Mobile.ViewModels.Managers
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			PhotosSource.CollectionChanged += PhotosSourceOnCollectionChanged;
+
+			AllowGallerySource = allowGallerySource;
 
 			AddPhotoCommand = new AsyncCommand(OnAddPhoto, OnCanAddPhoto);
 			DeletePhotoCommand = new AsyncCommand<PhotoItemViewModel?>(OnDeletePhoto, OnCanDeletePhoto);
@@ -193,6 +196,9 @@ namespace EasySDK.Mobile.ViewModels.Managers
 				: 0;
 		}
 
+
+		protected virtual Task<FileResult?> CapturePhotoAsync() => MediaPicker.CapturePhotoAsync();
+
 		private async Task<FileResult?> TryCapturePhotoAsync()
 		{
 			try
@@ -203,7 +209,7 @@ namespace EasySDK.Mobile.ViewModels.Managers
 				    ))
 					return null;
 
-				return await MediaPicker.CapturePhotoAsync();
+				return await CapturePhotoAsync();
 			}
 			catch (Exception ex)
 			{

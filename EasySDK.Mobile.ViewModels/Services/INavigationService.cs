@@ -17,4 +17,6 @@ public interface INavigationService
 	IReadOnlyList<Page?> OpenPages { get; }
 
 	void RemovePage(Page page);
+
+	Task<TResult?> GoToAsync<TResult>(string route);
 }
