@@ -21,15 +21,14 @@ using ImageSource = Xamarin.Forms.ImageSource;
 
 namespace EasySDK.Mobile.ViewModels.Managers
 {
-
 	public abstract class PhotosManagerViewModelBase<TMediaFile> : ViewModelBase, IPhotosManagerViewModel
 		where TMediaFile : class, IMediaFile
 	{
 		#region Private fields
 
-		private readonly IUserDialogs _dialogs;
+		private readonly IUserDialogs  _dialogs;
 		private readonly IImageService _imageService;
-		private readonly ILogger _logger;
+		private readonly ILogger       _logger;
 
 		private bool _isPhotoOpened;
 		private PhotoItemViewModel? _selectedPhoto;
