@@ -26,9 +26,9 @@ namespace EasySDK.Mobile.ViewModels.Managers
 	{
 		#region Private fields
 
-		private readonly IUserDialogs  _dialogs;
-		private readonly IImageService _imageService;
-		private readonly ILogger       _logger;
+		protected readonly IUserDialogs  _dialogs;
+		protected readonly IImageService _imageService;
+		protected readonly ILogger       _logger;
 
 		private bool _isPhotoOpened;
 		private PhotoItemViewModel? _selectedPhoto;
@@ -243,9 +243,9 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 		public ICommand AddPhotoCommand { get; }
 
-		private bool OnCanAddPhoto() => true;
+		protected virtual bool OnCanAddPhoto() => true;
 
-		private async Task OnAddPhoto()
+		protected virtual async Task OnAddPhoto()
 		{
 			try
 			{
@@ -315,9 +315,9 @@ namespace EasySDK.Mobile.ViewModels.Managers
 
 		public ICommand DeletePhotoCommand { get; }
 
-		private bool OnCanDeletePhoto(PhotoItemViewModel? item) => item != null;
+		protected virtual bool OnCanDeletePhoto(PhotoItemViewModel? item) => item != null;
 
-		private async Task OnDeletePhoto(PhotoItemViewModel? item)
+		protected virtual async Task OnDeletePhoto(PhotoItemViewModel? item)
 		{
 			try
 			{

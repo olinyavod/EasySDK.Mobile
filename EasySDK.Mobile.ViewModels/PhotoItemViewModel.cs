@@ -11,5 +11,15 @@ public class PhotoItemViewModel : ViewModelBase
 
 	public string? Id { get; set; }
 
+	/// <summary>
+	/// Путь к локальному файлу фото (для фото, ещё не загруженных на сервер)
+	/// </summary>
+	public string? LocalFilePath { get; set; }
+
+	/// <summary>
+	/// Признак того, что фото ещё не загружено на сервер
+	/// </summary>
+	public bool IsPendingUpload => !string.IsNullOrEmpty(LocalFilePath) && string.IsNullOrEmpty(Id);
+
 	#endregion
 }
