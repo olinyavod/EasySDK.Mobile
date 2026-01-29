@@ -163,15 +163,10 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Firebase.iOS.Analytics">
-      <Version>8.10.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Firebase.iOS.CloudMessaging">
-      <Version>8.10.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Firebase.iOS.Installations">
-      <Version>8.10.0.3</Version>
-    </PackageReference>
+    <PackageReference Include="AdamE.Firebase.iOS.Analytics" Version="11.10.0" />
+    <PackageReference Include="AdamE.Firebase.iOS.Core" Version="11.10.0" />
+    <PackageReference Include="AdamE.Firebase.iOS.CloudMessaging" Version="11.10.0" />
+    <PackageReference Include="AdamE.Firebase.iOS.Installations" Version="11.10.0" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
