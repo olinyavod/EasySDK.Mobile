@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using EasySDK.Mobile.Models;
 using EasySDK.Mobile.ViewModels.Services;
 
@@ -9,5 +10,5 @@ public interface IAuthManager<TLoginFrom> : IAuthService<TLoginFrom>
 {
 	bool CheckIsLogin();
 
-	Task<TLoginFrom> CreateFormAsync(string login, string password);
+	Task<TLoginFrom> CreateFormAsync(string login, string password, CancellationToken cancellationToken = default);
 }

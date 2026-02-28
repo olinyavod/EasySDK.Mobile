@@ -27,6 +27,18 @@ public static class IoCExtensions
 			if (page.BindingContext is not TViewModel)
 				page.BindingContext = services.GetRequiredService<TViewModel>();
 
+			if (page.BindingContext is ISupportAppearing appearing)
+				page.Appearing += (_, _) =>
+				{
+					if (MainThread.IsMainThread)
+						appearing.OnAppearing();
+					else
+						MainThread.InvokeOnMainThreadAsync(appearing.OnAppearing);
+				};
+
+			if (page.BindingContext is ISupportDisappearing disappearing)
+				page.Disappearing += (_, _) => disappearing.OnDisappearing();
+
 			Shell.SetTabBarIsVisible(page, false);
 
 			return page;
