@@ -253,7 +253,8 @@ public abstract class HttpServiceBase
 	{
 		var json = JsonConvert.SerializeObject(model, settings);
 
-		Logger.LogDebug("Create json for send: {0}", json);
+		if (Logger.IsEnabled(LogLevel.Debug))
+			Logger.LogDebug("Create json for send: {0}", LogSafeJson.Serialize(model));
 
 		return new StringContent(json, Encoding.UTF8, MediaType);
 	}
