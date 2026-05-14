@@ -22,4 +22,4 @@ public class PhotoItemViewModel : ViewModelBase
 	public bool IsPendingUpload => !string.IsNullOrEmpty(LocalFilePath) && string.IsNullOrEmpty(Id);
 
 	#endregion
-}
+}	

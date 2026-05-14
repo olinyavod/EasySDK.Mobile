@@ -29,7 +29,7 @@ public static class LoggerExtensions
 			Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:format=tostring}",
 		};
 
-		config.AddRule(LogLevel.Info, LogLevel.Fatal, logConsole);
+		config.AddRule(LogLevel.Debug, LogLevel.Fatal, logConsole);
 		config.AddRule(LogLevel.Debug, LogLevel.Fatal, logFile);
 
 		return config;

@@ -167,6 +167,8 @@ public abstract class HttpServiceBase
 	{
 		var model = patch.ToJObject();
 
+		Logger.LogDebug("PATCH request body for '{0}': {1}", requestUri, model);
+
 		return PatchJsonAsync(requestUri, model, useToken, parse, cancellationToken);
 	}
 
