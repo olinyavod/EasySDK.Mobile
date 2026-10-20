@@ -56,24 +56,23 @@ public abstract class ShellViewModelNavigationServiceBase : IViewModelNavigation
 			if (parameter == null)
 			{
 				await currentShell.GoToAsync(route, animate);
-				return;
 			}
-
-			await currentShell.GoToAsync(route, animate, new Dictionary<string, object>
+			else
 			{
-				{"Parameter", parameter}
-			});
+				await currentShell.GoToAsync(route, animate, new Dictionary<string, object>
+				{
+					{"Parameter", parameter}
+				});
+			}
 		}
 		catch (Exception ex)
 		{
 			Debug.WriteLine("[{0}] Navigation error: {1}.", this, ex);
 			throw;
 		}
-		finally
-		{
-			if (removeCurrent && !isModal)
-				currentShell.Navigation.RemovePage(currentPage);
-		}
+
+		if (removeCurrent && !isModal)
+			currentShell.Navigation.RemovePage(currentPage);
 	}
 
 	#endregion
