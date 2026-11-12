@@ -224,7 +224,7 @@ public abstract class HttpServiceBase
 		LogErrorResponse(response, content);
 
 		var json = JToken.Parse(content);
-		var message = json.Value<string>("message") ?? content;
+		var message = json.GetFirstValue<string>("message", "errorMessage", "description") ?? content;
 
 		var errorCode = (int) response.StatusCode;
 
