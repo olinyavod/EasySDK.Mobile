@@ -7,6 +7,27 @@ namespace EasySDK.Mobile.ViewModels.Tests.Services;
 
 public class HttpServiceBaseErrorResponseTests
 {
+	[TestCase("")]
+	[TestCase(" ")]
+	[TestCase("<html>Unauthorized</html>")]
+	[TestCase("not JSON")]
+	public void CreateErrorResponse_preserves_unauthorized_status_for_non_json_body(string content)
+	{
+		var result = CreateErrorResponse(content, HttpStatusCode.Unauthorized);
+		Assert.That(result.ErrorCode, Is.EqualTo(401));
+		Assert.That(result.NeedAuthorization, Is.True);
+		Assert.That(result.Result, Is.Null);
+	}
+
+	[TestCase(HttpStatusCode.BadRequest, "")]
+	[TestCase(HttpStatusCode.NotFound, "not JSON")]
+	[TestCase(HttpStatusCode.InternalServerError, "<html>private failure</html>")]
+	[TestCase(HttpStatusCode.BadGateway, "<html>gateway failure</html>")]
+	public void CreateErrorResponse_keeps_malformed_non_401_errors_conservative(HttpStatusCode status, string content)
+	{
+		Assert.Throws<Newtonsoft.Json.JsonReaderException>(() => CreateErrorResponse(content, status));
+	}
+
 	[TestCase(@"{""message"":""Primary"",""errorMessage"":""Secondary"",""description"":""Description""}", "Primary")]
 	[TestCase(@"{""message"":""Primary""}", "Primary")]
 	[TestCase(@"{""errorMessage"":""Secondary"",""description"":""Description""}", "Secondary")]

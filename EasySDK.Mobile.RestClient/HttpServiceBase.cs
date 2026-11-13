@@ -223,8 +223,18 @@ public abstract class HttpServiceBase
 	{
 		LogErrorResponse(response, content);
 
-		var json = JToken.Parse(content);
-		var message = json.GetFirstValue<string>("message", "errorMessage", "description") ?? content;
+		var message = content;
+		try
+		{
+			var json = JToken.Parse(content);
+			message = json.GetFirstValue<string>("message", "errorMessage", "description") ?? content;
+		}
+		catch (JsonReaderException) when (response.StatusCode == HttpStatusCode.Unauthorized)
+		{
+			// Protected 401 retains its authoritative status even without JSON. Other malformed
+			// responses keep the existing conservative exception/ambiguous-write behavior.
+			message = response.ReasonPhrase ?? response.StatusCode.ToString();
+		}
 
 		var errorCode = (int) response.StatusCode;
 

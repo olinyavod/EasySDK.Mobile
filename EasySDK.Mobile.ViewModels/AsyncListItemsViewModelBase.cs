@@ -24,6 +24,10 @@ namespace EasySDK.Mobile.ViewModels
 		private bool                        _isEmpty = true;
 		private CancellationTokenSource?    _loadCancelSource;
 		private TaskCompletionSource<bool>? _loadingTask;
+		private string? _loadErrorMessage;
+		private bool _loadRejected;
+		private int _loadVersion;
+		private bool _hasSuccessfulLoad;
 
 		#endregion
 
@@ -42,6 +46,17 @@ namespace EasySDK.Mobile.ViewModels
 		}
 
 		public int PageSize { get; set; } = 30;
+
+		public string? LoadErrorMessage
+		{
+			get => _loadErrorMessage;
+			private set
+			{
+				if (SetProperty(ref _loadErrorMessage, value)) OnPropertyChanged(nameof(HasLoadError));
+			}
+		}
+
+		public bool HasLoadError => !string.IsNullOrWhiteSpace(LoadErrorMessage);
 
 		protected ILogger Log { get; private set; }
 
@@ -70,30 +85,44 @@ namespace EasySDK.Mobile.ViewModels
 
 		#region Protected methods
 
+		/// <summary>Application opt-in; existing SDK consumers retain their original empty-state semantics.</summary>
+		protected virtual bool UseResponseErrorState => false;
+
 		protected abstract Task<IResponseList<TModel>> LoadItemsAsync(IServiceProvider scope, IListRequest request,
 			CancellationToken                                                          token);
 
+		/// <summary>Optional application hook. Return null to reject a classified response before replacing data.</summary>
+		protected virtual async Task<IResponseList<TModel>?> ExecuteLoadItemsResponseAsync(IServiceProvider scope,
+			IListRequest request, CancellationToken token) => await LoadItemsAsync(scope, request, token);
+
+		protected void SetLoadError(string? message) => LoadErrorMessage = message;
+
 		protected async Task LoadItemsAsync(bool clearAllItems)
 		{
-			if (_loadCancelSource?.IsCancellationRequested is false)
+			var version = Interlocked.Increment(ref _loadVersion);
+			if (_loadCancelSource is { } activeLoad)
 			{
-				_loadCancelSource.Cancel();
+				if (!activeLoad.IsCancellationRequested) activeLoad.Cancel();
 
 				if (_loadingTask?.Task is { } loadingTask)
 					await loadingTask;
 				else
 					await Task.Yield();
 			}
+			if (version != _loadVersion) return;
 
 			CancellationTokenSource? cancelSource = null;
 			IEnumerable<TItem>? newItems = null;
+			TaskCompletionSource<bool>? loadingCompletion = null;
 
 			try
 			{
 				IsBusy = true;
 				IsEmpty = false;
+				_loadRejected = false;
+				SetLoadError(null);
 
-				_loadingTask      = new TaskCompletionSource<bool>();
+				_loadingTask      = loadingCompletion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 				_loadCancelSource = cancelSource = new CancellationTokenSource();
 				await Task.Delay(250, cancelSource.Token);
 
@@ -107,8 +136,6 @@ namespace EasySDK.Mobile.ViewModels
 				if (cancelSource.IsCancellationRequested)
 					throw new OperationCanceledException();
 
-				IsEmpty = ItemsSource?.Any() is not true;
-				IsBusy  = false;
 			}
 			catch (OperationCanceledException)
 			{
@@ -120,9 +147,15 @@ namespace EasySDK.Mobile.ViewModels
 			}
 			finally
 			{
+				if (version == _loadVersion)
+				{
+					IsBusy = false;
+					IsEmpty = ItemsSource?.Any() is not true
+						&& (!UseResponseErrorState || !HasLoadError && !_loadRejected && _hasSuccessfulLoad);
+				}
 				cancelSource?.Dispose();
-				_loadCancelSource = null;
-				_loadingTask?.TrySetResult(true);
+				if (ReferenceEquals(_loadCancelSource, cancelSource)) _loadCancelSource = null;
+				loadingCompletion?.TrySetResult(true);
 			}
 		}
 
@@ -144,27 +177,41 @@ namespace EasySDK.Mobile.ViewModels
 			bool                                                                 clearAllItems, CancellationToken token)
 		{
 			LinkedList<TItem> addedItems = new();
+			var previousItems = ItemsSource;
+			var replacedItems = false;
 			try
 			{
 				if (!await OnPreLoadItems(scope))
 					return addedItems;
 
-				var response = await LoadItemsAsync(scope, request, token);
+				var response = await ExecuteLoadItemsResponseAsync(scope, request, token);
 
 				if (token.IsCancellationRequested)
 					throw new OperationCanceledException();
+
+				if (response is null)
+				{
+					_loadRejected = true;
+					return addedItems;
+				}
 
 				if (!await _responseChecker.CheckCanContinue(scope, response, GetLoadItemsFailedMessage()))
+				{
+					_loadRejected = true;
 					return addedItems;
+				}
 
 				if (token.IsCancellationRequested)
 					throw new OperationCanceledException();
 
-				var items = response.Result?.Select(CreateItem) ?? Enumerable.Empty<TItem>();
+				var items = response.Result?.Select(CreateItem).ToArray() ?? Array.Empty<TItem>();
 				bool hasItems = false;
 
 				if (ItemsSource is null || clearAllItems)
+				{
 					ItemsSource = new();
+					replacedItems = true;
+				}
 
 				foreach (var item in items)
 				{
@@ -183,6 +230,7 @@ namespace EasySDK.Mobile.ViewModels
 					throw new OperationCanceledException();
 
 				await OnPostLoadItems(scope);
+				_hasSuccessfulLoad = true;
 
 				return addedItems;
 			}
@@ -205,6 +253,7 @@ namespace EasySDK.Mobile.ViewModels
 			{
 				foreach (var item in addedItems)
 					ItemsSource?.Remove(item);
+				if (replacedItems) ItemsSource = previousItems;
 
 				throw;
 			}
